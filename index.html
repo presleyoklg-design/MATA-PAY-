@@ -1,1 +1,844 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#124B35">
+  <title>MATA PAY | Votre avenir commence ici</title>
+
+  <style>
+    :root {
+      --green: #124B35;
+      --green-light: #EAF3ED;
+      --gold: #D9AD45;
+      --gold-light: #FBF4E3;
+      --bg: #F5F7F4;
+      --white: #FFFFFF;
+      --text: #25352C;
+      --muted: #7C8980;
+      --border: #E7ECE7;
+      --red: #C65353;
+      --shadow: 0 5px 24px rgba(18,75,53,.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* MENU LATERAL */
+
+    .sidebar {
+      width: 245px;
+      background: var(--green);
+      color: white;
+      padding: 28px 17px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 1px;
+      padding: 0 12px;
+    }
+
+    .brand small {
+      display: block;
+      color: #DCE9DF;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-top: 6px;
+    }
+
+    .menu-label {
+      color: #A9C4B3;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      margin: 38px 12px 13px;
+    }
+
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: #DCE9DF;
+      padding: 13px 12px;
+      text-align: left;
+      border-radius: 9px;
+      margin-bottom: 6px;
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: rgba(255,255,255,.13);
+      color: var(--gold);
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 14px 12px;
+      border-top: 1px solid rgba(255,255,255,.15);
+      color: #DCE9DF;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* CONTENU */
+
+    .main {
+      margin-left: 245px;
+      width: calc(100% - 245px);
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 76px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar h2 {
+      font-size: 18px;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .avatar {
+      background: var(--gold-light);
+      color: var(--green);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    .content {
+      max-width: 1150px;
+      padding: 32px;
+      margin: auto;
+    }
+
+    .page {
+      display: none;
+      animation: appear .2s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: bold;
+      color: var(--green);
+      margin: 14px 0 8px;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      margin-bottom: 17px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+    }
+
+    .action {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      padding: 19px 10px;
+      text-align: center;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .action:hover {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .action-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* FORMULAIRES */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+      background: #FCFDFC;
+    }
+
+    .field input:focus {
+      border-color: var(--green);
+    }
+
+    .btn {
+      background: var(--green);
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 20px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #1D694A;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #26352C;
+    }
+
+    .btn-light {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .result {
+      background: var(--green-light);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 17px;
+      display: none;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    /* MOBIKISI */
+
+    .mobikisi {
+      background: linear-gradient(125deg, #124B35, #1C7350);
+      color: white;
+      border-radius: 17px;
+      padding: 25px;
+      max-width: 450px;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .mobikisi:after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      right: -70px;
+      bottom: -100px;
+    }
+
+    .mobikisi h2 {
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .mobikisi .number {
+      margin-top: 45px;
+      letter-spacing: 3px;
+      font-size: 17px;
+    }
+
+    .mobikisi small {
+      color: #DCE9DF;
+    }
+
+    /* TABLE */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 450px;
+    }
+
+    th, td {
+      padding: 14px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .positive {
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .empty {
+      padding: 25px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .notice {
+      background: var(--gold-light);
+      color: #73591E;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* MOBILE */
+
+    .mobile-nav {
+      display: none;
+    }
+
+    @media(max-width: 850px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+        padding-bottom: 75px;
+      }
+
+      .topbar {
+        padding: 0 18px;
+        height: 65px;
+      }
+
+      .content {
+        padding: 23px 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 67px;
+        background: white;
+        border-top: 1px solid var(--border);
+        z-index: 20;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .mobile-nav button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .mobile-nav button.active {
+        color: var(--green);
+        font-weight: bold;
+      }
+
+      .mobile-nav span {
+        font-size: 19px;
+      }
+    }
+
+    @media(max-width: 480px) {
+      .grid, .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .welcome h1 {
+        font-size: 22px;
+      }
+
+      .stat-value {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      MataPay
+      <small>ÉPARGNE & MICROFINANCE</small>
+    </div>
+
+    <div class="menu-label">MENU PRINCIPAL</div>
+
+    <button class="nav-btn active" data-page="dashboard">⌂ Tableau de bord</button>
+    <button class="nav-btn" data-page="savings">◈ Mon épargne</button>
+    <button class="nav-btn" data-page="mobikisi">▣ Carte Mobikisi</button>
+    <button class="nav-btn" data-page="credit">↗ Simulation crédit</button>
+    <button class="nav-btn" data-page="history">◷ Historique</button>
+
+    <div class="sidebar-bottom">
+      MATA PAY<br>
+      Prototype de démonstration<br>
+      Version 1.0
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h2 id="page-title">Tableau de bord</h2>
+      <div class="user">
+        <div class="avatar">M</div>
+        <span>Mon espace</span>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- TABLEAU DE BORD -->
+      <section class="page active" id="dashboard">
+        <div class="welcome">
+          <h1>Bienvenue chez MATA PAY</h1>
+          <p>Votre épargne, vos projets et votre avenir commencent ici.</p>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="stat-label">Épargne simulée</div>
+            <div class="stat-value" id="dashboard-balance">0 FCFA</div>
+            <div class="stat-note">Total des versements fictifs</div>
+          </div>
+
+          <div class="card">
+            <div class="stat-label">Nombre de versements</div>
+            <div class="stat-value" id="dashboard-count">0</div>
+            <div class="stat-note">Opérations enregistrées</div>
+          </div>
+
+          <div class="card">
+            <div class="stat-label">Objectif d'épargne</div>
+            <div class="stat-value" id="dashboard-goal">100 000 FCFA</div>
+            <div class="stat-note">Objectif de démonstration</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Accès rapide</h3>
+          <div class="actions">
+            <button class="action" data-go="savings">
+              <div class="action-icon">💰</div>
+              Épargner
+            </button>
+            <button class="action" data-go="mobikisi">
+              <div class="action-icon">▣</div>
+              Mobikisi
+            </button>
+            <button class="action" data-go="credit">
+              <div class="action-icon">📊</div>
+              Simuler un crédit
+            </button>
+            <button class="action" data-go="history">
+              <div class="action-icon">◷</div>
+              Historique
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Activité récente</h3>
+          <div id="recent-activity" class="empty">
+            Aucune opération pour le moment.
+          </div>
+        </div>
+      </section>
+
+      <!-- EPARGNE -->
+      <section class="page" id="savings">
+        <div class="welcome">
+          <h1>Mon épargne</h1>
+          <p>Simulez vos versements et suivez votre progression.</p>
+        </div>
+
+        <div class="notice">
+          Ceci est une simulation. Aucun dépôt réel n'est effectué et aucun rendement n'est promis.
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Mon solde simulé</h3>
+          <div class="stat-value" id="savings-balance">0 FCFA</div>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Effectuer un versement fictif</h3>
+
+          <div class="field">
+            <label for="deposit-amount">Montant du versement (FCFA)</label>
+            <input type="number" id="deposit-amount" min="1" placeholder="Exemple : 1000">
+          </div>
+
+          <div class="field">
+            <label for="deposit-note">Description (facultatif)</label>
+            <input type="text" id="deposit-note" placeholder="Mon épargne quotidienne">
+          </div>
+
+          <button class="btn" id="deposit-button">Enregistrer la simulation</button>
+          <div class="result" id="deposit-result"></div>
+        </div>
+      </section>
+
+      <!-- MOBIKISI -->
+      <section class="page" id="mobikisi">
+        <div class="welcome">
+          <h1>Carte Mobikisi</h1>
+          <p>Votre support de suivi des versements d'épargne.</p>
+        </div>
+
+        <div class="notice">
+          Carte numérique fictive destinée à tester l'expérience utilisateur.
+        </div>
+
+        <div class="mobikisi">
+          <h2>MATA PAY</h2>
+          <small>CARTE MOBIKISI</small>
+          <div class="number">MP •••• •••• 0001</div>
+          <small>CARTE DE SUIVI — DÉMONSTRATION</small>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="stat-label">Total enregistré</div>
+            <div class="stat-value" id="mobikisi-total">0 FCFA</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Versements enregistrés</div>
+            <div class="stat-value" id="mobikisi-count">0</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Derniers versements</h3>
+          <div id="mobikisi-history" class="empty">Aucun versement enregistré.</div>
+        </div>
+      </section>
+
+      <!-- CREDIT -->
+      <section class="page" id="credit">
+        <div class="welcome">
+          <h1>Simulation de crédit</h1>
+          <p>Estimez une mensualité indicative selon votre projet.</p>
+        </div>
+
+        <div class="notice">
+          Cette simulation ne constitue ni une offre de crédit, ni une décision d'octroi. MATA PAY ne prête pas d'argent dans ce prototype.
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Mon projet de financement</h3>
+
+          <div class="field">
+            <label for="credit-amount">Montant souhaité (FCFA)</label>
+            <input type="number" id="credit-amount" min="1000" placeholder="Exemple : 100000">
+          </div>
+
+          <div class="field">
+            <label for="credit-duration">Durée (mois)</label>
+            <input type="number" id="credit-duration" min="1" max="60" value="12">
+          </div>
+
+          <button class="btn" id="credit-button">Calculer ma simulation</button>
+          <div class="result" id="credit-result"></div>
+        </div>
+      </section>
+
+      <!-- HISTORIQUE -->
+      <section class="page" id="history">
+        <div class="welcome">
+          <h1>Historique des opérations</h1>
+          <p>Retrouvez les versements fictifs effectués dans le prototype.</p>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap" id="history-table">
+            <div class="empty">Aucune opération enregistrée.</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- NAVIGATION MOBILE -->
+<nav class="mobile-nav">
+  <button class="active" data-page="dashboard">
+    <span>⌂</span>Accueil
+  </button>
+  <button data-page="savings">
+    <span>◈</span>Épargne
+  </button>
+  <button data-page="mobikisi">
+    <span>▣</span>Mobikisi
+  </button>
+  <button data-page="credit">
+    <span>↗</span>Crédit
+  </button>
+  <button data-page="history">
+    <span>◷</span>Historique
+  </button>
+</nav>
+
+<script>
+  // DONNÉES DE DÉMONSTRATION
+  const state = {
+    balance: 0,
+    operations: []
+  };
+
+  const titles = {
+    dashboard: "Tableau de bord",
+    savings: "Mon épargne",
+    mobikisi: "Carte Mobikisi",
+    credit: "Simulation crédit",
+    history: "Historique"
+  };
+
+  // NAVIGATION ENTRE LES RUBRIQUES
+  function navigate(page) {
+    document.querySelectorAll(".page").forEach(section => {
+      section.classList.remove("active");
+    });
+
+    document.getElementById(page).classList.add("active");
+    document.getElementById("page-title").textContent = titles[page];
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+      button.classList.toggle("active", button.dataset.page === page);
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    updateInterface();
+  }
+
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => navigate(button.dataset.page));
+  });
+
+  document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", () => navigate(button.dataset.go));
+  });
+
+  // FORMATAGE DES MONTANTS
+  function money(amount) {
+    return new Intl.NumberFormat("fr-FR").format(amount) + " FCFA";
+  }
+
+  // AJOUT D'UN VERSEMENT FICTIF
+  document.getElementById("deposit-button").addEventListener("click", () => {
+    const amount = Number(document.getElementById("deposit-amount").value);
+    const note = document.getElementById("deposit-note").value.trim();
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      alert("Veuillez saisir un montant valide.");
+      return;
+    }
+
+    state.balance += amount;
+
+    state.operations.unshift({
+      amount,
+      note: note || "Versement simulé",
+      date: new Date().toLocaleString("fr-FR")
+    });
+
+    document.getElementById("deposit-amount").value = "";
+    document.getElementById("deposit-note").value = "";
+
+    const result = document.getElementById("deposit-result");
+    result.style.display = "block";
+    result.textContent = "Versement simulé enregistré : " + money(amount);
+
+    updateInterface();
+  });
+
+  // SIMULATION DE CREDIT
+  document.getElementById("credit-button").addEventListener("click", () => {
+    const amount = Number(document.getElementById("credit-amount").value);
+    const duration = Number(document.getElementById("credit-duration").value);
+
+    if (!Number.isFinite(amount) || amount <= 0 ||
+        !Number.isInteger(duration) || duration < 1 || duration > 60) {
+      alert("Veuillez vérifier le montant et la durée.");
+      return;
+    }
+
+    const monthly = amount / duration;
+    const result = document.getElementById("credit-result");
+
+    result.style.display = "block";
+    result.innerHTML =
+      "<strong>Résultat indicatif</strong><br>" +
+      "Montant demandé : " + money(amount) + "<br>" +
+      "Durée : " + duration + " mois<br>" +
+      "Mensualité estimée hors intérêts et frais : <strong>" +
+      money(monthly) + "</strong><br><small>Ce calcul ne représente pas une offre de financement.</small>";
+  });
+
+  // AFFICHAGE DES OPERATIONS
+  function renderOperations(containerId, limit) {
+    const container = document.getElementById(containerId);
+    const operations = limit
+      ? state.operations.slice(0, limit)
+      : state.operations;
+
+    if (operations.length === 0) {
+      container.className = "empty";
+      container.textContent = "Aucune opération enregistrée.";
+      return;
+    }
+
+    container.className = "table-wrap";
+    const table = document.createElement("table");
+    const head = document.createElement("tr");
+
+    ["Date", "Description", "Montant"].forEach(label => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      head.appendChild(th);
+    });
+
+    table.appendChild(head);
+
+    operations.forEach(operation => {
+      const row = document.createElement("tr");
+
+      [operation.date, operation.note, "+" + money(o

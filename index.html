@@ -841,4 +841,72 @@
     operations.forEach(operation => {
       const row = document.createElement("tr");
 
-      [operation.date, operation.note, "+" + money(o
+      
+[operation.date, operation.note, "+" + money(operation.amount)].forEach(value => {
+  const td = document.createElement("td");
+  td.textContent = value;
+  row.appendChild(td);
+});
+
+table.appendChild(row);
+});
+container.replaceChildren(table);
+}
+
+// Mise à jour de toutes les rubriques
+function updateInterface() {
+  const count = state.operations.length;
+  const balanceText = money(state.balance);
+
+  document.getElementById("dashboard-balance").textContent = balanceText;
+  document.getElementById("dashboard-count").textContent = count;
+  document.getElementById("savings-balance").textContent = balanceText;
+  document.getElementById("mobikisi-total").textContent = balanceText;
+  document.getElementById("mobikisi-count").textContent = count;
+
+  renderOperations("recent-activity", 5);
+  renderOperations("mobikisi-history", 5);
+  renderOperations("history-table");
+}
+
+// Sauvegarde locale des données de démonstration
+const STORAGE_KEY = "matapay-demo-v1";
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.warn("Sauvegarde locale indisponible :", error);
+  }
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+
+    if (!saved || !Array.isArray(saved.operations)) return;
+
+    state.operations = saved.operations.filter(operation =>
+      operation &&
+      Number.isSafeInteger(operation.amount) &&
+      operation.amount > 0 &&
+      typeof operation.note === "string" &&
+      typeof operation.date === "string"
+    );
+
+    state.balance = state.operations.reduce(
+      (total, operation) => total + operation.amount,
+      0
+    );
+  } catch (error) {
+    console.warn("Données locales non récupérables :", error);
+  }
+}
+
+// Démarrage
+loadState();
+updateInterface();
+</script>
+</body>
+</html>
+

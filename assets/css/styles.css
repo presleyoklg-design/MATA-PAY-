@@ -848,3 +848,120 @@ tbody tr:hover {
     font-size: 22px;
   }
 }
+/* =========================================
+   MATAPAY — FINITIONS PROFESSIONNELLES
+   ========================================= */
+
+:root {
+  --shadow: 0 10px 30px rgba(11, 48, 36, .08);
+}
+
+.welcome-banner {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(217,173,69,.18), transparent 30%),
+    linear-gradient(125deg, #09291F, #174F3B);
+  border: 1px solid rgba(217,173,69,.25);
+  box-shadow: 0 16px 35px rgba(11,48,36,.15);
+}
+
+.welcome-banner h2 {
+  letter-spacing: -.7px;
+}
+
+.welcome-symbol {
+  box-shadow: 0 0 0 12px rgba(217,173,69,.05);
+}
+
+.service-card {
+  min-height: 155px;
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform .25s ease, box-shadow .25s ease,
+              border-color .25s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 14px 28px rgba(11,48,36,.11);
+}
+
+.service-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #E9F1EC, #DCE9E0);
+  color: var(--green);
+}
+
+.service-icon svg,
+.mobile-nav-link svg {
+  display: block;
+  width: 23px;
+  height: 23px;
+}
+
+.stat-card {
+  border-radius: 15px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 13px 28px rgba(11,48,36,.10);
+}
+
+.stat-card strong {
+  letter-spacing: -.5px;
+}
+
+.notice {
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(11,48,36,.035);
+}
+
+.form-card,
+.table-card {
+  border-radius: 17px;
+}
+
+.primary-button {
+  box-shadow: 0 5px 13px rgba(217,173,69,.2);
+}
+
+.primary-button:active {
+  transform: scale(.98);
+}
+
+.mobikisi-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(217,173,69,.2), transparent 35%),
+    linear-gradient(135deg, #09291F, #1B6047);
+}
+
+.mobile-nav {
+  backdrop-filter: blur(12px);
+}
+
+.mobile-nav-link.active {
+  color: var(--green-dark);
+}
+
+@media (max-width: 700px) {
+  .welcome-banner {
+    border-radius: 17px;
+    padding: 27px 22px;
+  }
+
+  .service-card {
+    min-height: 145px;
+    padding: 17px 14px;
+  }
+
+  .service-icon {
+    width: 42px;
+    height: 42px;
+  }
+}

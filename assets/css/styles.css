@@ -1,1 +1,90 @@
 
+/* MATAPAY — DESIGN INSTITUTIONNEL */
+
+:root {
+  --mp-green: #124B35;
+  --mp-green-dark: #0C3828;
+  --mp-green-soft: #EAF3ED;
+  --mp-gold: #D9AD45;
+  --mp-gold-soft: #FBF4E3;
+  --mp-cream: #F7F7F2;
+  --mp-white: #FFFFFF;
+  --mp-text: #26352D;
+  --mp-muted: #748078;
+  --mp-border: #E3E9E3;
+
+  --mp-radius: 12px;
+  --mp-radius-lg: 18px;
+  --mp-shadow: 0 4px 18px rgba(12, 56, 40, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--mp-cream);
+  color: var(--mp-text);
+  line-height: 1.5;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.card {
+  background: var(--mp-white);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  box-shadow: var(--mp-shadow);
+}
+
+.btn {
+  background: var(--mp-green);
+  color: var(--mp-white);
+  border: none;
+  border-radius: var(--mp-radius);
+  padding: 13px 20px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--mp-green-dark);
+}
+
+.btn-gold {
+  background: var(--mp-gold);
+  color: var(--mp-green-dark);
+}
+
+.field input {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 13px;
+  width: 100%;
+}
+
+.field input:focus {
+  outline: 2px solid var(--mp-green-soft);
+  border-color: var(--mp-green);
+}
+
+.notice {
+  border-left: 4px solid var(--mp-gold);
+  background: var(--mp-gold-soft);
+  border-radius: 8px;
+}
+
+@media (max-width: 850px) {
+  .content {
+    padding: 20px 15px;
+  }
+  }
+

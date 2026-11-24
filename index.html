@@ -771,7 +771,7 @@
       alert("Veuillez saisir un montant valide.");
       return;
     }
-
+saveState();
     state.balance += amount;
 
     state.operations.unshift({

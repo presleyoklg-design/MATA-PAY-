@@ -4,698 +4,314 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#124B35">
-  <title>MATA PAY | Votre avenir commence ici</title>
-
-  <style>
-    :root {
-      --green: #124B35;
-      --green-light: #EAF3ED;
-      --gold: #D9AD45;
-      --gold-light: #FBF4E3;
-      --bg: #F5F7F4;
-      --white: #FFFFFF;
-      --text: #25352C;
-      --muted: #7C8980;
-      --border: #E7ECE7;
-      --red: #C65353;
-      --shadow: 0 5px 24px rgba(18,75,53,.07);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      min-height: 100vh;
-      display: flex;
-    }
-
-    /* MENU LATERAL */
-
-    .sidebar {
-      width: 245px;
-      background: var(--green);
-      color: white;
-      padding: 28px 17px;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      inset: 0 auto 0 0;
-      z-index: 10;
-    }
-
-    .brand {
-      font-size: 25px;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 1px;
-      padding: 0 12px;
-    }
-
-    .brand small {
-      display: block;
-      color: #DCE9DF;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 2px;
-      margin-top: 6px;
-    }
-
-    .menu-label {
-      color: #A9C4B3;
-      font-size: 10px;
-      letter-spacing: 1.5px;
-      margin: 38px 12px 13px;
-    }
-
-    .nav-btn {
-      border: 0;
-      background: transparent;
-      color: #DCE9DF;
-      padding: 13px 12px;
-      text-align: left;
-      border-radius: 9px;
-      margin-bottom: 6px;
-      width: 100%;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .nav-btn:hover, .nav-btn.active {
-      background: rgba(255,255,255,.13);
-      color: var(--gold);
-    }
-
-    .sidebar-bottom {
-      margin-top: auto;
-      padding: 14px 12px;
-      border-top: 1px solid rgba(255,255,255,.15);
-      color: #DCE9DF;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    /* CONTENU */
-
-    .main {
-      margin-left: 245px;
-      width: calc(100% - 245px);
-      min-height: 100vh;
-    }
-
-    .topbar {
-      height: 76px;
-      background: white;
-      border-bottom: 1px solid var(--border);
-      padding: 0 34px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .topbar h2 {
-      font-size: 18px;
-    }
-
-    .user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-    }
-
-    .avatar {
-      background: var(--gold-light);
-      color: var(--green);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-weight: bold;
-    }
-
-    .content {
-      max-width: 1150px;
-      padding: 32px;
-      margin: auto;
-    }
-
-    .page {
-      display: none;
-      animation: appear .2s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .welcome {
-      margin-bottom: 25px;
-    }
-
-    .welcome h1 {
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .stat-value {
-      font-size: 25px;
-      font-weight: bold;
-      color: var(--green);
-      margin: 14px 0 8px;
-    }
-
-    .stat-note {
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .section-title {
-      font-size: 17px;
-      margin-bottom: 17px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 13px;
-    }
-
-    .action {
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 12px;
-      padding: 19px 10px;
-      text-align: center;
-      color: var(--green);
-      font-size: 13px;
-    }
-
-    .action:hover {
-      border-color: var(--gold);
-      background: var(--gold-light);
-    }
-
-    .action-icon {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    /* FORMULAIRES */
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .field {
-      margin-bottom: 17px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .field input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      outline: none;
-      background: #FCFDFC;
-    }
-
-    .field input:focus {
-      border-color: var(--green);
-    }
-
-    .btn {
-      background: var(--green);
-      color: white;
-      border: 0;
-      border-radius: 9px;
-      padding: 13px 20px;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      background: #1D694A;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: #26352C;
-    }
-
-    .btn-light {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .result {
-      background: var(--green-light);
-      border-radius: 12px;
-      padding: 18px;
-      margin-top: 17px;
-      display: none;
-      line-height: 1.8;
-      font-size: 14px;
-    }
-
-    /* MOBIKISI */
-
-    .mobikisi {
-      background: linear-gradient(125deg, #124B35, #1C7350);
-      color: white;
-      border-radius: 17px;
-      padding: 25px;
-      max-width: 450px;
-      min-height: 220px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .mobikisi:after {
-      content: "";
-      position: absolute;
-      width: 210px;
-      height: 210px;
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: 50%;
-      right: -70px;
-      bottom: -100px;
-    }
-
-    .mobikisi h2 {
-      color: var(--gold);
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .mobikisi .number {
-      margin-top: 45px;
-      letter-spacing: 3px;
-      font-size: 17px;
-    }
-
-    .mobikisi small {
-      color: #DCE9DF;
-    }
-
-    /* TABLE */
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      min-width: 450px;
-    }
-
-    th, td {
-      padding: 14px 10px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    th {
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .positive {
-      color: var(--green);
-      font-weight: bold;
-    }
-
-    .empty {
-      padding: 25px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .notice {
-      background: var(--gold-light);
-      color: #73591E;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    /* MOBILE */
-
-    .mobile-nav {
-      display: none;
-    }
-
-    @media(max-width: 850px) {
-      .sidebar {
-        display: none;
-      }
-
-      .main {
-        margin-left: 0;
-        width: 100%;
-        padding-bottom: 75px;
-      }
-
-      .topbar {
-        padding: 0 18px;
-        height: 65px;
-      }
-
-      .content {
-        padding: 23px 16px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .actions {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .mobile-nav {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 67px;
-        background: white;
-        border-top: 1px solid var(--border);
-        z-index: 20;
-        justify-content: space-around;
-        align-items: center;
-      }
-
-      .mobile-nav button {
-        border: 0;
-        background: transparent;
-        color: var(--muted);
-        font-size: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        align-items: center;
-      }
-
-      .mobile-nav button.active {
-        color: var(--green);
-        font-weight: bold;
-      }
-
-      .mobile-nav span {
-        font-size: 19px;
-      }
-    }
-
-    @media(max-width: 480px) {
-      .grid, .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .welcome h1 {
-        font-size: 22px;
-      }
-
-      .stat-value {
-        font-size: 23px;
-      }
-    }
-    </style>
-
+  <meta name="theme-color" content="#123F30">
+  <meta name="description" content="MATA PAY - Prototype de démonstration">
+  <title>MATA PAY | Espace financier</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
-<div class="app">
+<div class="app-shell">
 
   <aside class="sidebar">
     <div class="brand">
-      MataPay
-      <small>ÉPARGNE & MICROFINANCE</small>
+      <div class="brand-mark">M</div>
+      <div>
+        <strong>MATA PAY</strong>
+        <small>Épargne & confiance</small>
+      </div>
     </div>
 
-    <div class="menu-label">MENU PRINCIPAL</div>
+    <div class="sidebar-label">MENU PRINCIPAL</div>
 
-    <button class="nav-btn active" data-page="dashboard">⌂ Tableau de bord</button>
-    <button class="nav-btn" data-page="savings">◈ Mon épargne</button>
-    <button class="nav-btn" data-page="mobikisi">▣ Carte Mobikisi</button>
-    <button class="nav-btn" data-page="credit">↗ Simulation crédit</button>
-    <button class="nav-btn" data-page="history">◷ Historique</button>
+    <nav class="sidebar-nav">
+      <button class="nav-link active" data-page="dashboard">Accueil</button>
+      <button class="nav-link" data-page="savings">Épargne</button>
+      <button class="nav-link" data-page="mobikisi">Carte Mobikisi</button>
+      <button class="nav-link" data-page="credit">Simulation de prêt</button>
+      <button class="nav-link" data-page="history">Historique</button>
+    </nav>
 
-    <div class="sidebar-bottom">
-      MATA PAY<br>
-      Prototype de démonstration<br>
-      Version 1.0
+    <div class="sidebar-footer">
+      <strong>MATA PAY</strong>
+      <p>Un espace pensé pour vous.</p>
+      <span>Prototype de démonstration</span>
     </div>
   </aside>
 
-  <main class="main">
+  <main class="main-area">
+
     <header class="topbar">
-      <h2 id="page-title">Tableau de bord</h2>
-      <div class="user">
-        <div class="avatar">M</div>
-        <span>Mon espace</span>
+      <div>
+        <span class="eyebrow">VOTRE ESPACE PERSONNEL</span>
+        <h1 id="page-title">Tableau de bord</h1>
+      </div>
+      <div class="profile-area">
+        <span class="status-dot"></span>
+        <span>Compte de démonstration</span>
       </div>
     </header>
 
     <div class="content">
 
-      <!-- TABLEAU DE BORD -->
-      <section class="page active" id="dashboard">
-        <div class="welcome">
-          <h1>Bienvenue chez MATA PAY</h1>
-          <p>Votre épargne, vos projets et votre avenir commencent ici.</p>
-        </div>
-
-        <div class="grid">
-          <div class="card">
-            <div class="stat-label">Épargne simulée</div>
-            <div class="stat-value" id="dashboard-balance">0 FCFA</div>
-            <div class="stat-note">Total des versements fictifs</div>
+      <!-- ACCUEIL -->
+      <section id="dashboard" class="page active">
+        <div class="welcome-banner">
+          <div>
+            <span class="eyebrow">BIENVENUE CHEZ MATA PAY</span>
+            <h2>Construisez vos projets avec confiance.</h2>
+            <p>Découvrez un espace de démonstration dédié à l'épargne et à la simulation de prêt.</p>
+            <button class="primary-button" data-go="savings">Commencer</button>
           </div>
-
-          <div class="card">
-            <div class="stat-label">Nombre de versements</div>
-            <div class="stat-value" id="dashboard-count">0</div>
-            <div class="stat-note">Opérations enregistrées</div>
-          </div>
-
-          <div class="card">
-            <div class="stat-label">Objectif d'épargne</div>
-            <div class="stat-value" id="dashboard-goal">100 000 FCFA</div>
-            <div class="stat-note">Objectif de démonstration</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3 class="section-title">Accès rapide</h3>
-          <div class="actions">
-            <button class="action" data-go="savings">
-              <div class="action-icon">💰</div>
-              Épargner
-            </button>
-            <button class="action" data-go="mobikisi">
-              <div class="action-icon">▣</div>
-              Mobikisi
-            </button>
-            <button class="action" data-go="credit">
-              <div class="action-icon">📊</div>
-              Simuler un crédit
-            </button>
-            <button class="action" data-go="history">
-              <div class="action-icon">◷</div>
-              Historique
-            </button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3 class="section-title">Activité récente</h3>
-          <div id="recent-activity" class="empty">
-            Aucune opération pour le moment.
-          </div>
-        </div>
-      </section>
-
-      <!-- EPARGNE -->
-      <section class="page" id="savings">
-        <div class="welcome">
-          <h1>Mon épargne</h1>
-          <p>Simulez vos versements et suivez votre progression.</p>
+          <div class="welcome-symbol">M</div>
         </div>
 
         <div class="notice">
-          Ceci est une simulation. Aucun dépôt réel n'est effectué et aucun rendement n'est promis.
+          <strong>Information importante</strong>
+          <p>Vous utilisez une version prototype. Aucun dépôt, paiement ou prêt réel n'est effectué.</p>
         </div>
 
-        <div class="card">
-          <h3 class="section-title">Mon solde simulé</h3>
-          <div class="stat-value" id="savings-balance">0 FCFA</div>
-        </div>
-
-        <div class="card">
-          <h3 class="section-title">Effectuer un versement fictif</h3>
-
-          <div class="field">
-            <label for="deposit-amount">Montant du versement (FCFA)</label>
-            <input type="number" id="deposit-amount" min="1" placeholder="Exemple : 1000">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">VUE D'ENSEMBLE</span>
+            <h2>Votre situation</h2>
           </div>
-
-          <div class="field">
-            <label for="deposit-note">Description (facultatif)</label>
-            <input type="text" id="deposit-note" placeholder="Mon épargne quotidienne">
-          </div>
-
-          <button class="btn" id="deposit-button">Enregistrer la simulation</button>
-          <div class="result" id="deposit-result"></div>
         </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span>Épargne simulée</span>
+            <strong id="dashboard-balance">0 FCFA</strong>
+            <small>Solde de démonstration</small>
+          </article>
+
+          <article class="stat-card">
+            <span>Opérations simulées</span>
+            <strong id="dashboard-count">0</strong>
+            <small>Activités enregistrées</small>
+          </article>
+
+          <article class="stat-card">
+            <span>Objectif d'épargne</span>
+            <strong id="dashboard-goal">0 FCFA</strong>
+            <small>Objectif indicatif</small>
+          </article>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">NOS SERVICES</span>
+            <h2>Que souhaitez-vous faire ?</h2>
+          </div>
+        </div>
+
+        <div class="services-grid">
+          <button class="service-card" data-go="savings">
+            <span class="service-icon">01</span>
+            <strong>Épargne</strong>
+            <small>Consulter et simuler votre épargne</small>
+          </button>
+
+          <button class="service-card" data-go="credit">
+            <span class="service-icon">02</span>
+            <strong>Prêt</strong>
+            <small>Découvrir une simulation de crédit</small>
+          </button>
+
+          <button class="service-card" data-go="mobikisi">
+            <span class="service-icon">03</span>
+            <strong>Mobikisi</strong>
+            <small>Découvrir votre carte de démonstration</small>
+          </button>
+
+          <button class="service-card" data-go="history">
+            <span class="service-icon">04</span>
+            <strong>Historique</strong>
+            <small>Consulter les activités simulées</small>
+          </button>
+        </div>
+
+        <div class="section-heading">
+          <h2>Activité récente</h2>
+        </div>
+        <div id="recent-activity" class="activity-list"></div>
       </section>
 
-      <!-- MOBIKISI -->
-      <section class="page" id="mobikisi">
-        <div class="welcome">
-          <h1>Carte Mobikisi</h1>
-          <p>Votre support de suivi des versements d'épargne.</p>
+      <!-- ÉPARGNE -->
+      <section id="savings" class="page">
+        <div class="page-intro">
+          <span class="eyebrow">GESTION DE VOTRE ÉPARGNE</span>
+          <h2>Votre espace épargne</h2>
+          <p>Découvrez le fonctionnement de l'épargne à travers cette simulation.</p>
         </div>
 
         <div class="notice">
-          Carte numérique fictive destinée à tester l'expérience utilisateur.
+          <strong>Mode démonstration</strong>
+          <p>Les montants saisis ici sont fictifs. Aucun argent réel n'est collecté.</p>
         </div>
 
-        <div class="mobikisi">
-          <h2>MATA PAY</h2>
-          <small>CARTE MOBIKISI</small>
-          <div class="number">MP •••• •••• 0001</div>
-          <small>CARTE DE SUIVI — DÉMONSTRATION</small>
-        </div>
+        <article class="balance-card">
+          <span>Solde d'épargne simulé</span>
+          <strong id="savings-balance">0 FCFA</strong>
+          <small>Votre progression dans le prototype</small>
+        </article>
 
-        <div class="grid">
-          <div class="card">
-            <div class="stat-label">Total enregistré</div>
-            <div class="stat-value" id="mobikisi-total">0 FCFA</div>
-          </div>
-          <div class="card">
-            <div class="stat-label">Versements enregistrés</div>
-            <div class="stat-value" id="mobikisi-count">0</div>
-          </div>
-        </div>
+        <div class="form-card">
+          <h3>Simuler un versement</h3>
+          <label for="deposit-amount">Montant (FCFA)</label>
+          <input id="deposit-amount" type="number" min="1" placeholder="Ex. 5000">
 
-        <div class="card">
-          <h3 class="section-title">Derniers versements</h3>
-          <div id="mobikisi-history" class="empty">Aucun versement enregistré.</div>
+          <label for="deposit-note">Description</label>
+          <input id="deposit-note" type="text" placeholder="Ex. Épargne personnelle">
+
+          <button id="deposit-button" class="primary-button">Simuler le versement</button>
+          <div id="deposit-result" class="result-message"></div>
         </div>
       </section>
 
-      <!-- CREDIT -->
-      <section class="page" id="credit">
-        <div class="welcome">
-          <h1>Simulation de crédit</h1>
-          <p>Estimez une mensualité indicative selon votre projet.</p>
+      <!-- CARTE MOBIKISI -->
+      <section id="mobikisi" class="page">
+        <div class="page-intro">
+          <span class="eyebrow">VOTRE CARTE</span>
+          <h2>Carte Mobikisi</h2>
+          <p>Découvrez une représentation de votre espace carte.</p>
         </div>
 
         <div class="notice">
-          Cette simulation ne constitue ni une offre de crédit, ni une décision d'octroi. MATA PAY ne prête pas d'argent dans ce prototype.
+          <strong>Carte fictive</strong>
+          <p>Cette carte est une illustration du prototype. Elle ne permet aucun paiement réel.</p>
         </div>
 
-        <div class="card">
-          <h3 class="section-title">Mon projet de financement</h3>
-
-          <div class="field">
-            <label for="credit-amount">Montant souhaité (FCFA)</label>
-            <input type="number" id="credit-amount" min="1000" placeholder="Exemple : 100000">
+        <div class="mobikisi-card">
+          <div class="card-top">
+            <strong>MATA PAY</strong>
+            <span>MOBIKISI</span>
           </div>
-
-          <div class="field">
-            <label for="credit-duration">Durée (mois)</label>
-            <input type="number" id="credit-duration" min="1" max="60" value="12">
+          <div class="card-chip"></div>
+          <div class="card-number">•••• &nbsp; •••• &nbsp; •••• &nbsp; 0000</div>
+          <div class="card-bottom">
+            <span>CARTE DE DÉMONSTRATION</span>
+            <strong>MOBIKISI</strong>
           </div>
+        </div>
 
-          <button class="btn" id="credit-button">Calculer ma simulation</button>
-          <div class="result" id="credit-result"></div>
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span>Montant simulé</span>
+            <strong id="mobikisi-total">0 FCFA</strong>
+          </article>
+          <article class="stat-card">
+            <span>Nombre d'opérations</span>
+            <strong id="mobikisi-count">0</strong>
+          </article>
+        </div>
+
+        <div class="form-card">
+          <h3>Activité de la carte</h3>
+          <div id="mobikisi-history"></div>
+        </div>
+      </section>
+
+      <!-- CRÉDIT -->
+      <section id="credit" class="page">
+        <div class="page-intro">
+          <span class="eyebrow">ACCOMPAGNEMENT FINANCIER</span>
+          <h2>Simulation de prêt</h2>
+          <p>Estimez une mensualité indicative selon le montant et la durée choisis.</p>
+        </div>
+
+        <div class="notice">
+          <strong>Simulation uniquement</strong>
+          <p>Cette fonctionnalité ne constitue pas une offre de crédit ni une demande de prêt réelle.</p>
+        </div>
+
+        <div class="form-card">
+          <h3>Paramètres de simulation</h3>
+
+          <label for="credit-amount">Montant souhaité (FCFA)</label>
+          <input id="credit-amount" type="number" min="1" placeholder="Ex. 100000">
+
+          <label for="credit-duration">Durée souhaitée</label>
+          <select id="credit-duration">
+            <option value="3">3 mois</option>
+            <option value="6">6 mois</option>
+            <option value="12">12 mois</option>
+            <option value="18">18 mois</option>
+            <option value="24">24 mois</option>
+          </select>
+
+          <button id="credit-button" class="primary-button">Lancer la simulation</button>
+          <div id="credit-result" class="result-message"></div>
         </div>
       </section>
 
       <!-- HISTORIQUE -->
-      <section class="page" id="history">
-        <div class="welcome">
-          <h1>Historique des opérations</h1>
-          <p>Retrouvez les versements fictifs effectués dans le prototype.</p>
+      <section id="history" class="page">
+        <div class="page-intro">
+          <span class="eyebrow">SUIVI DES ACTIVITÉS</span>
+          <h2>Historique</h2>
+          <p>Retrouvez les opérations réalisées dans votre prototype.</p>
         </div>
 
-        <div class="card">
-          <div class="table-wrap" id="history-table">
-            <div class="empty">Aucune opération enregistrée.</div>
+        <div class="notice">
+          <strong>Historique fictif</strong>
+          <p>Les informations affichées correspondent uniquement aux simulations effectuées sur cet appareil.</p>
+        </div>
+
+        <div class="table-card">
+          <h3>Vos activités</h3>
+          <div class="table-responsive">
+            <table id="history-table">
+              <thead>
+                <tr>
+                  <th>Opération</th>
+                  <th>Description</th>
+                  <th>Montant</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
-      
-    <script src="assets/js/app.js"></script>
-</body>
-</html>
+      </section>
 
+    </div>
+
+    <footer class="main-footer">
+      <strong>MATA PAY</strong>
+      <span>Prototype de démonstration — Aucune transaction financière réelle.</span>
+    </footer>
+
+  </main>
+
+  <!-- NAVIGATION MOBILE -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-link active" data-page="dashboard">
+      <span>⌂</span>
+      <small>Accueil</small>
+    </button>
+    <button class="mobile-nav-link" data-page="savings">
+      <span>◈</span>
+      <small>Épargne</small>
+    </button>
+    <button class="mobile-nav-link" data-page="mobikisi">
+      <span>▣</span>
+      <small>Carte</small>
+    </button>
+    <button class="mobile-nav-link" data-page="credit">
+      <span>＋</span>
+      <small>Prêt</small>
+    </button>
+    <button class="mobile-nav-link" data-page="history">
+      <span>☷</span>
+      <small>Historique</small>
+    </button>
+  </nav>
+
+</div>
+
+<script src="assets/js/app.js"></script>
+</body>
+  </html>
+            

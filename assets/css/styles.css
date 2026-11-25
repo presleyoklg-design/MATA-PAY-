@@ -1092,9 +1092,9 @@ tbody tr:hover {
     align-items: flex-end;
     background:
       linear-gradient(0deg,
-        rgba(9, 41, 31, .98) 0%,
-        rgba(9, 41, 31, .88) 48%,
-        rgba(9, 41, 31, .18) 100%),
+        rgba(9, 41, 31, .82) 0%,
+        rgba(9, 41, 31, .62) 48%,
+        rgba(9, 41, 31, .12) 100%),
       url("../images/matapay-representante(1).jpg") center 28% / cover no-repeat;
   }
 

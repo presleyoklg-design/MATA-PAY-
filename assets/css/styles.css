@@ -1066,3 +1066,39 @@ tbody tr:hover {
     white-space: nowrap;
   }
    }
+/* MATAPAY — PHOTO DU PANNEAU DE BIENVENUE */
+.welcome-banner {
+  min-height: 310px;
+  padding: 38px;
+  background:
+    linear-gradient(90deg,
+      rgba(9, 41, 31, .97) 0%,
+      rgba(9, 41, 31, .88) 42%,
+      rgba(9, 41, 31, .30) 100%),
+    url("../images/matapay-representante(1).jpg") center right / cover no-repeat;
+  border: 1px solid rgba(217, 173, 69, .35);
+}
+
+.welcome-banner > div {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+}
+
+@media (max-width: 700px) {
+  .welcome-banner {
+    min-height: 360px;
+    padding: 26px 21px;
+    align-items: flex-end;
+    background:
+      linear-gradient(0deg,
+        rgba(9, 41, 31, .98) 0%,
+        rgba(9, 41, 31, .88) 48%,
+        rgba(9, 41, 31, .18) 100%),
+      url("../images/matapay-representante(1).jpg") center 28% / cover no-repeat;
+  }
+
+  .welcome-banner > div {
+    max-width: 100%;
+  }
+}

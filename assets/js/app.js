@@ -2,6 +2,7 @@
 const state = { balance: 0, operations: [], dailyChecks: [], withdrawalRequests: [] };
 const titles = {
   dashboard: "Tableau de bord",
+  register: "Créer un compte",
   savings: "Mon épargne",
   mobikisi: "Carte Mobikisi",
   credit: "Simulation crédit",
@@ -14,12 +15,20 @@ function navigate(page) {
   if (!target) return;
   target.classList.add("active");
   document.getElementById("page-title").textContent = titles[page] || "MATA PAY";
+  const profileLabel = document.getElementById("profile-label");
+  if (profileLabel) profileLabel.textContent = demoProfile ? demoProfile + " — démonstration" : "Visiteur — démonstration";
   document.querySelectorAll("[data-page]").forEach(button => button.classList.toggle("active", button.dataset.page === page));
   window.scrollTo({ top: 0, behavior: "smooth" });
   updateInterface();
 }
 document.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.page)));
-document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.go)));
+document.addEventListener("click", event => {
+  const trigger = event.target.closest("[data-go]");
+  if (trigger) {
+    event.preventDefault();
+    navigate(trigger.dataset.go);
+  }
+});
 
 function money(amount) {
   return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(amount) + " FCFA";
@@ -262,6 +271,8 @@ function updateInterface() {
 }
 
 const STORAGE_KEY = "matapay-demo-v1";
+const PROFILE_KEY = "matapay-demo-profile-v1";
+let demoProfile = "";
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -289,6 +300,28 @@ function loadState() {
   } catch (error) {
     console.warn("Données locales non récupérables :", error);
   }
+}
+try { demoProfile = localStorage.getItem(PROFILE_KEY) || ""; } catch (error) { demoProfile = ""; }
+const registerForm = document.getElementById("register-form");
+if (registerForm) {
+  registerForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const field = document.getElementById("display-name");
+    const name = field.value.trim().replace(/\\s+/g, " ");
+    if (!name || name.length > 40) {
+      showResult("register-result", "Saisissez un nom d'affichage valide (40 caractères maximum).");
+      return;
+    }
+    demoProfile = name;
+    try {
+      localStorage.setItem(PROFILE_KEY, demoProfile);
+      showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Aucune opération réelle n'est possible.");
+      document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
+      field.value = "";
+    } catch (error) {
+      showResult("register-result", "La sauvegarde locale n'est pas disponible sur cet appareil. Réessayez dans un autre navigateur.");
+    }
+  });
 }
 loadState();
 updateDepositRule();

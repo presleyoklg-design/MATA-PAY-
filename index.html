@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-13">\n  <link rel="stylesheet" href="assets/css/credit.css?v=20261126-01">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-13">
+  <link rel="stylesheet" href="assets/css/credit.css?v=20261126-02">
 </head>
 
 <body>
@@ -28,7 +29,8 @@
       <button type="button" class="nav-link active" data-page="dashboard">Accueil</button>
       <button type="button" class="nav-link" data-page="savings">Épargne</button>
       <button type="button" class="nav-link" data-page="mobikisi">Carte Mobikisi</button>
-      <button type="button" class="nav-link" data-page="credit">Simulation de prêt</button>
+      <button type="button" class="nav-link" data-page="credit">Espace prêt</button>
+      <button type="button" class="nav-link" data-page="credit-admin">Administration démo</button>
       <button type="button" class="nav-link" data-page="history">Historique</button>
     </nav>
     <div class="sidebar-footer">
@@ -416,6 +418,18 @@
             <div id="credit-result" class="credit-result" aria-live="polite">
               <div class="credit-result-empty"><span>↗</span><strong>Votre estimation apparaîtra ici</strong><small>Entrez un montant fictif et lancez le calcul.</small></div>
             </div>
+            <div id="credit-file-create-wrap" class="credit-file-create-wrap" hidden>
+              <div class="credit-create-intro"><strong>Continuer avec un dossier fictif ?</strong><p>Utilisez uniquement des informations inventées. Aucun renseignement personnel ou document officiel n'est demandé.</p></div>
+              <label for="credit-purpose">Objet pédagogique du dossier</label>
+              <select id="credit-purpose">
+                <option value="Projet personnel fictif">Projet personnel fictif</option>
+                <option value="Formation fictive">Formation fictive</option>
+                <option value="Équipement fictif">Équipement fictif</option>
+                <option value="Autre scénario fictif">Autre scénario fictif</option>
+              </select>
+              <button type="button" id="credit-create-file" class="credit-primary-button">Créer mon dossier de démonstration <span aria-hidden="true">→</span></button>
+              <p id="credit-create-message" class="credit-form-footnote" aria-live="polite"></p>
+            </div>
           </section>
 
           <section class="credit-panel credit-explanation-panel">
@@ -430,7 +444,7 @@
         <div class="credit-lower-grid">
           <section class="credit-panel">
             <div class="credit-panel-heading"><div><span class="credit-kicker">ESPACE PERSONNEL</span><h3>Suivi du dossier</h3></div><span class="credit-panel-number">03 / 04</span></div>
-            <div class="credit-empty-state"><span class="credit-empty-icon">▤</span><strong>Aucun dossier de démonstration</strong><p>Le suivi présentera ici les étapes, les pièces éventuellement requises et les décisions simulées. Aucun document officiel ne doit être ajouté à ce prototype.</p></div>
+            <div id="credit-member-file" class="credit-empty-state"><span class="credit-empty-icon">▤</span><strong>Aucun dossier de démonstration</strong><p>Après une simulation, vous pourrez créer un dossier fictif et suivre son évolution ici. N'ajoutez aucun document officiel ni renseignement personnel.</p></div>
           </section>
           <section class="credit-panel">
             <div class="credit-panel-heading"><div><span class="credit-kicker">TRANSPARENCE</span><h3>Règles à finaliser</h3></div><span class="credit-panel-number">04 / 04</span></div>
@@ -444,6 +458,38 @@
           </section>
         </div>
         <p class="credit-page-footnote">MATA-PAY — Maquette fonctionnelle de démonstration. Les opérations réelles ne pourront être envisagées qu'avec des partenaires habilités, les autorisations nécessaires et un dispositif de conformité et de protection des utilisateurs.</p>
+      </section>
+
+
+      <!-- ADMINISTRATION DU PRÊT — DÉMONSTRATION DISTINCTE -->
+      <section id="credit-admin" class="page credit-admin-page">
+        <div class="credit-hero credit-admin-hero">
+          <div class="credit-hero-copy">
+            <span class="credit-eyebrow">MATA-PAY • CONSOLE ADMINISTRATIVE</span>
+            <h2>Gestion des dossiers de démonstration.</h2>
+            <p>Consultez les dossiers fictifs créés sur cet appareil et simulez leur examen. Aucune décision financière réelle n'est prise.</p>
+            <div class="credit-hero-tags"><span>Vue administrative</span><span>Journal de suivi</span><span>Données locales fictives</span></div>
+          </div>
+          <div class="credit-hero-mark" aria-hidden="true"><div class="credit-orbit credit-orbit-one"></div><div class="credit-orbit credit-orbit-two"></div><div class="credit-hero-symbol">A</div><span class="credit-hero-caption">ADMIN<br> DÉMO</span></div>
+        </div>
+        <div class="credit-demo-alert credit-admin-warning" role="note">
+          <span class="credit-alert-icon">!</span><div><strong>Console non sécurisée — démonstration locale</strong><p>Cette page est accessible sans authentification et ses données sont stockées dans le navigateur. Elle sert uniquement à présenter le parcours. Elle ne doit jamais être utilisée pour traiter de vrais dossiers. Une vraie administration exigera un serveur, une authentification forte, des rôles contrôlés côté serveur et un journal d'audit non modifiable par le navigateur.</p></div>
+        </div>
+        <div class="credit-section-heading"><div><span class="credit-kicker">PILOTAGE</span><h3>Vue administrative</h3></div><button type="button" class="credit-back-button" data-go="credit">← Retour à l'espace prêt</button></div>
+        <div class="credit-overview-grid">
+          <article class="credit-overview-card"><span class="credit-overview-icon">01</span><div><small>Dossiers enregistrés</small><strong id="credit-admin-total">0</strong><em>Sur cet appareil</em></div></article>
+          <article class="credit-overview-card"><span class="credit-overview-icon">02</span><div><small>En attente</small><strong id="credit-admin-pending">0</strong><em>À examiner dans la simulation</em></div></article>
+          <article class="credit-overview-card"><span class="credit-overview-icon">03</span><div><small>Décisions simulées</small><strong id="credit-admin-decided">0</strong><em>Aucun effet financier</em></div></article>
+        </div>
+        <section class="credit-panel credit-admin-list-panel">
+          <div class="credit-panel-heading"><div><span class="credit-kicker">DOSSIERS FICTIFS</span><h3>File d'examen</h3></div><span class="credit-panel-number">ADMIN / DÉMO</span></div>
+          <p class="credit-panel-intro">Sélectionnez un dossier pour afficher ses données fictives et choisir une action de démonstration.</p>
+          <div id="credit-admin-files" class="credit-admin-files"><div class="credit-empty-state"><span class="credit-empty-icon">▤</span><strong>Aucun dossier disponible</strong><p>Créez d'abord un dossier de démonstration depuis l'espace Prêt.</p></div></div>
+        </section>
+        <section class="credit-panel credit-admin-audit-panel">
+          <div class="credit-panel-heading"><div><span class="credit-kicker">TRAÇABILITÉ LOCALE</span><h3>Journal des événements</h3></div><span class="credit-panel-number">HISTORIQUE DÉMO</span></div>
+          <div id="credit-admin-audit" class="credit-admin-audit"><p class="credit-admin-empty-note">Aucun événement pour le moment.</p></div>
+        </section>
       </section>
 
       <!-- HISTORIQUE -->
@@ -563,7 +609,8 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261126-12"></script>\n<script src="assets/js/credit.js?v=20261126-01"></script>
+<script src="assets/js/app.js?v=20261126-13"></script>
+<script src="assets/js/credit.js?v=20261126-02"></script>
 </body>
   </html>
             

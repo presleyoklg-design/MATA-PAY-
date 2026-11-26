@@ -1612,3 +1612,25 @@ body {
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
 }
+
+
+/* CORRECTION NAVIGATION + INSCRIPTION */
+#dashboard { display: none; }
+#dashboard.active { display: flex; }
+#dashboard:not(.active) { display: none; }
+.welcome-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.secondary-button, .account-entry {
+  min-height:42px; padding:10px 15px; border:1px solid #DCE5DD;
+  border-radius:10px; background:#fff; color:#174B36; font-weight:700;
+}
+.account-entry { min-height:34px; padding:7px 11px; font-size:11px; }
+.secondary-button:hover, .account-entry:hover { border-color:#D9AD45; background:#FBF5E7; }
+#register .form-card { max-width:680px; margin-top:20px; }
+#register-form .primary-button { margin-top:20px; }
+#register .result-message:empty { display:none; }
+@media (max-width:700px) {
+  .profile-area { flex-wrap:wrap; justify-content:flex-end; gap:7px; }
+  .account-entry { font-size:10px; }
+  .welcome-actions { align-items:stretch; flex-direction:column; }
+  .welcome-actions button { width:100%; }
+}

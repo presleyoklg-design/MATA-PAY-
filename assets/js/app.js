@@ -307,17 +307,30 @@ if (registerForm) {
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
     const field = document.getElementById("display-name");
+    const emailField = document.getElementById("demo-email");
+    const adultField = document.getElementById("adult-confirm");
+    const genderField = document.getElementById("demo-gender");
     const name = field.value.trim().replace(/\\s+/g, " ");
+    const email = emailField.value.trim();
     if (!name || name.length > 40) {
       showResult("register-result", "Saisissez un nom d'affichage valide (40 caractères maximum).");
       return;
     }
+    if (!emailField.checkValidity() || !email) {
+      showResult("register-result", "Saisissez une adresse e-mail au format valide. Utilisez une adresse fictive pour la démonstration.");
+      return;
+    }
+    if (!adultField.checked) {
+      showResult("register-result", "La création de ce profil de démonstration nécessite la confirmation des 18 ans ou plus.");
+      return;
+    }
     demoProfile = name;
+    const demoDetails = { name, email, adultConfirmed: true, gender: genderField.value || "Non précisé" };
     try {
-      localStorage.setItem(PROFILE_KEY, demoProfile);
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
       showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Aucune opération réelle n'est possible.");
       document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
-      field.value = "";
+      registerForm.reset();
     } catch (error) {
       showResult("register-result", "La sauvegarde locale n'est pas disponible sur cet appareil. Réessayez dans un autre navigateur.");
     }

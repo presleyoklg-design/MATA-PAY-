@@ -804,7 +804,7 @@ h1{color:#124b35;margin:0 0 6px}.subtitle{color:#7c8980;font-size:13px}.amount{f
 .note{color:#7c8980;font-size:12px;line-height:1.6;margin-top:24px}button{background:#124b35;color:white;border:0;border-radius:8px;padding:13px 18px;margin-top:20px;font-weight:bold}
 @media print{body{background:#fff;padding:0}.receipt{border:0;margin:0 auto}button{display:none}}</style></head><body><main class="receipt">
 <h1>MATA PAY</h1><div class="subtitle">Reçu de dépôt — Prototype de démonstration</div><div class="amount">+${safe(money(operation.amount))}</div>
-<div class="row"><span>Formule</span><strong>${safe(operation.product)}</strong></div><div class="row"><span>Date et heure</span><strong>${safe(operation.date)}</strong></div>
+<div class="row"><span>Formule</span><strong>${safe(operation.product)}</strong></div><div class="row"><span>Date et heure</span><strong>${safe(operation.date)}</strong></div>${operation.maturityDate?`<div class="row"><span>Échéance indicative (un an)</span><strong>${safe(operation.maturityDate)}</strong></div>`:""}
 <div class="row"><span>Référence unique</span><strong>${safe(operation.reference)}</strong></div><div class="row"><span>Statut</span><strong class="status">Confirmé — simulation</strong></div>
 <div class="row"><span>Solde total simulé après dépôt</span><strong>${safe(money(operation.balanceAfter))}</strong></div><div class="row"><span>Description</span><strong>${safe(operation.note)}</strong></div>
 <p class="note">Ce document atteste uniquement d'une opération fictive dans le prototype MATA PAY. Il ne constitue pas une preuve de dépôt de fonds réels. Pour enregistrer ce reçu en PDF, choisissez « Enregistrer au format PDF » dans les options d'impression de votre navigateur.</p>

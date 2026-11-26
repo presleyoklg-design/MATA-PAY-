@@ -1733,3 +1733,72 @@ body {
     font-size: 12px;
   }
 }
+
+
+/* MATA PAY — COMPTE EN HAUT À DROITE, EN FACE DU LOGO */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.topbar-brand {
+  order: 1;
+  margin-right: auto;
+}
+.profile-area {
+  order: 2;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+.profile-area .status-dot,
+.profile-area #profile-label {
+  display: none;
+}
+.account-entry {
+  min-height: 40px;
+  padding: 9px 16px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .topbar {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .topbar-brand {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+  .topbar-brand img {
+    flex: 0 0 auto;
+  }
+  .topbar-brand strong {
+    font-size: 15px;
+  }
+  .topbar-brand small {
+    font-size: 9px;
+  }
+  .profile-area {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .account-entry {
+    min-height: 36px;
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+  .topbar-page {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 380px) {
+  .profile-area { display: flex; }
+}

@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-9">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-10">
 </head>
 
 <body>
@@ -270,6 +270,27 @@
           <div id="blocked-checkin-result" class="result-message" aria-live="polite"></div>
         </div>
         <div class="form-card">
+          <h3>Fiches de pointage des trois formules</h3>
+          <p>Les fiches récapitulent les opérations et pointages enregistrés dans cette démonstration. Elles sont consultables sur cet appareil et ne constituent pas une preuve de dépôt réel.</p>
+          <section class="pointage-sheet">
+            <h4>Fiche de pointage — Épargne Simple</h4>
+            <p>Suivi des dépôts simulés et des demandes de retrait mensuel.</p>
+            <div id="simple-pointage-sheet" class="table-wrap">Aucune opération enregistrée.</div>
+          </section>
+          <hr>
+          <section class="pointage-sheet">
+            <h4>Fiche de pointage — Épargne Bloquée</h4>
+            <p>Suivi des pointages journaliers et des dépôts sur la durée de référence d'un an.</p>
+            <div id="blocked-pointage-sheet" class="table-wrap">Aucun pointage enregistré.</div>
+          </section>
+          <hr>
+          <section class="pointage-sheet">
+            <h4>Fiche de pointage — Compte Mobikisi</h4>
+            <p>Suivi des contributions quotidiennes de 300, 500 ou 1 000 FCFA.</p>
+            <div id="mobikisi-pointage-sheet" class="table-wrap">Aucune contribution enregistrée.</div>
+          </section>
+        </div>
+        <div class="form-card">
           <h3>Historique et reçus</h3>
           <div id="savings-history" class="activity-list">Aucun dépôt enregistré.</div>
         </div>
@@ -477,7 +498,7 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261126-6"></script>
+<script src="assets/js/app.js?v=20261126-7"></script>
 </body>
   </html>
             

@@ -191,6 +191,7 @@ document.getElementById("blocked-checkin-button").addEventListener("click", () =
     showResult("blocked-checkin-result", "Pointage journalier enregistré — simulation uniquement.");
   }
   refreshSavingsTracking();
+  renderPointageSheets();
 });
 
 // SIMULATION DE CRÉDIT — aucune demande réelle.
@@ -252,6 +253,62 @@ function renderOperations(containerId, limit, productFilter) {
   container.replaceChildren(table);
 }
 
+function renderPointageTable(containerId, rows, emptyMessage) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (!rows.length) {
+    container.textContent = emptyMessage;
+    return;
+  }
+  const table = document.createElement("table");
+  const head = document.createElement("tr");
+  ["Date", "Détail", "Montant", "Référence / statut"].forEach(label => {
+    const th = document.createElement("th");
+    th.textContent = label;
+    head.appendChild(th);
+  });
+  table.appendChild(head);
+  rows.forEach(item => {
+    const row = document.createElement("tr");
+    [item.date, item.detail, item.amount, item.reference].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "—";
+      row.appendChild(cell);
+    });
+    table.appendChild(row);
+  });
+  container.replaceChildren(table);
+}
+function renderPointageSheets() {
+  const simpleOperations = state.operations.filter(op => op.product === "Épargne Simple").map(op => ({
+    date: op.date, detail: op.note || "Dépôt simulé", amount: money(op.amount),
+    reference: op.reference || "Enregistré — simulation"
+  }));
+  const simpleWithdrawals = state.withdrawalRequests.map(item => ({
+    date: item.date, detail: "Demande de retrait mensuel", amount: "—",
+    reference: item.reference || item.status
+  }));
+  renderPointageTable("simple-pointage-sheet",
+    [...simpleOperations, ...simpleWithdrawals].sort((a,b) => String(b.date).localeCompare(String(a.date))),
+    "Aucun dépôt ni retrait mensuel enregistré.");
+  const blockedOperations = state.operations.filter(op => op.product === "Épargne Bloquée").map(op => ({
+    date: op.date, detail: op.note || "Dépôt simulé", amount: money(op.amount),
+    reference: op.reference || "Enregistré — simulation"
+  }));
+  const blockedChecks = state.dailyChecks.map(day => ({
+    date: day, detail: "Pointage journalier", amount: "—", reference: "Pointage fictif enregistré"
+  }));
+  renderPointageTable("blocked-pointage-sheet",
+    [...blockedOperations, ...blockedChecks].sort((a,b) => String(b.date).localeCompare(String(a.date))),
+    "Aucun dépôt ni pointage journalier enregistré.");
+  const mobikisiOperations = state.operations.filter(op => op.product === "Compte Mobikisi").map(op => ({
+    date: op.date, detail: op.note || "Contribution quotidienne", amount: money(op.amount),
+    reference: op.reference || "Enregistré — simulation"
+  }));
+  renderPointageTable("mobikisi-pointage-sheet", mobikisiOperations,
+    "Aucune contribution quotidienne enregistrée.");
+}
+
 function updateInterface() {
   const count = state.operations.length;
   const balanceText = money(state.balance);
@@ -268,6 +325,7 @@ function updateInterface() {
   renderOperations("mobikisi-history", 5, "Compte Mobikisi");
   renderOperations("savings-history", 10);
   renderOperations("history-table");
+  renderPointageSheets();
 }
 
 const STORAGE_KEY = "matapay-demo-v1";

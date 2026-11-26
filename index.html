@@ -129,11 +129,9 @@
           <input id="demo-email" name="email" type="email" maxlength="120" autocomplete="off" placeholder="exemple@domaine.com" required>
           <small>Aucun e-mail ne sera envoyé ni vérifié. Pour tester, utilisez une adresse fictive.</small>
 
-          <label class="check-row" for="adult-confirm">
-            <input id="adult-confirm" name="adultConfirm" type="checkbox" required>
-            <span>Je confirme avoir 18 ans ou plus.</span>
-          </label>
-          <small>Ce prototype est réservé aux démonstrations destinées aux adultes. Ne saisissez pas votre date de naissance.</small>
+          <label for="demo-age">Âge (18 ans minimum)</label>
+          <input id="demo-age" name="age" type="number" min="18" max="120" step="1" inputmode="numeric" placeholder="Ex. 25" required>
+          <small>Les profils de démonstration sont réservés aux personnes âgées de 18 ans ou plus. N'indiquez pas votre date de naissance.</small>
 
           <label for="demo-gender">Genre <span>(facultatif)</span></label>
           <select id="demo-gender" name="gender">

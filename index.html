@@ -125,9 +125,25 @@
           <input id="display-name" name="displayName" type="text" maxlength="40" autocomplete="off" placeholder="Ex. Marie" required>
           <small>Utilisez un prénom fictif ou un pseudonyme.</small>
 
+          <label for="demo-first-name">Prénom</label>
+          <input id="demo-first-name" name="firstName" type="text" maxlength="50" autocomplete="off" placeholder="Ex. Jean" required>
+
           <label for="demo-email">Adresse e-mail de démonstration</label>
           <input id="demo-email" name="email" type="email" maxlength="120" autocomplete="off" placeholder="exemple@domaine.com" required>
           <small>Aucun e-mail ne sera envoyé ni vérifié. Pour tester, utilisez une adresse fictive.</small>
+
+          <label for="demo-country">Pays</label>
+          <input id="demo-country" name="country" type="text" maxlength="80" autocomplete="off" placeholder="Ex. Congo" required>
+
+          <label for="demo-city">Ville</label>
+          <input id="demo-city" name="city" type="text" maxlength="80" autocomplete="off" placeholder="Ex. Brazzaville" required>
+
+          <label for="demo-neighborhood">Quartier</label>
+          <input id="demo-neighborhood" name="neighborhood" type="text" maxlength="100" autocomplete="off" placeholder="Votre quartier fictif" required>
+
+          <label for="demo-phone">Numéro de téléphone de démonstration</label>
+          <input id="demo-phone" name="phone" type="tel" maxlength="20" inputmode="tel" autocomplete="off" pattern="[0-9+() .-]{7,20}" placeholder="Ex. +242 06 000 00 00" required>
+          <small>Aucun appel ni SMS ne sera envoyé. Utilisez un numéro fictif pour les essais.</small>
 
           <label for="demo-age">Âge (18 ans minimum)</label>
           <input id="demo-age" name="age" type="number" min="18" max="120" step="1" inputmode="numeric" placeholder="Ex. 25" required>

@@ -25,11 +25,11 @@
     <div class="sidebar-label">MENU PRINCIPAL</div>
 
     <nav class="sidebar-nav">
-      <button class="nav-link active" data-page="dashboard">Accueil</button>
-      <button class="nav-link" data-page="savings">Épargne</button>
-      <button class="nav-link" data-page="mobikisi">Carte Mobikisi</button>
-      <button class="nav-link" data-page="credit">Simulation de prêt</button>
-      <button class="nav-link" data-page="history">Historique</button>
+      <button type="button" class="nav-link active" data-page="dashboard">Accueil</button>
+      <button type="button" class="nav-link" data-page="savings">Épargne</button>
+      <button type="button" class="nav-link" data-page="mobikisi">Carte Mobikisi</button>
+      <button type="button" class="nav-link" data-page="credit">Simulation de prêt</button>
+      <button type="button" class="nav-link" data-page="history">Historique</button>
     </nav>
     <div class="sidebar-footer">
       <strong>MATA PAY</strong>
@@ -56,7 +56,8 @@
 
   <div class="profile-area">
     <span class="status-dot"></span>
-    <span>Compte de démonstration</span>
+    <span id="profile-label">Visiteur — démonstration</span>
+    <button type="button" class="account-entry" data-go="register">Créer un compte</button>
   </div>
     </header>
 
@@ -69,7 +70,7 @@
             <span class="eyebrow">BIENVENUE CHEZ MATA PAY</span>
             <h2>Bienvenue dans votre espace MATA PAY.</h2>
             <p>Un tableau de bord clair pour suivre vos simulations d'épargne et découvrir les services proposés.</p>
-            <button class="primary-button" data-go="savings">Commencer</button>
+            <div class="welcome-actions"><button type="button" class="primary-button" data-go="register">Créer mon espace</button><button type="button" class="secondary-button" data-go="savings">Découvrir les services</button></div>
           </div>
         </div>
 
@@ -112,7 +113,7 @@
         </div>
 
         <div class="services-grid">
-          <button class="service-card" data-go="savings">
+          <button type="button" class="service-card" data-go="savings">
             <span class="service-icon">
   <svg viewBox="0 0 24 24" width="24" height="24"
        fill="none" stroke="currentColor"
@@ -126,7 +127,7 @@
             <small>Constituez votre épargne et suivez vos objectifs.</small>
           </button>
 
-          <button class="service-card" data-go="credit">
+          <button type="button" class="service-card" data-go="credit">
           <span class="service-icon">
   <svg viewBox="0 0 24 24" width="24" height="24"
        fill="none" stroke="currentColor"
@@ -141,7 +142,7 @@
             <small>Simulez votre prêt et estimez vos mensualités.</small>
           </button>
 
-          <button class="service-card" data-go="mobikisi">
+          <button type="button" class="service-card" data-go="mobikisi">
             <span class="service-icon">
   <svg viewBox="0 0 24 24" width="24" height="24"
        fill="none" stroke="currentColor"
@@ -156,7 +157,7 @@
             <small>Découvrez votre carte et ses fonctionnalités.</small>
           </button>
 
-          <button class="service-card" data-go="history">
+          <button type="button" class="service-card" data-go="history">
             <span class="service-icon">
   <svg viewBox="0 0 24 24" width="24" height="24"
        fill="none" stroke="currentColor"
@@ -176,6 +177,32 @@
           <h2>Activité récente</h2>
         </div>
         <div id="recent-activity" class="activity-list"></div>
+      </section>
+
+      <!-- INSCRIPTION — COMPTE DE DÉMONSTRATION -->
+      <section id="register" class="page">
+        <div class="page-intro">
+          <span class="eyebrow">OUVRIR VOTRE ESPACE</span>
+          <h2>Créer un compte de démonstration</h2>
+          <p>Personnalisez votre espace MATA PAY sur cet appareil.</p>
+        </div>
+        <div class="notice">
+          <strong>Prototype uniquement</strong>
+          <p>Cette inscription est locale et fictive. N'indiquez ni mot de passe réel, ni numéro de téléphone, ni donnée bancaire. Aucun compte financier réel n'est créé.</p>
+        </div>
+        <form id="register-form" class="form-card">
+          <h3>Vos informations de démonstration</h3>
+          <label for="display-name">Nom d'affichage</label>
+          <input id="display-name" name="displayName" type="text" maxlength="40" autocomplete="off" placeholder="Ex. Marie" required>
+          <small>Vous pouvez utiliser un prénom fictif ou un pseudonyme.</small>
+          <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
+          <div id="register-result" class="result-message" aria-live="polite"></div>
+        </form>
+        <div class="form-card">
+          <h3>Vous avez déjà créé un espace sur cet appareil ?</h3>
+          <p>Votre profil de démonstration est conservé localement dans ce navigateur.</p>
+          <button type="button" class="secondary-button" data-go="dashboard">Retour au tableau de bord</button>
+        </div>
       </section>
 
       <!-- ÉPARGNE -->
@@ -366,7 +393,7 @@
 
   <!-- NAVIGATION MOBILE -->
   <nav class="mobile-nav">
-    <button class="mobile-nav-link active" data-page="dashboard">
+    <button type="button" class="mobile-nav-link active" data-page="dashboard">
       <span>
   <svg viewBox="0 0 24 24" width="23" height="23"
        fill="none" stroke="currentColor"
@@ -379,7 +406,7 @@
       </span>
       <small>Accueil</small>
     </button>
-    <button class="mobile-nav-link" data-page="savings">
+    <button type="button" class="mobile-nav-link" data-page="savings">
       <span>
   <svg viewBox="0 0 24 24" width="23" height="23"
        fill="none" stroke="currentColor"
@@ -393,7 +420,7 @@
       </span>
       <small>Épargne</small>
     </button>
-    <button class="mobile-nav-link" data-page="mobikisi">
+    <button type="button" class="mobile-nav-link" data-page="mobikisi">
       <span>
   <svg viewBox="0 0 24 24" width="23" height="23"
        fill="none" stroke="currentColor"
@@ -406,7 +433,7 @@
       </span>
       <small>Carte</small>
     </button>
-    <button class="mobile-nav-link" data-page="credit">
+    <button type="button" class="mobile-nav-link" data-page="credit">
       <span>
   <svg viewBox="0 0 24 24" width="23" height="23"
        fill="none" stroke="currentColor"
@@ -419,7 +446,7 @@
       </span>
       <small>Prêt</small>
     </button>
-    <button class="mobile-nav-link" data-page="history">
+    <button type="button" class="mobile-nav-link" data-page="history">
       <span>
   <svg viewBox="0 0 24 24" width="23" height="23"
        fill="none" stroke="currentColor"

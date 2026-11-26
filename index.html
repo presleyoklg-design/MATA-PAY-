@@ -123,7 +123,25 @@
           <h3>Vos informations de démonstration</h3>
           <label for="display-name">Nom d'affichage</label>
           <input id="display-name" name="displayName" type="text" maxlength="40" autocomplete="off" placeholder="Ex. Marie" required>
-          <small>Vous pouvez utiliser un prénom fictif ou un pseudonyme.</small>
+          <small>Utilisez un prénom fictif ou un pseudonyme.</small>
+
+          <label for="demo-email">Adresse e-mail de démonstration</label>
+          <input id="demo-email" name="email" type="email" maxlength="120" autocomplete="off" placeholder="exemple@domaine.com" required>
+          <small>Aucun e-mail ne sera envoyé ni vérifié. Pour tester, utilisez une adresse fictive.</small>
+
+          <label class="check-row" for="adult-confirm">
+            <input id="adult-confirm" name="adultConfirm" type="checkbox" required>
+            <span>Je confirme avoir 18 ans ou plus.</span>
+          </label>
+          <small>Ce prototype est réservé aux démonstrations destinées aux adultes. Ne saisissez pas votre date de naissance.</small>
+
+          <label for="demo-gender">Genre <span>(facultatif)</span></label>
+          <select id="demo-gender" name="gender">
+            <option value="">Préfère ne pas préciser</option>
+            <option value="Femme">Femme</option>
+            <option value="Homme">Homme</option>
+            <option value="Autre">Autre</option>
+          </select>
           <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
           <div id="register-result" class="result-message" aria-live="polite"></div>
         </form>

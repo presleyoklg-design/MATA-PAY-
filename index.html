@@ -587,30 +587,49 @@
       <section class="page" id="savings">
         <div class="welcome">
           <h1>Mon épargne</h1>
-          <p>Choisissez votre formule, effectuez un dépôt fictif et consultez chaque confirmation.</p>
+          <p>Découvrez les trois formules MATA PAY selon les modalités des affiches de référence.</p>
         </div>
         <div class="notice">
-          Prototype de démonstration : aucun argent réel n'est collecté, conservé ou transféré.
-          La date et l'heure affichées correspondent à l'horloge de l'appareil utilisé.
+          Prototype de démonstration : toutes les opérations sont fictives. Aucun argent réel n'est collecté,
+          conservé ou transféré. Les taux et conditions sont affichés à titre de présentation et ne déclenchent
+          aucun calcul de rendement automatique.
         </div>
         <div class="grid">
-          <div class="card"><div class="stat-label">Épargne Simple</div><div class="stat-value" id="simple-balance">0 FCFA</div><div class="stat-note">Solde simulé</div></div>
-          <div class="card"><div class="stat-label">Épargne Bloquée</div><div class="stat-value" id="blocked-balance">0 FCFA</div><div class="stat-note">Durée de référence : 12 mois</div></div>
-          <div class="card"><div class="stat-label">Compte Mobikisi</div><div class="stat-value" id="mobikisi-savings-balance">0 FCFA</div><div class="stat-note">Contribution quotidienne dès 300 FCFA</div></div>
+          <div class="card">
+            <div class="stat-label">Épargne Simple</div>
+            <div class="stat-value">10 %</div>
+            <div class="stat-note">Compte ouvert · Retrait mensuel · Taux indiqué sur l'affiche</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Épargne Bloquée</div>
+            <div class="stat-value">1 an</div>
+            <div class="stat-note">Épargne bloquée pendant un an · Pointage journalier</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Compte Mobikisi</div>
+            <div class="stat-value">Dès 300 FCFA</div>
+            <div class="stat-note">Contributions quotidiennes : 300, 500 ou 1 000 FCFA</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="section-title">Modalités des formules</h3>
+          <p style="font-size:13px;line-height:1.8;margin-bottom:12px"><strong>Épargne Simple :</strong> compte ouvert, retrait mensuel et taux de 10 % indiqué sur l'affiche.</p>
+          <p style="font-size:13px;line-height:1.8;margin-bottom:12px"><strong>Épargne Bloquée :</strong> durée d'un an avec pointage journalier.</p>
+          <p style="font-size:13px;line-height:1.8"><strong>Compte Mobikisi :</strong> contribution quotidienne à partir de 300 FCFA, avec les montants de référence de 300, 500 et 1 000 FCFA.</p>
         </div>
         <div class="card">
           <h3 class="section-title">Mon solde total simulé</h3>
           <div class="stat-value" id="savings-balance">0 FCFA</div>
-          <div class="stat-note"><span id="savings-count">0</span> dépôt(s) confirmé(s) dans la démonstration</div>
+          <div class="stat-note"><span id="savings-count">0</span> dépôt(s) fictif(s) enregistré(s)</div>
         </div>
         <div class="card">
-          <h3 class="section-title">Effectuer un dépôt fictif</h3>
+          <h3 class="section-title">Enregistrer un dépôt fictif</h3>
           <div class="field">
             <label for="deposit-product">Formule d'épargne</label>
             <select id="deposit-product">
-              <option value="Épargne Simple">Épargne Simple</option>
-              <option value="Épargne Bloquée">Épargne Bloquée (12 mois)</option>
-              <option value="Compte Mobikisi">Compte Mobikisi (contribution quotidienne)</option>
+              <option value="Épargne Simple">Épargne Simple — retrait mensuel</option>
+              <option value="Épargne Bloquée">Épargne Bloquée — 1 an</option>
+              <option value="Compte Mobikisi">Compte Mobikisi — contribution quotidienne</option>
             </select>
           </div>
           <div class="field">
@@ -620,12 +639,12 @@
           </div>
           <div class="field">
             <label for="deposit-note">Description (facultatif)</label>
-            <input type="text" id="deposit-note" maxlength="120" placeholder="Exemple : Mon épargne du jour">
+            <input type="text" id="deposit-note" maxlength="120" placeholder="Exemple : Contribution du jour">
           </div>
-          <button class="btn" id="deposit-button">Confirmer le dépôt fictif</button>
+          <button class="btn" id="deposit-button">Enregistrer le dépôt fictif</button>
           <div class="result" id="deposit-result" aria-live="polite"></div>
         </div>
-        <div class="card"><h3 class="section-title">Mes derniers dépôts</h3><div id="savings-history" class="empty">Aucun dépôt enregistré.</div></div>
+        <div class="card"><h3 class="section-title">Historique et reçus</h3><div id="savings-history" class="empty">Aucun dépôt enregistré.</div></div>
       </section>
 
       <!-- MOBIKISI -->

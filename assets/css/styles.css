@@ -2147,3 +2147,12 @@ body {
   .calendar-operation { align-items:flex-start; flex-direction:column; }
   .calendar-validate-button { width:100%; }
 }
+
+.calendar-day-interactive { width:100%; font:inherit; cursor:pointer; }
+.calendar-day-interactive:focus-visible { outline:3px solid #C69A35; outline-offset:2px; }
+.pointage-day-details { display:grid; gap:10px; margin-top:14px; padding:13px; border:1px solid #DCE7DE; border-radius:12px; background:#F8FBF8; color:#536257; font-size:12px; }
+.pointage-day-details > strong { color:#174B36; font-size:13px; }
+.pointage-day-details p { margin:4px 0; }
+.pointage-detail-operation { display:grid; gap:5px; padding:11px; border:1px solid #E1E9E2; border-radius:9px; background:#fff; }
+.pointage-detail-operation > strong { color:#174B36; font-size:14px; }
+.pointage-detail-operation small { color:#7A877D; overflow-wrap:anywhere; }

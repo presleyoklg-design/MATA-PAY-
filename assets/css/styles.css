@@ -1655,3 +1655,21 @@ body {
     width: 100%;
   }
 }
+
+
+/* MATA PAY — TEXTE DU PANNEAU EN BAS POUR DÉGAGER LA PHOTO */
+#dashboard .welcome-banner {
+  align-items: flex-end;
+}
+#dashboard .welcome-banner > div {
+  align-self: flex-end;
+  margin-top: auto;
+}
+@media (max-width: 700px) {
+  #dashboard .welcome-banner {
+    align-items: flex-end;
+  }
+  #dashboard .welcome-banner > div {
+    margin-top: auto;
+  }
+}

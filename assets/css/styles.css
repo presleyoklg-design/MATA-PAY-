@@ -2006,3 +2006,36 @@ body {
     padding: 16px 13px;
   }
 }
+
+
+/* MOBIKISI — carte nominative et demande de carte physique */
+.card-member-name {
+  margin: 2px 0 8px;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  overflow-wrap: anywhere;
+}
+.card-number {
+  font-size: clamp(13px, 2vw, 17px);
+  letter-spacing: 1.2px;
+  overflow-wrap: anywhere;
+}
+.mobikisi-account-panel {
+  max-width: 640px;
+  margin: 0 0 25px;
+}
+.mobikisi-account-panel .small-note {
+  color: #7B877F;
+  font-size: 11px;
+  line-height: 1.6;
+}
+#physical-card-request:disabled {
+  cursor: not-allowed;
+  opacity: .68;
+  box-shadow: none;
+}
+#physical-card-result:empty {
+  display: none;
+}

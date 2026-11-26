@@ -367,6 +367,87 @@ if (registerForm) {
     }
   });
 }
+// PIÈCE JUSTIFICATIVE — métadonnées fictives uniquement, aucun fichier officiel.
+const DOCUMENT_KEY = "matapay-demo-document-v1";
+const documentForm = document.getElementById("demo-document-form");
+const documentTypeField = document.getElementById("demo-document-type");
+const documentExpiryField = document.getElementById("demo-document-expiry");
+const documentHelp = document.getElementById("demo-document-date-help");
+
+function currentAcademicYearEnd() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const endYear = now.getMonth() >= 8 ? year + 1 : year;
+  return endYear + "-06-30";
+}
+function todayDateString() {
+  const now = new Date();
+  return [now.getFullYear(), String(now.getMonth()+1).padStart(2,"0"), String(now.getDate()).padStart(2,"0")].join("-");
+}
+function updateDocumentDateRule() {
+  if (!documentTypeField || !documentExpiryField) return;
+  const isStudentCard = documentTypeField.value === "Carte d'étudiant ou scolaire";
+  documentExpiryField.min = todayDateString();
+  if (isStudentCard) {
+    documentExpiryField.max = currentAcademicYearEnd();
+    documentHelp.textContent = "Pour une carte scolaire ou étudiante, la date doit être future et ne pas dépasser la fin de l'année scolaire en cours (" + currentAcademicYearEnd() + ").";
+  } else {
+    documentExpiryField.removeAttribute("max");
+    documentHelp.textContent = "La date doit être aujourd'hui ou une date future.";
+  }
+}
+function renderDemoDocument(documentInfo) {
+  const summary = document.getElementById("demo-document-summary");
+  if (!summary) return;
+  summary.replaceChildren();
+  if (!documentInfo) return;
+  const message = document.createElement("p");
+  message.textContent = "Pièce enregistrée pour la démonstration : " + documentInfo.type +
+    " — valable jusqu'au " + new Date(documentInfo.expiryDate + "T00:00:00").toLocaleDateString("fr-FR") +
+    ". Statut : date valide (contrôle simulé, authenticité non vérifiée).";
+  summary.appendChild(message);
+}
+if (documentForm) {
+  documentTypeField.addEventListener("change", updateDocumentDateRule);
+  documentForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const type = documentTypeField.value;
+    const expiryDate = documentExpiryField.value;
+    const today = todayDateString();
+    if (!type || !expiryDate) {
+      showResult("demo-document-result", "Choisissez le type de pièce et indiquez sa date de validité.");
+      return;
+    }
+    if (expiryDate < today) {
+      showResult("demo-document-result", "Pièce refusée : la date de validité est dépassée.");
+      return;
+    }
+    if (type === "Carte d'étudiant ou scolaire" && expiryDate > currentAcademicYearEnd()) {
+      showResult("demo-document-result", "Pièce refusée : la carte scolaire ou étudiante doit expirer au plus tard à la fin de l'année scolaire en cours (" + currentAcademicYearEnd() + ").");
+      return;
+    }
+    const documentInfo = { type, expiryDate, status: "date valide — simulation" };
+    try {
+      localStorage.setItem(DOCUMENT_KEY, JSON.stringify(documentInfo));
+      showResult("demo-document-result", "Pièce ajoutée à la démonstration. Seul le type et la date fictive sont enregistrés ; aucun document officiel n'est téléversé.");
+      renderDemoDocument(documentInfo);
+      documentForm.reset();
+      updateDocumentDateRule();
+    } catch (error) {
+      showResult("demo-document-result", "La sauvegarde locale n'est pas disponible sur cet appareil.");
+    }
+  });
+  try {
+    const savedDocument = JSON.parse(localStorage.getItem(DOCUMENT_KEY) || "null");
+    if (savedDocument && typeof savedDocument.type === "string" && typeof savedDocument.expiryDate === "string") {
+      renderDemoDocument(savedDocument);
+    }
+  } catch (error) {
+    console.warn("Pièce de démonstration non récupérable :", error);
+  }
+  updateDocumentDateRule();
+}
+
 loadState();
 updateDepositRule();
 updateInterface();

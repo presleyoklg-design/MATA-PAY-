@@ -517,6 +517,11 @@ if (registerForm) {
     if (!country || !city || !neighborhood) {
       showResult("register-result", "Renseignez le pays, la ville et le quartier."); return;
     }
+    if (!selectedProfilePhoto) {
+      showResult("register-result", "Ajoutez obligatoirement une photo de profil avant de créer votre espace.");
+      if (profilePhotoField) profilePhotoField.focus();
+      return;
+    }
     if (!documentType || !expiryDate) {
       showResult("register-result", "Terminez la dernière étape : choisissez le type de pièce et sa date de validité."); return;
     }
@@ -547,6 +552,8 @@ if (registerForm) {
       renderMobikisiCard();
       showResult("register-result", "Votre espace de démonstration est créé. Votre carte MOBIKISI numérique et son numéro de membre ont été générés immédiatement. Une carte physique pourra être demandée depuis l'espace MOBIKISI. Toutes les données restent fictives et locales ; aucune carte réelle n'est fabriquée.");
       registerForm.reset();
+      selectedProfilePhoto = "";
+      renderProfilePhoto();
       updateDocumentDateRule();
     } catch (error) {
       showResult("register-result", "La sauvegarde locale n'est pas disponible sur cet appareil. Réessayez dans un autre navigateur.");

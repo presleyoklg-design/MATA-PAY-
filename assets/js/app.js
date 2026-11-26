@@ -5,7 +5,8 @@ const titles = {
   register: "Créer un compte",
   savings: "Mon épargne",
   mobikisi: "Carte Mobikisi",
-  credit: "Simulation crédit",
+  credit: "Espace prêt",
+  "credit-admin": "Administration démo",
   history: "Historique"
 };
 

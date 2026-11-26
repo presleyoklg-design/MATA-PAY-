@@ -2039,3 +2039,67 @@ body {
 #physical-card-result:empty {
   display: none;
 }
+
+
+/* MATA PAY — PHOTO DE PROFIL PERSONNALISABLE */
+.profile-photo-picker {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-top: 8px;
+  padding: 15px;
+  border: 1px solid #E3EAE3;
+  border-radius: 13px;
+  background: #FAFCFA;
+}
+.profile-photo-picker > img {
+  width: 88px;
+  height: 88px;
+  flex: 0 0 88px;
+  border: 3px solid #FFFFFF;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 10px rgba(11,48,36,.12);
+}
+.profile-photo-picker > div {
+  flex: 1;
+  min-width: 0;
+}
+.profile-photo-picker input[type="file"] {
+  min-height: auto !important;
+  padding: 9px !important;
+  font-size: 12px !important;
+  background: #FFFFFF !important;
+}
+.profile-photo-picker .secondary-button {
+  margin-top: 10px;
+}
+.profile-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #E9F1EC;
+}
+@media (max-width: 520px) {
+  .profile-photo-picker {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+  .profile-photo-picker > img {
+    width: 70px;
+    height: 70px;
+    flex-basis: 70px;
+  }
+  .profile-photo-picker small {
+    font-size: 10px;
+  }
+  .profile-avatar {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+}

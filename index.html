@@ -133,12 +133,12 @@
           <input id="demo-age" name="age" type="number" min="18" max="120" step="1" inputmode="numeric" placeholder="Ex. 25" required>
           <small>Les profils de démonstration sont réservés aux personnes âgées de 18 ans ou plus. N'indiquez pas votre date de naissance.</small>
 
-          <label for="demo-gender">Genre <span>(facultatif)</span></label>
-          <select id="demo-gender" name="gender">
-            <option value="">Préfère ne pas préciser</option>
-            <option value="Femme">Femme</option>
+          <label for="demo-gender">Type de profil</label>
+          <select id="demo-gender" name="gender" required>
+            <option value="" selected disabled>Choisissez une option</option>
             <option value="Homme">Homme</option>
-            <option value="Autre">Autre</option>
+            <option value="Femme">Femme</option>
+            <option value="Entreprise">Entreprise</option>
           </select>
           <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
           <div id="register-result" class="result-message" aria-live="polite"></div>

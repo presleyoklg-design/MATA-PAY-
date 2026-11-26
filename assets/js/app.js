@@ -315,61 +315,8 @@ try {
   }
 } catch (error) { demoProfile = ""; }
 const registerForm = document.getElementById("register-form");
-if (registerForm) {
-  registerForm.addEventListener("submit", event => {
-    event.preventDefault();
-    const field = document.getElementById("display-name");
-    const firstNameField = document.getElementById("demo-first-name");
-    const emailField = document.getElementById("demo-email");
-    const ageField = document.getElementById("demo-age");
-    const genderField = document.getElementById("demo-gender");
-    const countryField = document.getElementById("demo-country");
-    const cityField = document.getElementById("demo-city");
-    const neighborhoodField = document.getElementById("demo-neighborhood");
-    const phoneField = document.getElementById("demo-phone");
-    const name = field.value.trim().replace(/\s+/g, " ");
-    const firstName = firstNameField.value.trim().replace(/\s+/g, " ");
-    const email = emailField.value.trim();
-    const age = Number(ageField.value);
-    const country = countryField.value.trim();
-    const city = cityField.value.trim();
-    const neighborhood = neighborhoodField.value.trim();
-    const phone = phoneField.value.trim();
-    if (!name || name.length > 40 || !firstName || firstName.length > 50) {
-      showResult("register-result", "Renseignez un nom d'affichage et un prénom valides.");
-      return;
-    }
-    if (!email || !emailField.checkValidity()) {
-      showResult("register-result", "Saisissez une adresse e-mail au format valide. Utilisez une adresse fictive pour la démonstration.");
-      return;
-    }
-    if (!Number.isInteger(age) || age < 18 || age > 120) {
-      showResult("register-result", "L'âge doit être un nombre entier compris entre 18 et 120 ans.");
-      return;
-    }
-    if (!country || !city || !neighborhood) {
-      showResult("register-result", "Renseignez le pays, la ville et le quartier.");
-      return;
-    }
-    if (!phoneField.checkValidity() || !phone) {
-      showResult("register-result", "Saisissez un numéro de démonstration valide (7 à 20 caractères autorisés).");
-      return;
-    }
-    demoProfile = name;
-    const demoDetails = { name, firstName, email, age, gender: genderField.value, country, city, neighborhood, phone };
-    try {
-      localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
-      showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Aucune opération réelle n'est possible.");
-      document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
-      registerForm.reset();
-    } catch (error) {
-      showResult("register-result", "La sauvegarde locale n'est pas disponible sur cet appareil. Réessayez dans un autre navigateur.");
-    }
-  });
-}
-// PIÈCE JUSTIFICATIVE — métadonnées fictives uniquement, aucun fichier officiel.
+// INSCRIPTION — validation groupée des informations et justificatifs fictifs.
 const DOCUMENT_KEY = "matapay-demo-document-v1";
-const documentForm = document.getElementById("demo-document-form");
 const documentTypeField = document.getElementById("demo-document-type");
 const documentExpiryField = document.getElementById("demo-document-expiry");
 const documentHelp = document.getElementById("demo-document-date-help");
@@ -396,57 +343,95 @@ function updateDocumentDateRule() {
     documentHelp.textContent = "La date doit être aujourd'hui ou une date future.";
   }
 }
+function calculateAge(birthDate) {
+  const birth = new Date(birthDate + "T00:00:00");
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  if (today.getMonth() < birth.getMonth() ||
+      (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
+  return age;
+}
 function renderDemoDocument(documentInfo) {
   const summary = document.getElementById("demo-document-summary");
-  if (!summary) return;
-  summary.replaceChildren();
-  if (!documentInfo) return;
-  const message = document.createElement("p");
-  message.textContent = "Pièce enregistrée pour la démonstration : " + documentInfo.type +
-    " — valable jusqu'au " + new Date(documentInfo.expiryDate + "T00:00:00").toLocaleDateString("fr-FR") +
-    ". Statut : date valide (contrôle simulé, authenticité non vérifiée).";
-  summary.appendChild(message);
+  if (!summary || !documentInfo) return;
+  summary.textContent = "Justificatif sélectionné : " + documentInfo.type +
+    " — date de validité : " + new Date(documentInfo.expiryDate + "T00:00:00").toLocaleDateString("fr-FR") +
+    ". Contrôle simulé uniquement ; authenticité non vérifiée.";
 }
-if (documentForm) {
-  documentTypeField.addEventListener("change", updateDocumentDateRule);
-  documentForm.addEventListener("submit", event => {
+if (registerForm) {
+  if (documentTypeField) documentTypeField.addEventListener("change", updateDocumentDateRule);
+  registerForm.addEventListener("submit", event => {
     event.preventDefault();
-    const type = documentTypeField.value;
+    const field = document.getElementById("display-name");
+    const firstNameField = document.getElementById("demo-first-name");
+    const birthDateField = document.getElementById("demo-birth-date");
+    const birthPlaceField = document.getElementById("demo-birth-place");
+    const emailField = document.getElementById("demo-email");
+    const genderField = document.getElementById("demo-gender");
+    const countryField = document.getElementById("demo-country");
+    const cityField = document.getElementById("demo-city");
+    const neighborhoodField = document.getElementById("demo-neighborhood");
+    const phoneField = document.getElementById("demo-phone");
+    const name = field.value.trim().replace(/\s+/g, " ");
+    const firstName = firstNameField.value.trim().replace(/\s+/g, " ");
+    const birthDate = birthDateField.value;
+    const birthPlace = birthPlaceField.value.trim();
+    const email = emailField.value.trim();
+    const country = countryField.value.trim();
+    const city = cityField.value.trim();
+    const neighborhood = neighborhoodField.value.trim();
+    const phone = phoneField.value.trim();
+    const documentType = documentTypeField.value;
     const expiryDate = documentExpiryField.value;
-    const today = todayDateString();
-    if (!type || !expiryDate) {
-      showResult("demo-document-result", "Choisissez le type de pièce et indiquez sa date de validité.");
-      return;
+
+    if (!name || name.length > 40 || !firstName || firstName.length > 50) {
+      showResult("register-result", "Renseignez un nom et un prénom valides."); return;
     }
-    if (expiryDate < today) {
-      showResult("demo-document-result", "Pièce refusée : la date de validité est dépassée.");
-      return;
+    if (!birthDate || birthDate > todayDateString() || calculateAge(birthDate) < 18 || calculateAge(birthDate) > 120) {
+      showResult("register-result", "Pour cette démonstration réservée aux adultes, choisissez une date de naissance fictive correspondant à un âge de 18 à 120 ans."); return;
     }
-    if (type === "Carte d'étudiant ou scolaire" && expiryDate > currentAcademicYearEnd()) {
-      showResult("demo-document-result", "Pièce refusée : la carte scolaire ou étudiante doit expirer au plus tard à la fin de l'année scolaire en cours (" + currentAcademicYearEnd() + ").");
-      return;
+    if (!birthPlace || birthPlace.length > 100) {
+      showResult("register-result", "Renseignez un lieu de naissance valide."); return;
     }
-    const documentInfo = { type, expiryDate, status: "date valide — simulation" };
+    if (!genderField.value) {
+      showResult("register-result", "Choisissez le genre."); return;
+    }
+    if (!email || !emailField.checkValidity()) {
+      showResult("register-result", "Saisissez une adresse e-mail au format valide. Utilisez une adresse fictive."); return;
+    }
+    if (!phoneField.checkValidity() || !phone) {
+      showResult("register-result", "Saisissez un numéro de démonstration valide (7 à 20 caractères autorisés)."); return;
+    }
+    if (!country || !city || !neighborhood) {
+      showResult("register-result", "Renseignez le pays, la ville et le quartier."); return;
+    }
+    if (!documentType || !expiryDate) {
+      showResult("register-result", "Terminez la dernière étape : choisissez le type de pièce et sa date de validité."); return;
+    }
+    if (expiryDate < todayDateString()) {
+      showResult("register-result", "Pièce refusée : la date de validité est dépassée."); return;
+    }
+    if (documentType === "Carte d'étudiant ou scolaire" && expiryDate > currentAcademicYearEnd()) {
+      showResult("register-result", "Pièce refusée : la carte scolaire ou étudiante doit expirer au plus tard à la fin de l'année scolaire en cours (" + currentAcademicYearEnd() + ")."); return;
+    }
+
+    const demoDetails = { name, firstName, birthDate, birthPlace, gender: genderField.value, email, phone, country, city, neighborhood };
+    const documentInfo = { type: documentType, expiryDate, status: "date valide — simulation" };
     try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
       localStorage.setItem(DOCUMENT_KEY, JSON.stringify(documentInfo));
-      showResult("demo-document-result", "Pièce ajoutée à la démonstration. Seul le type et la date fictive sont enregistrés ; aucun document officiel n'est téléversé.");
+      demoProfile = name;
+      document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
       renderDemoDocument(documentInfo);
-      documentForm.reset();
+      showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Informations et justificatif fictifs enregistrés ; aucune pièce officielle n'a été téléversée et aucune opération réelle n'est possible.");
+      registerForm.reset();
       updateDocumentDateRule();
     } catch (error) {
-      showResult("demo-document-result", "La sauvegarde locale n'est pas disponible sur cet appareil.");
+      showResult("register-result", "La sauvegarde locale n'est pas disponible sur cet appareil. Réessayez dans un autre navigateur.");
     }
   });
-  try {
-    const savedDocument = JSON.parse(localStorage.getItem(DOCUMENT_KEY) || "null");
-    if (savedDocument && typeof savedDocument.type === "string" && typeof savedDocument.expiryDate === "string") {
-      renderDemoDocument(savedDocument);
-    }
-  } catch (error) {
-    console.warn("Pièce de démonstration non récupérable :", error);
-  }
-  updateDocumentDateRule();
 }
+if (documentTypeField && documentExpiryField) updateDocumentDateRule();
 
 loadState();
 updateDepositRule();

@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-10">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-11">
 </head>
 
 <body>
@@ -269,26 +269,32 @@
           <small id="blocked-checkin-status">Aucun pointage enregistré aujourd'hui.</small>
           <div id="blocked-checkin-result" class="result-message" aria-live="polite"></div>
         </div>
-        <div class="form-card">
-          <h3>Fiches de pointage des trois formules</h3>
-          <p>Les fiches récapitulent les opérations et pointages enregistrés dans cette démonstration. Elles sont consultables sur cet appareil et ne constituent pas une preuve de dépôt réel.</p>
+        <div class="form-card pointage-calendar-card">
+          <h3>Calendriers mensuels de pointage</h3>
+          <p>Chaque calendrier s'ouvre sur le mois en cours. Une coche verte apparaît uniquement après la validation administrative fictive d'une épargne simulée.</p>
+          <div class="notice pointage-admin-notice">
+            <strong>Validation administrative — démonstration</strong>
+            <p>Les nouvelles opérations restent « En attente » jusqu'à l'action « Valider » dans ce prototype. Cette action représente un contrôle administratif simulé ; elle ne confirme aucun dépôt réel.</p>
+          </div>
           <section class="pointage-sheet">
-            <h4>Fiche de pointage — Épargne Simple</h4>
-            <p>Suivi des dépôts simulés et des demandes de retrait mensuel.</p>
-            <div id="simple-pointage-sheet" class="table-wrap">Aucune opération enregistrée.</div>
+            <h4>Calendrier — Épargne Simple</h4>
+            <div id="simple-pointage-sheet" class="pointage-calendar" data-product="Épargne Simple"></div>
           </section>
           <hr>
           <section class="pointage-sheet">
-            <h4>Fiche de pointage — Épargne Bloquée</h4>
-            <p>Suivi des pointages journaliers et des dépôts sur la durée de référence d'un an.</p>
-            <div id="blocked-pointage-sheet" class="table-wrap">Aucun pointage enregistré.</div>
+            <h4>Calendrier — Épargne Bloquée</h4>
+            <div id="blocked-pointage-sheet" class="pointage-calendar" data-product="Épargne Bloquée"></div>
           </section>
           <hr>
           <section class="pointage-sheet">
-            <h4>Fiche de pointage — Compte Mobikisi</h4>
-            <p>Suivi des contributions quotidiennes de 300, 500 ou 1 000 FCFA.</p>
-            <div id="mobikisi-pointage-sheet" class="table-wrap">Aucune contribution enregistrée.</div>
+            <h4>Calendrier — Compte Mobikisi</h4>
+            <div id="mobikisi-pointage-sheet" class="pointage-calendar" data-product="Compte Mobikisi"></div>
           </section>
+          <div class="pointage-legend">
+            <span><i class="legend-mark validated">✓</i> Épargne validée</span>
+            <span><i class="legend-mark pending">…</i> En attente</span>
+            <span><i class="legend-mark empty">·</i> Aucune épargne validée</span>
+          </div>
         </div>
         <div class="form-card">
           <h3>Historique et reçus</h3>
@@ -498,7 +504,7 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261126-8"></script>
+<script src="assets/js/app.js?v=20261126-9"></script>
 </body>
   </html>
             

@@ -106,6 +106,7 @@ function updateDepositRule() {
   }
 }
 depositProduct.addEventListener("change", updateDepositRule);
+depositProduct.addEventListener("change", () => { renderPointageSheets(); document.getElementById("pointage-day-details").textContent = "Sélectionnez une journée marquée pour consulter les détails."; });
 mobikisiChoice.addEventListener("change", () => {
   depositAmount.value = mobikisiChoice.value;
   depositAmount.min = mobikisiChoice.value;
@@ -254,112 +255,93 @@ function renderOperations(containerId, limit, productFilter) {
   container.replaceChildren(table);
 }
 
-function renderPointageCalendar(containerId, product) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const offset = Number(container.dataset.monthOffset || 0);
-  const now = new Date();
-  const monthDate = new Date(now.getFullYear(), now.getMonth() + offset, 1);
-  const year = monthDate.getFullYear();
-  const month = monthDate.getMonth();
-  const monthLabel = monthDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
-  const operationsByDay = {};
-  state.operations.filter(op => op.product === product && op.dayKey).forEach(op => {
-    (operationsByDay[op.dayKey] ||= []).push(op);
+function formatOperationDateTime(value) {
+  if (!value) return "Heure non disponible";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Heure non disponible";
+  return new Intl.DateTimeFormat("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(date);
+}
+function showPointageDayDetails(dayKey,product) {
+  const panel=document.getElementById("pointage-day-details");
+  if(!panel)return;
+  const parts=dayKey.split("-").map(Number);
+  const label=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const operations=state.operations.filter(op=>op.product===product&&op.dayKey===dayKey).sort((a,b)=>String(a.timestamp||"").localeCompare(String(b.timestamp||"")));
+  panel.replaceChildren();
+  const heading=document.createElement("strong");heading.textContent="Détails du "+label;panel.appendChild(heading);
+  if(!operations.length){const p=document.createElement("p");p.textContent="Aucune épargne enregistrée ce jour.";panel.appendChild(p);return;}
+  operations.forEach(op=>{
+    const card=document.createElement("article");card.className="pointage-detail-operation";
+    const amount=document.createElement("strong");amount.textContent=money(op.amount);
+    const deposited=document.createElement("p");deposited.textContent="Épargne effectuée le : "+formatOperationDateTime(op.timestamp);
+    const validated=document.createElement("p");
+    validated.className=op.adminStatus==="validated"?"admin-status-validated":"admin-status-pending";
+    validated.textContent=op.adminStatus==="validated"?"Validée par l'administration le : "+formatOperationDateTime(op.adminValidatedAt):"En attente de validation administrative.";
+    const ref=document.createElement("small");ref.textContent="Référence : "+(op.reference||"—");
+    card.append(amount,deposited,validated,ref);panel.appendChild(card);
   });
-  const header = document.createElement("div");
-  header.className = "calendar-toolbar";
-  const previous = document.createElement("button");
-  previous.type = "button"; previous.className = "calendar-nav";
-  previous.dataset.calendar = containerId; previous.dataset.monthStep = "-1";
-  previous.textContent = "‹ Mois précédent";
-  const title = document.createElement("strong");
-  title.textContent = monthLabel.charAt(0).toLocaleUpperCase("fr-FR") + monthLabel.slice(1);
-  const next = document.createElement("button");
-  next.type = "button"; next.className = "calendar-nav";
-  next.dataset.calendar = containerId; next.dataset.monthStep = "1";
-  next.textContent = "Mois suivant ›";
-  header.append(previous, title, next);
-  const grid = document.createElement("div"); grid.className = "calendar-grid";
-  ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].forEach(label => {
-    const dayName = document.createElement("div"); dayName.className = "calendar-weekday";
-    dayName.textContent = label; grid.appendChild(dayName);
-  });
-  for (let blank = 0; blank < firstWeekday; blank++) {
-    const empty = document.createElement("div"); empty.className = "calendar-day calendar-day-empty"; grid.appendChild(empty);
-  }
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayKey = [year, String(month + 1).padStart(2, "0"), String(day).padStart(2, "0")].join("-");
-    const dayOperations = operationsByDay[dayKey] || [];
-    const hasValidated = dayOperations.some(op => op.adminStatus === "validated");
-    const hasPending = dayOperations.some(op => op.adminStatus !== "validated");
-    const cell = document.createElement("div");
-    cell.className = "calendar-day" + (hasValidated ? " has-validated" : hasPending ? " has-pending" : "");
-    const number = document.createElement("span"); number.className = "calendar-day-number"; number.textContent = day;
-    const mark = document.createElement("span"); mark.className = "calendar-day-mark";
-    mark.textContent = hasValidated ? "✓" : hasPending ? "…" : "·";
-    mark.setAttribute("aria-label", hasValidated ? "Épargne validée" : hasPending ? "Validation en attente" : "Aucune épargne validée");
-    cell.append(number, mark);
-    if (dayOperations.length) {
-      const count = document.createElement("small");
-      count.textContent = dayOperations.length + (dayOperations.length > 1 ? " opérations" : " opération");
-      cell.appendChild(count);
-    }
+}
+function renderPointageCalendar() {
+  const container=document.getElementById("selected-pointage-calendar");
+  if(!container)return;
+  const product=depositProduct.value,offset=Number(container.dataset.monthOffset||0),now=new Date();
+  const date=new Date(now.getFullYear(),now.getMonth()+offset,1),year=date.getFullYear(),month=date.getMonth();
+  const days=new Date(year,month+1,0).getDate(),first=(new Date(year,month,1).getDay()+6)%7;
+  const label=date.toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const byDay={};
+  state.operations.filter(op=>op.product===product&&op.dayKey).forEach(op=>(byDay[op.dayKey]||=[]).push(op));
+  const toolbar=document.createElement("div");toolbar.className="calendar-toolbar";
+  const prev=document.createElement("button");prev.type="button";prev.className="calendar-nav";prev.dataset.monthStep="-1";prev.textContent="‹ Mois précédent";
+  const heading=document.createElement("strong");heading.textContent=label.charAt(0).toLocaleUpperCase("fr-FR")+label.slice(1);
+  const next=document.createElement("button");next.type="button";next.className="calendar-nav";next.dataset.monthStep="1";next.textContent="Mois suivant ›";
+  toolbar.append(prev,heading,next);
+  const grid=document.createElement("div");grid.className="calendar-grid";
+  ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(x=>{const el=document.createElement("div");el.className="calendar-weekday";el.textContent=x;grid.appendChild(el);});
+  for(let i=0;i<first;i++){const el=document.createElement("div");el.className="calendar-day calendar-day-empty";grid.appendChild(el);}
+  for(let day=1;day<=days;day++){
+    const key=[year,String(month+1).padStart(2,"0"),String(day).padStart(2,"0")].join("-"),ops=byDay[key]||[];
+    const valid=ops.some(op=>op.adminStatus==="validated"),pending=ops.some(op=>op.adminStatus!=="validated");
+    const cell=document.createElement(ops.length?"button":"div");if(ops.length)cell.type="button";
+    cell.className="calendar-day"+(valid?" has-validated":pending?" has-pending":"")+(ops.length?" calendar-day-interactive":"");
+    if(ops.length){cell.dataset.pointageDay=key;cell.dataset.pointageProduct=product;cell.setAttribute("aria-label","Voir les épargnes du "+key);}
+    const num=document.createElement("span");num.className="calendar-day-number";num.textContent=day;
+    const mark=document.createElement("span");mark.className="calendar-day-mark";mark.textContent=valid?"✓":pending?"…":"·";cell.append(num,mark);
+    if(ops.length){const count=document.createElement("small");count.textContent=ops.length+" épargne(s)";cell.appendChild(count);}
     grid.appendChild(cell);
   }
-  const details = document.createElement("div"); details.className = "calendar-operations";
-  const monthPrefix = year + "-" + String(month + 1).padStart(2, "0");
-  const monthOperations = state.operations.filter(op => op.product === product && op.dayKey && op.dayKey.startsWith(monthPrefix))
-    .sort((a,b) => String(b.timestamp || b.dayKey).localeCompare(String(a.timestamp || a.dayKey)));
-  if (!monthOperations.length) {
-    details.textContent = "Aucune épargne enregistrée pour ce mois.";
-  } else {
-    const heading = document.createElement("strong"); heading.textContent = "Opérations du mois"; details.appendChild(heading);
-    monthOperations.forEach(operation => {
-      const item = document.createElement("div"); item.className = "calendar-operation";
-      const info = document.createElement("div");
-      const date = document.createElement("strong"); date.textContent = new Date(operation.timestamp || operation.dayKey).toLocaleDateString("fr-FR");
-      const amount = document.createElement("span"); amount.textContent = money(operation.amount) + " — " + (operation.note || "Épargne simulée");
-      const status = document.createElement("small");
-      status.className = operation.adminStatus === "validated" ? "admin-status-validated" : "admin-status-pending";
-      status.textContent = operation.adminStatus === "validated" ? "✓ Validée par l'administration (démo)" : "En attente de validation administrative";
-      info.append(date, amount, status); item.appendChild(info);
-      if (operation.adminStatus !== "validated") {
-        const validate = document.createElement("button"); validate.type = "button";
-        validate.className = "calendar-validate-button"; validate.dataset.validateOperation = operation.reference;
-        validate.textContent = "Valider (admin démo)"; item.appendChild(validate);
-      }
-      details.appendChild(item);
+  const list=document.createElement("div");list.className="calendar-operations";
+  const prefix=year+"-"+String(month+1).padStart(2,"0");
+  const monthOps=state.operations.filter(op=>op.product===product&&op.dayKey&&op.dayKey.startsWith(prefix)).sort((a,b)=>String(b.timestamp||"").localeCompare(String(a.timestamp||"")));
+  if(!monthOps.length)list.textContent="Aucune épargne enregistrée pour cette formule ce mois-ci.";
+  else{
+    const title=document.createElement("strong");title.textContent="Opérations du mois";list.appendChild(title);
+    monthOps.forEach(op=>{
+      const row=document.createElement("div");row.className="calendar-operation";
+      const info=document.createElement("div"),dt=document.createElement("strong"),amt=document.createElement("span"),status=document.createElement("small");
+      dt.textContent=formatOperationDateTime(op.timestamp);amt.textContent=money(op.amount)+" — "+(op.note||"Épargne simulée");
+      status.className=op.adminStatus==="validated"?"admin-status-validated":"admin-status-pending";
+      status.textContent=op.adminStatus==="validated"?"✓ Validée par l'administration (démo)":"En attente de validation administrative";
+      info.append(dt,amt,status);row.appendChild(info);
+      if(op.adminStatus!=="validated"){const btn=document.createElement("button");btn.type="button";btn.className="calendar-validate-button";btn.dataset.validateOperation=op.reference;btn.textContent="Valider (admin démo)";row.appendChild(btn);}
+      list.appendChild(row);
     });
   }
-  container.replaceChildren(header, grid, details);
+  container.replaceChildren(toolbar,grid,list);
 }
-function renderPointageSheets() {
-  renderPointageCalendar("simple-pointage-sheet", "Épargne Simple");
-  renderPointageCalendar("blocked-pointage-sheet", "Épargne Bloquée");
-  renderPointageCalendar("mobikisi-pointage-sheet", "Compte Mobikisi");
-}
-document.addEventListener("click", event => {
-  const monthButton = event.target.closest("[data-month-step]");
-  if (monthButton) {
-    const calendar = document.getElementById(monthButton.dataset.calendar);
-    if (calendar) {
-      calendar.dataset.monthOffset = String(Number(calendar.dataset.monthOffset || 0) + Number(monthButton.dataset.monthStep));
-      renderPointageSheets();
-    }
-    return;
-  }
-  const validateButton = event.target.closest("[data-validate-operation]");
-  if (validateButton) {
-    const operation = state.operations.find(op => op.reference === validateButton.dataset.validateOperation);
-    if (!operation || operation.adminStatus === "validated") return;
-    operation.adminStatus = "validated";
-    operation.adminValidatedAt = new Date().toISOString();
-    operation.adminValidationReference = "ADMIN-DEMO-" + makeReference().slice(3);
-    saveState(); renderPointageSheets();
-    showResult("deposit-result", "Validation administrative fictive enregistrée pour " + operation.reference + ". La coche apparaît dans le calendrier.");
+function renderPointageSheets(){renderPointageCalendar();}
+document.addEventListener("click",event=>{
+  const month=event.target.closest("[data-month-step]");
+  if(month){const cal=document.getElementById("selected-pointage-calendar");if(cal){cal.dataset.monthOffset=String(Number(cal.dataset.monthOffset||0)+Number(month.dataset.monthStep));renderPointageCalendar();}return;}
+  const day=event.target.closest("[data-pointage-day]");
+  if(day){showPointageDayDetails(day.dataset.pointageDay,day.dataset.pointageProduct);return;}
+  const validate=event.target.closest("[data-validate-operation]");
+  if(validate){
+    const op=state.operations.find(item=>item.reference===validate.dataset.validateOperation);
+    if(!op||op.adminStatus==="validated")return;
+    op.adminStatus="validated";op.adminValidatedAt=new Date().toISOString();
+    op.adminValidationReference="ADMIN-DEMO-"+makeReference().slice(3);
+    saveState();renderPointageSheets();showPointageDayDetails(op.dayKey,op.product);
+    showResult("deposit-result","Validation administrative fictive enregistrée pour "+op.reference+".");
   }
 });
 function updateInterface() {

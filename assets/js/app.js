@@ -301,31 +301,44 @@ function loadState() {
     console.warn("Données locales non récupérables :", error);
   }
 }
-try { demoProfile = localStorage.getItem(PROFILE_KEY) || ""; } catch (error) { demoProfile = ""; }
+try {
+  const savedProfile = localStorage.getItem(PROFILE_KEY);
+  if (savedProfile) {
+    try {
+      const parsedProfile = JSON.parse(savedProfile);
+      demoProfile = parsedProfile && typeof parsedProfile === "object"
+        ? (parsedProfile.name || "")
+        : savedProfile;
+    } catch {
+      demoProfile = savedProfile;
+    }
+  }
+} catch (error) { demoProfile = ""; }
 const registerForm = document.getElementById("register-form");
 if (registerForm) {
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
     const field = document.getElementById("display-name");
     const emailField = document.getElementById("demo-email");
-    const adultField = document.getElementById("adult-confirm");
+    const ageField = document.getElementById("demo-age");
     const genderField = document.getElementById("demo-gender");
-    const name = field.value.trim().replace(/\\s+/g, " ");
+    const name = field.value.trim().replace(/\s+/g, " ");
     const email = emailField.value.trim();
+    const age = Number(ageField.value);
     if (!name || name.length > 40) {
       showResult("register-result", "Saisissez un nom d'affichage valide (40 caractères maximum).");
       return;
     }
-    if (!emailField.checkValidity() || !email) {
+    if (!email || !emailField.checkValidity()) {
       showResult("register-result", "Saisissez une adresse e-mail au format valide. Utilisez une adresse fictive pour la démonstration.");
       return;
     }
-    if (!adultField.checked) {
-      showResult("register-result", "La création de ce profil de démonstration nécessite la confirmation des 18 ans ou plus.");
+    if (!Number.isInteger(age) || age < 18 || age > 120) {
+      showResult("register-result", "L'âge doit être un nombre entier compris entre 18 et 120 ans.");
       return;
     }
     demoProfile = name;
-    const demoDetails = { name, email, adultConfirmed: true, gender: genderField.value || "Non précisé" };
+    const demoDetails = { name, email, age, gender: genderField.value || "Non précisé" };
     try {
       localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
       showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Aucune opération réelle n'est possible.");

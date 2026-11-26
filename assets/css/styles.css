@@ -1673,3 +1673,60 @@ body {
     margin-top: auto;
   }
 }
+
+
+/* MATA PAY — PANNEAU DE BIENVENUE : PHOTO DÉGAGÉE, TEXTE EN BANDEAU BAS */
+#dashboard .welcome-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  min-height: 330px;
+  padding: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(0deg, rgba(7, 35, 26, .94) 0%, rgba(7, 35, 26, .78) 24%, rgba(7, 35, 26, .12) 57%, rgba(7, 35, 26, 0) 75%),
+    url("../images/matapay-representante(1).jpg");
+  background-size: cover;
+  background-position: center 38%;
+}
+#dashboard .welcome-banner > div {
+  width: 100%;
+  max-width: none;
+  margin: auto 0 0;
+  padding: 25px clamp(20px, 3vw, 38px) 24px;
+  box-sizing: border-box;
+}
+#dashboard .welcome-banner .eyebrow {
+  margin-bottom: 8px;
+}
+#dashboard .welcome-banner h2 {
+  max-width: 760px;
+  margin-bottom: 7px;
+  font-size: clamp(23px, 2.8vw, 34px);
+}
+#dashboard .welcome-banner p {
+  max-width: 760px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+@media (max-width: 700px) {
+  #dashboard .welcome-banner {
+    min-height: 390px;
+    background-image:
+      linear-gradient(0deg, rgba(7, 35, 26, .96) 0%, rgba(7, 35, 26, .83) 25%, rgba(7, 35, 26, .08) 62%, rgba(7, 35, 26, 0) 78%),
+      url("../images/matapay-representante(1).jpg");
+    background-position: center 25%;
+  }
+  #dashboard .welcome-banner > div {
+    padding: 22px 18px 20px;
+  }
+  #dashboard .welcome-banner h2 {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  #dashboard .welcome-banner p {
+    font-size: 12px;
+  }
+}

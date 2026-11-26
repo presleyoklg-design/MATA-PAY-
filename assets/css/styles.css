@@ -1102,3 +1102,281 @@ tbody tr:hover {
     max-width: 100%;
   }
 }
+
+
+/* =========================================
+   MATA PAY — TABLEAU DE BORD PROFESSIONNEL
+   ========================================= */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+#dashboard .welcome-banner {
+  min-height: 285px;
+  display: flex;
+  align-items: center;
+  padding: clamp(26px, 4vw, 48px);
+  border-radius: 22px;
+  background-position: center right;
+}
+#dashboard .welcome-banner .eyebrow {
+  display: inline-flex;
+  margin-bottom: 13px;
+  color: #F3D88F;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+#dashboard .welcome-banner h2 {
+  max-width: 560px;
+  color: #fff;
+  font-size: clamp(27px, 3.2vw, 39px);
+  line-height: 1.16;
+  margin-bottom: 13px;
+}
+#dashboard .welcome-banner p {
+  max-width: 510px;
+  color: rgba(255,255,255,.88);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+#dashboard .welcome-banner .primary-button {
+  min-width: 158px;
+  min-height: 46px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 10px;
+  font-weight: 700;
+}
+#dashboard .notice {
+  margin: 0;
+}
+#dashboard .dashboard-section-heading {
+  margin: 2px 0 -8px;
+}
+#dashboard .dashboard-section-heading h2 {
+  margin: 3px 0 4px;
+  font-size: 23px;
+  letter-spacing: -.45px;
+}
+#dashboard .dashboard-section-heading p {
+  color: var(--muted);
+  font-size: 13px;
+}
+.dashboard-overview {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 16px;
+}
+.dashboard-overview .stat-card {
+  min-width: 0;
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 21px 22px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: var(--white);
+  box-shadow: 0 5px 20px rgba(11,48,36,.045);
+}
+.dashboard-overview .stat-card-primary {
+  color: #fff;
+  border-color: #174F3B;
+  background: linear-gradient(135deg, #0B3024, #1A5A41);
+  box-shadow: 0 10px 24px rgba(11,48,36,.14);
+}
+.stat-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.stat-card-primary .stat-card-heading,
+.stat-card-primary small {
+  color: rgba(255,255,255,.76);
+}
+.stat-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 10px;
+  color: var(--green);
+  background: var(--green-light);
+  font-size: 13px;
+  font-weight: 800;
+}
+.stat-icon-gold {
+  color: #87651D;
+  background: var(--gold-light);
+  font-size: 20px;
+}
+.stat-icon-soft {
+  color: var(--green);
+  background: #EEF1ED;
+  font-size: 20px;
+}
+.dashboard-overview .stat-card > strong {
+  display: block;
+  color: var(--green-dark);
+  font-size: clamp(23px, 2.4vw, 30px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.dashboard-overview .stat-card-primary > strong {
+  color: #fff;
+}
+.dashboard-overview .stat-card > small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+#dashboard .services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 15px;
+}
+#dashboard .service-card {
+  min-width: 0;
+  min-height: 175px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+#dashboard .service-card strong {
+  margin: 13px 0 5px;
+  color: var(--green-dark);
+  font-size: 15px;
+}
+#dashboard .service-card small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+#dashboard .section-heading:not(.dashboard-section-heading) {
+  margin: 0;
+}
+#dashboard .section-heading:not(.dashboard-section-heading) h2 {
+  font-size: 21px;
+}
+#dashboard #recent-activity {
+  width: 100%;
+  min-height: 82px;
+  padding: 4px 0;
+  overflow-x: auto;
+}
+#dashboard #recent-activity table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  overflow: hidden;
+}
+#dashboard #recent-activity th {
+  padding: 13px 15px;
+  color: #64736A;
+  background: #F3F6F2;
+  font-size: 11px;
+  text-align: left;
+}
+#dashboard #recent-activity td {
+  padding: 14px 15px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+}
+#dashboard #recent-activity td:nth-child(4) {
+  color: var(--green);
+  font-weight: 700;
+}
+#dashboard .empty {
+  padding: 23px;
+  border: 1px dashed #D8E1D9;
+  border-radius: 13px;
+  color: var(--muted);
+  background: #fff;
+  font-size: 13px;
+  text-align: center;
+}
+@media (max-width: 1050px) {
+  .dashboard-overview {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .dashboard-overview .stat-card-primary {
+    grid-column: 1 / -1;
+  }
+  #dashboard .services-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+@media (max-width: 700px) {
+  #dashboard {
+    gap: 20px;
+  }
+  #dashboard .welcome-banner {
+    min-height: 350px;
+    padding: 24px 20px;
+    border-radius: 17px;
+  }
+  #dashboard .welcome-banner h2 {
+    font-size: 27px;
+  }
+  .dashboard-overview {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dashboard-overview .stat-card {
+    min-height: 132px;
+    padding: 15px 13px;
+    gap: 12px;
+  }
+  .dashboard-overview .stat-card-primary {
+    grid-column: 1 / -1;
+  }
+  .stat-card-heading {
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 10px;
+  }
+  .stat-icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+  .dashboard-overview .stat-card > strong {
+    font-size: 22px;
+  }
+  #dashboard .services-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+  }
+  #dashboard .service-card {
+    min-height: 155px;
+    padding: 15px 13px;
+  }
+  #dashboard .service-card strong {
+    font-size: 14px;
+  }
+}
+@media (max-width: 360px) {
+  .dashboard-overview {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-overview .stat-card-primary {
+    grid-column: auto;
+  }
+  #dashboard .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

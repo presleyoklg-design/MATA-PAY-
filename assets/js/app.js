@@ -142,6 +142,7 @@ document.getElementById("deposit-button").addEventListener("click", () => {
     dayKey: localDayKey(confirmedAt),
     reference: makeReference(),
     status: "confirmed",
+    adminStatus: "pending",
     balanceAfter: state.balance + amount,
     maturityDate
   };
@@ -253,62 +254,114 @@ function renderOperations(containerId, limit, productFilter) {
   container.replaceChildren(table);
 }
 
-function renderPointageTable(containerId, rows, emptyMessage) {
+function renderPointageCalendar(containerId, product) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  if (!rows.length) {
-    container.textContent = emptyMessage;
-    return;
+  const offset = Number(container.dataset.monthOffset || 0);
+  const now = new Date();
+  const monthDate = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  const year = monthDate.getFullYear();
+  const month = monthDate.getMonth();
+  const monthLabel = monthDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
+  const operationsByDay = {};
+  state.operations.filter(op => op.product === product && op.dayKey).forEach(op => {
+    (operationsByDay[op.dayKey] ||= []).push(op);
+  });
+  const header = document.createElement("div");
+  header.className = "calendar-toolbar";
+  const previous = document.createElement("button");
+  previous.type = "button"; previous.className = "calendar-nav";
+  previous.dataset.calendar = containerId; previous.dataset.monthStep = "-1";
+  previous.textContent = "‹ Mois précédent";
+  const title = document.createElement("strong");
+  title.textContent = monthLabel.charAt(0).toLocaleUpperCase("fr-FR") + monthLabel.slice(1);
+  const next = document.createElement("button");
+  next.type = "button"; next.className = "calendar-nav";
+  next.dataset.calendar = containerId; next.dataset.monthStep = "1";
+  next.textContent = "Mois suivant ›";
+  header.append(previous, title, next);
+  const grid = document.createElement("div"); grid.className = "calendar-grid";
+  ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].forEach(label => {
+    const dayName = document.createElement("div"); dayName.className = "calendar-weekday";
+    dayName.textContent = label; grid.appendChild(dayName);
+  });
+  for (let blank = 0; blank < firstWeekday; blank++) {
+    const empty = document.createElement("div"); empty.className = "calendar-day calendar-day-empty"; grid.appendChild(empty);
   }
-  const table = document.createElement("table");
-  const head = document.createElement("tr");
-  ["Date", "Détail", "Montant", "Référence / statut"].forEach(label => {
-    const th = document.createElement("th");
-    th.textContent = label;
-    head.appendChild(th);
-  });
-  table.appendChild(head);
-  rows.forEach(item => {
-    const row = document.createElement("tr");
-    [item.date, item.detail, item.amount, item.reference].forEach(value => {
-      const cell = document.createElement("td");
-      cell.textContent = value || "—";
-      row.appendChild(cell);
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayKey = [year, String(month + 1).padStart(2, "0"), String(day).padStart(2, "0")].join("-");
+    const dayOperations = operationsByDay[dayKey] || [];
+    const hasValidated = dayOperations.some(op => op.adminStatus === "validated");
+    const hasPending = dayOperations.some(op => op.adminStatus !== "validated");
+    const cell = document.createElement("div");
+    cell.className = "calendar-day" + (hasValidated ? " has-validated" : hasPending ? " has-pending" : "");
+    const number = document.createElement("span"); number.className = "calendar-day-number"; number.textContent = day;
+    const mark = document.createElement("span"); mark.className = "calendar-day-mark";
+    mark.textContent = hasValidated ? "✓" : hasPending ? "…" : "·";
+    mark.setAttribute("aria-label", hasValidated ? "Épargne validée" : hasPending ? "Validation en attente" : "Aucune épargne validée");
+    cell.append(number, mark);
+    if (dayOperations.length) {
+      const count = document.createElement("small");
+      count.textContent = dayOperations.length + (dayOperations.length > 1 ? " opérations" : " opération");
+      cell.appendChild(count);
+    }
+    grid.appendChild(cell);
+  }
+  const details = document.createElement("div"); details.className = "calendar-operations";
+  const monthPrefix = year + "-" + String(month + 1).padStart(2, "0");
+  const monthOperations = state.operations.filter(op => op.product === product && op.dayKey && op.dayKey.startsWith(monthPrefix))
+    .sort((a,b) => String(b.timestamp || b.dayKey).localeCompare(String(a.timestamp || a.dayKey)));
+  if (!monthOperations.length) {
+    details.textContent = "Aucune épargne enregistrée pour ce mois.";
+  } else {
+    const heading = document.createElement("strong"); heading.textContent = "Opérations du mois"; details.appendChild(heading);
+    monthOperations.forEach(operation => {
+      const item = document.createElement("div"); item.className = "calendar-operation";
+      const info = document.createElement("div");
+      const date = document.createElement("strong"); date.textContent = new Date(operation.timestamp || operation.dayKey).toLocaleDateString("fr-FR");
+      const amount = document.createElement("span"); amount.textContent = money(operation.amount) + " — " + (operation.note || "Épargne simulée");
+      const status = document.createElement("small");
+      status.className = operation.adminStatus === "validated" ? "admin-status-validated" : "admin-status-pending";
+      status.textContent = operation.adminStatus === "validated" ? "✓ Validée par l'administration (démo)" : "En attente de validation administrative";
+      info.append(date, amount, status); item.appendChild(info);
+      if (operation.adminStatus !== "validated") {
+        const validate = document.createElement("button"); validate.type = "button";
+        validate.className = "calendar-validate-button"; validate.dataset.validateOperation = operation.reference;
+        validate.textContent = "Valider (admin démo)"; item.appendChild(validate);
+      }
+      details.appendChild(item);
     });
-    table.appendChild(row);
-  });
-  container.replaceChildren(table);
+  }
+  container.replaceChildren(header, grid, details);
 }
 function renderPointageSheets() {
-  const simpleOperations = state.operations.filter(op => op.product === "Épargne Simple").map(op => ({
-    date: op.date, detail: op.note || "Dépôt simulé", amount: money(op.amount),
-    reference: op.reference || "Enregistré — simulation"
-  }));
-  const simpleWithdrawals = state.withdrawalRequests.map(item => ({
-    date: item.date, detail: "Demande de retrait mensuel", amount: "—",
-    reference: item.reference || item.status
-  }));
-  renderPointageTable("simple-pointage-sheet",
-    [...simpleOperations, ...simpleWithdrawals].sort((a,b) => String(b.date).localeCompare(String(a.date))),
-    "Aucun dépôt ni retrait mensuel enregistré.");
-  const blockedOperations = state.operations.filter(op => op.product === "Épargne Bloquée").map(op => ({
-    date: op.date, detail: op.note || "Dépôt simulé", amount: money(op.amount),
-    reference: op.reference || "Enregistré — simulation"
-  }));
-  const blockedChecks = state.dailyChecks.map(day => ({
-    date: day, detail: "Pointage journalier", amount: "—", reference: "Pointage fictif enregistré"
-  }));
-  renderPointageTable("blocked-pointage-sheet",
-    [...blockedOperations, ...blockedChecks].sort((a,b) => String(b.date).localeCompare(String(a.date))),
-    "Aucun dépôt ni pointage journalier enregistré.");
-  const mobikisiOperations = state.operations.filter(op => op.product === "Compte Mobikisi").map(op => ({
-    date: op.date, detail: op.note || "Contribution quotidienne", amount: money(op.amount),
-    reference: op.reference || "Enregistré — simulation"
-  }));
-  renderPointageTable("mobikisi-pointage-sheet", mobikisiOperations,
-    "Aucune contribution quotidienne enregistrée.");
+  renderPointageCalendar("simple-pointage-sheet", "Épargne Simple");
+  renderPointageCalendar("blocked-pointage-sheet", "Épargne Bloquée");
+  renderPointageCalendar("mobikisi-pointage-sheet", "Compte Mobikisi");
 }
-
+document.addEventListener("click", event => {
+  const monthButton = event.target.closest("[data-month-step]");
+  if (monthButton) {
+    const calendar = document.getElementById(monthButton.dataset.calendar);
+    if (calendar) {
+      calendar.dataset.monthOffset = String(Number(calendar.dataset.monthOffset || 0) + Number(monthButton.dataset.monthStep));
+      renderPointageSheets();
+    }
+    return;
+  }
+  const validateButton = event.target.closest("[data-validate-operation]");
+  if (validateButton) {
+    const operation = state.operations.find(op => op.reference === validateButton.dataset.validateOperation);
+    if (!operation || operation.adminStatus === "validated") return;
+    operation.adminStatus = "validated";
+    operation.adminValidatedAt = new Date().toISOString();
+    operation.adminValidationReference = "ADMIN-DEMO-" + makeReference().slice(3);
+    saveState(); renderPointageSheets();
+    showResult("deposit-result", "Validation administrative fictive enregistrée pour " + operation.reference + ". La coche apparaît dans le calendrier.");
+  }
+});
 function updateInterface() {
   const count = state.operations.length;
   const balanceText = money(state.balance);
@@ -418,7 +471,8 @@ function loadState() {
       ...op,
       product: op.product || "Épargne Simple",
       reference: op.reference || makeReference(),
-      status: "confirmed"
+      status: op.status || "confirmed",
+      adminStatus: op.adminStatus === "validated" ? "validated" : op.adminStatus === "pending" ? "pending" : "validated"
     }));
     state.dailyChecks = Array.isArray(saved.dailyChecks) ? saved.dailyChecks : [];
     state.withdrawalRequests = Array.isArray(saved.withdrawalRequests) ? saved.withdrawalRequests : [];

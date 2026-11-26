@@ -274,6 +274,36 @@ const STORAGE_KEY = "matapay-demo-v1";
 const PROFILE_KEY = "matapay-demo-profile-v1";
 let demoProfile = "";
 let demoProfileData = null;
+let selectedProfilePhoto = "";
+const DEFAULT_PROFILE_PHOTO = "assets/images/profile-placeholder.svg";
+function renderProfilePhoto() {
+  const photo = selectedProfilePhoto || (demoProfileData && demoProfileData.profilePhoto) || "";
+  const preview = document.getElementById("profile-photo-preview");
+  const avatar = document.getElementById("profile-avatar");
+  if (preview) preview.src = photo || DEFAULT_PROFILE_PHOTO;
+  if (avatar) avatar.src = photo || DEFAULT_PROFILE_PHOTO;
+}
+function compressProfilePhoto(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Lecture du fichier impossible."));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error("Cette image ne peut pas être ouverte."));
+      image.onload = () => {
+        const maxSide = 320;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.78));
+      };
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 function createMemberNumber() {
   const bytes = new Uint8Array(8);
@@ -347,6 +377,7 @@ try {
       if (parsedProfile && typeof parsedProfile === "object") {
         demoProfileData = parsedProfile;
         demoProfile = parsedProfile.name || "";
+        selectedProfilePhoto = typeof parsedProfile.profilePhoto === "string" ? parsedProfile.profilePhoto : "";
         if (!demoProfileData.memberNumber) {
           demoProfileData.memberNumber = createMemberNumber();
           saveDemoProfile();
@@ -360,6 +391,42 @@ try {
   }
 } catch (error) { demoProfile = ""; }
 const registerForm = document.getElementById("register-form");
+const profilePhotoField = document.getElementById("demo-profile-photo");
+const removeProfilePhotoButton = document.getElementById("remove-profile-photo");
+if (profilePhotoField) profilePhotoField.addEventListener("change", async () => {
+  const file = profilePhotoField.files && profilePhotoField.files[0];
+  if (!file) return;
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    profilePhotoField.value = "";
+    showResult("profile-photo-result", "Format non accepté. Choisissez une image JPEG, PNG ou WebP.");
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    profilePhotoField.value = "";
+    showResult("profile-photo-result", "La photo dépasse 5 Mo. Choisissez une image plus légère.");
+    return;
+  }
+  try {
+    selectedProfilePhoto = await compressProfilePhoto(file);
+    renderProfilePhoto();
+    showResult("profile-photo-result", "Photo prête. Elle sera enregistrée sur cet appareil après la création du compte de démonstration.");
+  } catch (error) {
+    selectedProfilePhoto = "";
+    profilePhotoField.value = "";
+    renderProfilePhoto();
+    showResult("profile-photo-result", "Impossible de lire cette image. Essayez une autre photo.");
+  }
+});
+if (removeProfilePhotoButton) removeProfilePhotoButton.addEventListener("click", () => {
+  selectedProfilePhoto = "";
+  if (profilePhotoField) profilePhotoField.value = "";
+  if (demoProfileData) {
+    demoProfileData.profilePhoto = "";
+    try { saveDemoProfile(); } catch (error) { console.warn("Photo non supprimée du stockage local :", error); }
+  }
+  renderProfilePhoto();
+  showResult("profile-photo-result", "La photo a été retirée de cet espace de démonstration.");
+});
 // INSCRIPTION — validation groupée des informations et justificatifs fictifs.
 const DOCUMENT_KEY = "matapay-demo-document-v1";
 const documentTypeField = document.getElementById("demo-document-type");
@@ -464,6 +531,7 @@ if (registerForm) {
       name, firstName, birthDate, birthPlace, gender: genderField.value,
       email, phone, country, city, neighborhood,
       memberNumber: (demoProfileData && demoProfileData.memberNumber) || createMemberNumber(),
+      profilePhoto: selectedProfilePhoto,
       physicalCardRequested: false,
       cardIssueMode: "digital-immediate-physical-on-request"
     };
@@ -475,6 +543,7 @@ if (registerForm) {
       demoProfile = name;
       document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
       renderDemoDocument(documentInfo);
+      renderProfilePhoto();
       renderMobikisiCard();
       showResult("register-result", "Votre espace de démonstration est créé. Votre carte MOBIKISI numérique et son numéro de membre ont été générés immédiatement. Une carte physique pourra être demandée depuis l'espace MOBIKISI. Toutes les données restent fictives et locales ; aucune carte réelle n'est fabriquée.");
       registerForm.reset();
@@ -504,6 +573,7 @@ if (physicalCardButton) {
 }
 
 loadState();
+renderProfilePhoto();
 updateDepositRule();
 updateInterface();
 renderMobikisiCard();

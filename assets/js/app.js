@@ -482,6 +482,7 @@ if (registerForm) {
     const genderField = document.getElementById("demo-gender");
     const countryField = document.getElementById("demo-country");
     const cityField = document.getElementById("demo-city");
+    const districtField = document.getElementById("demo-district");
     const neighborhoodField = document.getElementById("demo-neighborhood");
     const phoneField = document.getElementById("demo-phone");
     const name = field.value.trim().replace(/\s+/g, " ");
@@ -491,6 +492,7 @@ if (registerForm) {
     const email = emailField.value.trim();
     const country = countryField.value.trim();
     const city = cityField.value.trim();
+    const district = districtField.value.trim();
     const neighborhood = neighborhoodField.value.trim();
     const phone = phoneField.value.trim();
     const documentType = documentTypeField.value;
@@ -514,8 +516,8 @@ if (registerForm) {
     if (!phoneField.checkValidity() || !phone) {
       showResult("register-result", "Saisissez un numéro de démonstration valide (7 à 20 caractères autorisés)."); return;
     }
-    if (!country || !city || !neighborhood) {
-      showResult("register-result", "Renseignez le pays, la ville et le quartier."); return;
+    if (!country || !city || !district || !neighborhood) {
+      showResult("register-result", "Renseignez le pays, la ville, l'arrondissement et le quartier."); return;
     }
     if (!selectedProfilePhoto) {
       showResult("register-result", "Ajoutez obligatoirement une photo de profil avant de créer votre espace.");
@@ -534,7 +536,7 @@ if (registerForm) {
 
     const demoDetails = {
       name, firstName, birthDate, birthPlace, gender: genderField.value,
-      email, phone, country, city, neighborhood,
+      email, phone, country, city, district, neighborhood,
       memberNumber: (demoProfileData && demoProfileData.memberNumber) || createMemberNumber(),
       profilePhoto: selectedProfilePhoto,
       physicalCardRequested: false,

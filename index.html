@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-12">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-13">\n  <link rel="stylesheet" href="assets/css/credit.css?v=20261126-01">
 </head>
 
 <body>
@@ -342,37 +342,108 @@
         </div>
       </section>
 
-      <!-- CRÉDIT -->
-      <section id="credit" class="page">
-        <div class="page-intro">
-          <span class="eyebrow">ACCOMPAGNEMENT FINANCIER</span>
-          <h2>Simulation de prêt</h2>
-          <p>Estimez une mensualité indicative selon le montant et la durée choisis.</p>
+      <!-- ESPACE PRÊT — PROTOTYPE DE DÉMONSTRATION -->
+      <section id="credit" class="page credit-page">
+        <div class="credit-hero">
+          <div class="credit-hero-copy">
+            <span class="credit-eyebrow">MATA-PAY • ESPACE FINANCEMENT</span>
+            <h2>Un espace de financement clair, structuré et transparent.</h2>
+            <p>Comprenez le fonctionnement d'un financement, réalisez une simulation pédagogique et consultez les étapes d'un dossier fictif.</p>
+            <div class="credit-hero-tags">
+              <span>Parcours guidé</span><span>Informations transparentes</span><span>Suivi centralisé</span>
+            </div>
+          </div>
+          <div class="credit-hero-mark" aria-hidden="true">
+            <div class="credit-orbit credit-orbit-one"></div>
+            <div class="credit-orbit credit-orbit-two"></div>
+            <div class="credit-hero-symbol">M</div>
+            <span class="credit-hero-caption">FINANCEMENT<br>RESPONSABLE</span>
+          </div>
         </div>
 
-        <div class="notice">
-          <strong>Simulation uniquement</strong>
-          <p>Cette fonctionnalité ne constitue pas une offre de crédit ni une demande de prêt réelle.</p>
+        <div class="credit-demo-alert" role="note">
+          <span class="credit-alert-icon" aria-hidden="true">i</span>
+          <div><strong>Prototype de démonstration uniquement</strong>
+            <p>Aucun prêt réel n'est proposé ou accordé. Aucune demande réelle, aucun décaissement et aucun remboursement ne sont effectués. Les conditions financières et critères définitifs restent à étudier avec des partenaires habilités.</p>
+          </div>
         </div>
 
-        <div class="form-card">
-          <h3>Paramètres de simulation</h3>
-
-          <label for="credit-amount">Montant souhaité (FCFA)</label>
-          <input id="credit-amount" type="number" min="1" placeholder="Ex. 100000">
-
-          <label for="credit-duration">Durée souhaitée</label>
-          <select id="credit-duration">
-            <option value="3">3 mois</option>
-            <option value="6">6 mois</option>
-            <option value="12">12 mois</option>
-            <option value="18">18 mois</option>
-            <option value="24">24 mois</option>
-          </select>
-
-          <button id="credit-button" class="primary-button">Lancer la simulation</button>
-          <div id="credit-result" class="result-message"></div>
+        <div class="credit-section-heading">
+          <div><span class="credit-kicker">VOTRE ESPACE</span><h3>Vue d'ensemble</h3></div>
+          <span class="credit-demo-pill"><span></span> Mode démo</span>
         </div>
+
+        <div class="credit-overview-grid">
+          <article class="credit-overview-card">
+            <span class="credit-overview-icon">01</span><div><small>Simulations réalisées</small><strong id="credit-simulation-count">0</strong><em>Sur cet appareil, pendant la session</em></div>
+          </article>
+          <article class="credit-overview-card">
+            <span class="credit-overview-icon">02</span><div><small>Dossier de démonstration</small><strong id="credit-file-status">Non créé</strong><em>Aucune demande réelle enregistrée</em></div>
+          </article>
+          <article class="credit-overview-card">
+            <span class="credit-overview-icon">03</span><div><small>Prochaine étape</small><strong>Étude des règles</strong><em>Conditions définitives non validées</em></div>
+          </article>
+        </div>
+
+        <div class="credit-section-heading credit-heading-spaced">
+          <div><span class="credit-kicker">PARCOURS UTILISATEUR</span><h3>Un processus en quatre étapes</h3></div>
+        </div>
+        <div class="credit-steps" aria-label="Étapes indicatives du parcours">
+          <div class="credit-step credit-step-current"><span>1</span><div><strong>Simulation</strong><small>Estimation pédagogique</small></div></div>
+          <div class="credit-step"><span>2</span><div><strong>Dossier</strong><small>Informations à définir</small></div></div>
+          <div class="credit-step"><span>3</span><div><strong>Étude</strong><small>Décision par un organisme habilité</small></div></div>
+          <div class="credit-step"><span>4</span><div><strong>Suivi</strong><small>Échéancier et historique</small></div></div>
+        </div>
+
+        <div class="credit-workspace">
+          <section class="credit-panel credit-simulator-panel">
+            <div class="credit-panel-heading"><div><span class="credit-kicker">OUTIL PÉDAGOGIQUE</span><h3>Simulateur indicatif</h3></div><span class="credit-panel-number">01 / 04</span></div>
+            <p class="credit-panel-intro">Modifiez les valeurs pour comprendre comment une durée influence la répartition du montant simulé.</p>
+            <form id="credit-simulation-form" novalidate>
+              <label for="credit-amount">Montant fictif à simuler</label>
+              <div class="credit-input-wrap"><input id="credit-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="Ex. 100000" required><span>FCFA</span></div>
+              <label for="credit-duration">Durée illustrative</label>
+              <select id="credit-duration">
+                <option value="3">3 mois — exemple</option>
+                <option value="6" selected>6 mois — exemple</option>
+                <option value="12">12 mois — exemple</option>
+                <option value="18">18 mois — exemple</option>
+                <option value="24">24 mois — exemple</option>
+              </select>
+              <button id="credit-button" class="credit-primary-button" type="submit">Calculer la simulation <span aria-hidden="true">→</span></button>
+              <p class="credit-form-footnote">Aucune donnée saisie n'est transmise à un établissement financier.</p>
+            </form>
+            <div id="credit-result" class="credit-result" aria-live="polite">
+              <div class="credit-result-empty"><span>↗</span><strong>Votre estimation apparaîtra ici</strong><small>Entrez un montant fictif et lancez le calcul.</small></div>
+            </div>
+          </section>
+
+          <section class="credit-panel credit-explanation-panel">
+            <div class="credit-panel-heading"><div><span class="credit-kicker">LIRE AVANT DE SIMULER</span><h3>Comprendre le résultat</h3></div><span class="credit-panel-number">02 / 04</span></div>
+            <div class="credit-explain-item"><span class="credit-explain-icon">∑</span><div><strong>Répartition du capital</strong><p>Le montant est réparti à parts égales sur la durée choisie, uniquement pour illustrer le calcul.</p></div></div>
+            <div class="credit-explain-item"><span class="credit-explain-icon">%</span><div><strong>Taux et frais</strong><p>Aucun taux, frais ou pénalité n'est appliqué : ces paramètres ne sont pas encore définis.</p></div></div>
+            <div class="credit-explain-item"><span class="credit-explain-icon">✓</span><div><strong>Éligibilité</strong><p>La simulation ne vérifie pas l'éligibilité et ne constitue jamais une approbation.</p></div></div>
+            <div class="credit-clarification"><strong>À retenir</strong><p>Une estimation mathématique n'est ni une promesse de financement ni une offre contractuelle.</p></div>
+          </section>
+        </div>
+
+        <div class="credit-lower-grid">
+          <section class="credit-panel">
+            <div class="credit-panel-heading"><div><span class="credit-kicker">ESPACE PERSONNEL</span><h3>Suivi du dossier</h3></div><span class="credit-panel-number">03 / 04</span></div>
+            <div class="credit-empty-state"><span class="credit-empty-icon">▤</span><strong>Aucun dossier de démonstration</strong><p>Le suivi présentera ici les étapes, les pièces éventuellement requises et les décisions simulées. Aucun document officiel ne doit être ajouté à ce prototype.</p></div>
+          </section>
+          <section class="credit-panel">
+            <div class="credit-panel-heading"><div><span class="credit-kicker">TRANSPARENCE</span><h3>Règles à finaliser</h3></div><span class="credit-panel-number">04 / 04</span></div>
+            <ul class="credit-rule-list">
+              <li><span>01</span><div><strong>Types de financement</strong><small>À définir et faire valider</small></div><b>À étudier</b></li>
+              <li><span>02</span><div><strong>Montants et durées</strong><small>Plafonds et échéances à définir</small></div><b>À étudier</b></li>
+              <li><span>03</span><div><strong>Taux, frais et pénalités</strong><small>Transparence contractuelle requise</small></div><b>À étudier</b></li>
+              <li><span>04</span><div><strong>Éligibilité et garanties</strong><small>Critères objectifs à établir</small></div><b>À étudier</b></li>
+              <li><span>05</span><div><strong>Partenaire habilité</strong><small>Cadre légal et opérationnel</small></div><b>À étudier</b></li>
+            </ul>
+          </section>
+        </div>
+        <p class="credit-page-footnote">MATA-PAY — Maquette fonctionnelle de démonstration. Les opérations réelles ne pourront être envisagées qu'avec des partenaires habilités, les autorisations nécessaires et un dispositif de conformité et de protection des utilisateurs.</p>
       </section>
 
       <!-- HISTORIQUE -->
@@ -492,7 +563,7 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261126-10"></script>
+<script src="assets/js/app.js?v=20261126-11"></script>\n<script src="assets/js/credit.js?v=20261126-01"></script>
 </body>
   </html>
             

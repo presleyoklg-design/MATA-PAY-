@@ -196,21 +196,7 @@ document.getElementById("blocked-checkin-button").addEventListener("click", () =
   renderPointageSheets();
 });
 
-// SIMULATION DE CRÉDIT — aucune demande réelle.
-document.getElementById("credit-button").addEventListener("click", () => {
-  const amount = Number(document.getElementById("credit-amount").value);
-  const duration = Number(document.getElementById("credit-duration").value);
-  if (!Number.isFinite(amount) || amount <= 0 || !Number.isInteger(duration) || duration < 1 || duration > 60) {
-    alert("Veuillez vérifier le montant et la durée.");
-    return;
-  }
-  const monthly = amount / duration;
-  const result = document.getElementById("credit-result");
-  result.style.display = "block";
-  result.innerHTML = "<strong>Résultat indicatif</strong><br>Montant demandé : " + money(amount) +
-    "<br>Durée : " + duration + " mois<br>Mensualité estimée hors intérêts et frais : <strong>" +
-    money(monthly) + "</strong><br><small>Ce calcul ne représente pas une offre de financement.</small>";
-});
+// La logique du simulateur de prêt est isolée dans assets/js/credit.js.
 
 function renderOperations(containerId, limit, productFilter) {
   const container = document.getElementById(containerId);

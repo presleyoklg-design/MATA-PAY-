@@ -1802,3 +1802,26 @@ body {
 @media (max-width: 380px) {
   .profile-area { display: flex; }
 }
+
+
+/* MATA PAY — COMPTE DÉPLACÉ À GAUCHE DU LOGO */
+.topbar .profile-area {
+  order: 0;
+  margin-left: 0;
+  margin-right: 16px;
+}
+.topbar .topbar-brand {
+  order: 1;
+  margin-right: auto;
+}
+@media (max-width: 700px) {
+  .topbar .profile-area {
+    order: 0;
+    margin-left: 0;
+    margin-right: 8px;
+  }
+  .topbar .topbar-brand {
+    order: 1;
+    margin-right: auto;
+  }
+}

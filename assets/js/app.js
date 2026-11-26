@@ -338,7 +338,7 @@ if (registerForm) {
       return;
     }
     demoProfile = name;
-    const demoDetails = { name, email, age, gender: genderField.value || "Non précisé" };
+    const demoDetails = { name, email, age, gender: genderField.value };
     try {
       localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
       showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Aucune opération réelle n'est possible.");

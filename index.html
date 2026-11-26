@@ -274,17 +274,26 @@
           <p>Cette carte est une illustration du prototype. Elle ne permet aucun paiement réel.</p>
         </div>
 
-        <div class="mobikisi-card">
+        <div id="mobikisi-card-panel" class="mobikisi-card">
           <div class="card-top">
             <strong>MATA PAY</strong>
             <span>MOBIKISI</span>
           </div>
-          <div class="card-chip"></div>
-          <div class="card-number">•••• &nbsp; •••• &nbsp; •••• &nbsp; 0000</div>
+          <div class="card-chip" aria-hidden="true"></div>
+          <div class="card-member-name" id="mobikisi-member-name">MEMBRE MATA PAY</div>
+          <div class="card-number" id="mobikisi-member-number">MP-DEMO-••••••••••••</div>
           <div class="card-bottom">
-            <span>CARTE DE DÉMONSTRATION</span>
+            <span>CARTE NUMÉRIQUE DE DÉMONSTRATION</span>
             <strong>MOBIKISI</strong>
           </div>
+        </div>
+
+        <div class="form-card mobikisi-account-panel">
+          <h3>Votre carte MOBIKISI</h3>
+          <p id="mobikisi-card-status">Créez votre espace de démonstration pour obtenir votre carte numérique.</p>
+          <p class="small-note">Le numéro MOBIKISI identifie votre espace. Il ne constitue ni un numéro de carte bancaire ni un moyen d'accès à lui seul.</p>
+          <button type="button" id="physical-card-request" class="primary-button" disabled>Demander une carte physique</button>
+          <div id="physical-card-result" class="result-message" aria-live="polite"></div>
         </div>
 
         <div class="stats-grid">

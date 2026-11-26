@@ -159,6 +159,30 @@
           <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
           <div id="register-result" class="result-message" aria-live="polite"></div>
         </form>
+        <div class="form-card" id="demo-document-card">
+          <h3>Vérification du profil — pièce justificative (simulation)</h3>
+          <p>Choisissez un type de pièce et indiquez sa date d'expiration. Le prototype vérifie uniquement les dates saisies : il ne reçoit, ne photographie et ne conserve aucun document officiel.</p>
+          <div class="notice">
+            <strong>Protection de vos données</strong>
+            <p>N'ajoutez pas de photo, de numéro ou de copie de votre véritable pièce d'identité. Utilisez uniquement des informations fictives pour tester cette démonstration.</p>
+          </div>
+          <form id="demo-document-form">
+            <label for="demo-document-type">Type de pièce</label>
+            <select id="demo-document-type" name="documentType" required>
+              <option value="" selected disabled>Choisissez une pièce</option>
+              <option value="Carte nationale d'identité">Carte nationale d'identité</option>
+              <option value="Carte d'étudiant ou scolaire">Carte d'étudiant ou scolaire</option>
+              <option value="Passeport">Passeport</option>
+              <option value="Permis de conduire">Permis de conduire</option>
+            </select>
+            <label for="demo-document-expiry">Date d'expiration / fin de validité</label>
+            <input id="demo-document-expiry" name="expiryDate" type="date" required>
+            <small id="demo-document-date-help">La date doit être aujourd'hui ou une date future.</small>
+            <button class="primary-button" type="submit">Ajouter la pièce (simulation)</button>
+            <div id="demo-document-result" class="result-message" aria-live="polite"></div>
+          </form>
+          <div id="demo-document-summary" aria-live="polite"></div>
+        </div>
         <div class="form-card">
           <h3>Vous avez déjà créé un espace sur cet appareil ?</h3>
           <p>Votre profil de démonstration est conservé localement dans ce navigateur.</p>

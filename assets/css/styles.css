@@ -887,7 +887,10 @@ tbody tr:hover {
   }
 
   .profile-area {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 100%;
   }
 
   .welcome-banner h2 {

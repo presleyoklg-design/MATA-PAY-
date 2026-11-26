@@ -272,16 +272,17 @@
       margin-bottom: 8px;
     }
 
-    .field input {
+    .field input, .field select {
       width: 100%;
       padding: 13px;
       border: 1px solid var(--border);
       border-radius: 9px;
       outline: none;
       background: #FCFDFC;
+      color: var(--text);
     }
 
-    .field input:focus {
+    .field input:focus, .field select:focus {
       border-color: var(--green);
     }
 
@@ -586,34 +587,45 @@
       <section class="page" id="savings">
         <div class="welcome">
           <h1>Mon épargne</h1>
-          <p>Simulez vos versements et suivez votre progression.</p>
+          <p>Choisissez votre formule, effectuez un dépôt fictif et consultez chaque confirmation.</p>
         </div>
-
         <div class="notice">
-          Ceci est une simulation. Aucun dépôt réel n'est effectué et aucun rendement n'est promis.
+          Prototype de démonstration : aucun argent réel n'est collecté, conservé ou transféré.
+          La date et l'heure affichées correspondent à l'horloge de l'appareil utilisé.
         </div>
-
+        <div class="grid">
+          <div class="card"><div class="stat-label">Épargne Simple</div><div class="stat-value" id="simple-balance">0 FCFA</div><div class="stat-note">Solde simulé</div></div>
+          <div class="card"><div class="stat-label">Épargne Bloquée</div><div class="stat-value" id="blocked-balance">0 FCFA</div><div class="stat-note">Durée de référence : 12 mois</div></div>
+          <div class="card"><div class="stat-label">Compte Mobikisi</div><div class="stat-value" id="mobikisi-savings-balance">0 FCFA</div><div class="stat-note">Contribution quotidienne dès 300 FCFA</div></div>
+        </div>
         <div class="card">
-          <h3 class="section-title">Mon solde simulé</h3>
+          <h3 class="section-title">Mon solde total simulé</h3>
           <div class="stat-value" id="savings-balance">0 FCFA</div>
+          <div class="stat-note"><span id="savings-count">0</span> dépôt(s) confirmé(s) dans la démonstration</div>
         </div>
-
         <div class="card">
-          <h3 class="section-title">Effectuer un versement fictif</h3>
-
+          <h3 class="section-title">Effectuer un dépôt fictif</h3>
           <div class="field">
-            <label for="deposit-amount">Montant du versement (FCFA)</label>
-            <input type="number" id="deposit-amount" min="1" placeholder="Exemple : 1000">
+            <label for="deposit-product">Formule d'épargne</label>
+            <select id="deposit-product">
+              <option value="Épargne Simple">Épargne Simple</option>
+              <option value="Épargne Bloquée">Épargne Bloquée (12 mois)</option>
+              <option value="Compte Mobikisi">Compte Mobikisi (contribution quotidienne)</option>
+            </select>
           </div>
-
+          <div class="field">
+            <label for="deposit-amount">Montant du dépôt (FCFA)</label>
+            <input type="number" id="deposit-amount" min="1" step="1" placeholder="Exemple : 1000">
+            <small class="stat-note" id="deposit-minimum">Saisissez un montant entier en FCFA.</small>
+          </div>
           <div class="field">
             <label for="deposit-note">Description (facultatif)</label>
-            <input type="text" id="deposit-note" placeholder="Mon épargne quotidienne">
+            <input type="text" id="deposit-note" maxlength="120" placeholder="Exemple : Mon épargne du jour">
           </div>
-
-          <button class="btn" id="deposit-button">Enregistrer la simulation</button>
-          <div class="result" id="deposit-result"></div>
+          <button class="btn" id="deposit-button">Confirmer le dépôt fictif</button>
+          <div class="result" id="deposit-result" aria-live="polite"></div>
         </div>
+        <div class="card"><h3 class="section-title">Mes derniers dépôts</h3><div id="savings-history" class="empty">Aucun dépôt enregistré.</div></div>
       </section>
 
       <!-- MOBIKISI -->
@@ -717,195 +729,131 @@
   </button>
 </nav>
 
-<script>
-  // DONNÉES DE DÉMONSTRATION
-  const state = {
-    balance: 0,
-    operations: []
-  };
+ <script>
+  const state = { balance: 0, operations: [] };
+  const titles = { dashboard:"Tableau de bord", savings:"Mon épargne", mobikisi:"Carte Mobikisi", credit:"Simulation crédit", history:"Historique" };
 
-  const titles = {
-    dashboard: "Tableau de bord",
-    savings: "Mon épargne",
-    mobikisi: "Carte Mobikisi",
-    credit: "Simulation crédit",
-    history: "Historique"
-  };
-
-  // NAVIGATION ENTRE LES RUBRIQUES
   function navigate(page) {
-    document.querySelectorAll(".page").forEach(section => {
-      section.classList.remove("active");
-    });
-
+    document.querySelectorAll(".page").forEach(section => section.classList.remove("active"));
     document.getElementById(page).classList.add("active");
     document.getElementById("page-title").textContent = titles[page];
-
-    document.querySelectorAll("[data-page]").forEach(button => {
-      button.classList.toggle("active", button.dataset.page === page);
-    });
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.querySelectorAll("[data-page]").forEach(button => button.classList.toggle("active", button.dataset.page === page));
+    window.scrollTo({top:0,behavior:"smooth"});
     updateInterface();
   }
+  document.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click",()=>navigate(button.dataset.page)));
+  document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",()=>navigate(button.dataset.go)));
 
-  document.querySelectorAll("[data-page]").forEach(button => {
-    button.addEventListener("click", () => navigate(button.dataset.page));
-  });
-
-  document.querySelectorAll("[data-go]").forEach(button => {
-    button.addEventListener("click", () => navigate(button.dataset.go));
-  });
-
-  // FORMATAGE DES MONTANTS
-  function money(amount) {
-    return new Intl.NumberFormat("fr-FR").format(amount) + " FCFA";
+  function money(amount) { return new Intl.NumberFormat("fr-FR",{maximumFractionDigits:0}).format(amount)+" FCFA"; }
+  function makeReference() {
+    const stamp = new Date().toISOString().replace(/[-:TZ.]/g,"").slice(0,14);
+    return "MP-"+stamp+"-"+Math.random().toString(36).slice(2,8).toUpperCase();
+  }
+  function productBalance(product) {
+    return state.operations.filter(op=>op.product===product).reduce((sum,op)=>sum+op.amount,0);
   }
 
-  // AJOUT D'UN VERSEMENT FICTIF
-  document.getElementById("deposit-button").addEventListener("click", () => {
-    const amount = Number(document.getElementById("deposit-amount").value);
-    const note = document.getElementById("deposit-note").value.trim();
+  function openReceipt(operation) {
+    const receiptWindow=window.open("","_blank");
+    if(!receiptWindow){alert("Autorisez les fenêtres pop-up pour consulter le reçu, puis réessayez.");return;}
+    const safe=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    receiptWindow.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reçu MATA PAY - ${safe(operation.reference)}</title><style>
+body{font-family:Arial,sans-serif;background:#f5f7f4;color:#25352c;padding:20px}.receipt{max-width:580px;margin:20px auto;background:#fff;border:1px solid #e7ece7;border-radius:16px;padding:28px}
+h1{color:#124b35;margin:0 0 6px}.subtitle{color:#7c8980;font-size:13px}.amount{font-size:30px;color:#124b35;font-weight:bold;margin:25px 0}
+.row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid #e7ece7}.row span{color:#7c8980}.status{color:#124b35;font-weight:bold}
+.note{color:#7c8980;font-size:12px;line-height:1.6;margin-top:24px}button{background:#124b35;color:white;border:0;border-radius:8px;padding:13px 18px;margin-top:20px;font-weight:bold}
+@media print{body{background:#fff;padding:0}.receipt{border:0;margin:0 auto}button{display:none}}</style></head><body><main class="receipt">
+<h1>MATA PAY</h1><div class="subtitle">Reçu de dépôt — Prototype de démonstration</div><div class="amount">+${safe(money(operation.amount))}</div>
+<div class="row"><span>Formule</span><strong>${safe(operation.product)}</strong></div><div class="row"><span>Date et heure</span><strong>${safe(operation.date)}</strong></div>
+<div class="row"><span>Référence unique</span><strong>${safe(operation.reference)}</strong></div><div class="row"><span>Statut</span><strong class="status">Confirmé — simulation</strong></div>
+<div class="row"><span>Solde total simulé après dépôt</span><strong>${safe(money(operation.balanceAfter))}</strong></div><div class="row"><span>Description</span><strong>${safe(operation.note)}</strong></div>
+<p class="note">Ce document atteste uniquement d'une opération fictive dans le prototype MATA PAY. Il ne constitue pas une preuve de dépôt de fonds réels. Pour enregistrer ce reçu en PDF, choisissez « Enregistrer au format PDF » dans les options d'impression de votre navigateur.</p>
+<button onclick="window.print()">Imprimer / Enregistrer en PDF</button></main></body></html>`);
+    receiptWindow.document.close();
+  }
 
-    if (!Number.isFinite(amount) || amount <= 0) {
-      alert("Veuillez saisir un montant valide.");
-      return;
-    }
-    
-    state.balance += amount;
+  const depositProduct=document.getElementById("deposit-product");
+  const depositAmount=document.getElementById("deposit-amount");
+  const depositMinimum=document.getElementById("deposit-minimum");
+  function updateDepositRule() {
+    const isMobikisi=depositProduct.value==="Compte Mobikisi";
+    depositAmount.min=isMobikisi?"300":"1";
+    depositMinimum.textContent=isMobikisi?"Contribution quotidienne minimale : 300 FCFA. Vous pouvez déposer davantage.":"Montant selon la formule sélectionnée.";
+    depositAmount.placeholder=isMobikisi?"Minimum : 300 FCFA":"Exemple : 1000";
+  }
+  depositProduct.addEventListener("change",updateDepositRule);
 
-    state.operations.unshift({
-      amount,
-      note: note || "Versement simulé",
-      date: new Date().toLocaleString("fr-FR")
-    });
-saveState();
-    document.getElementById("deposit-amount").value = "";
-    document.getElementById("deposit-note").value = "";
-
-    const result = document.getElementById("deposit-result");
-    result.style.display = "block";
-    result.textContent = "Versement simulé enregistré : " + money(amount);
-
-    updateInterface();
+  document.getElementById("deposit-button").addEventListener("click",()=>{
+    const amount=Number(depositAmount.value), product=depositProduct.value;
+    const noteInput=document.getElementById("deposit-note"), note=noteInput.value.trim();
+    if(!Number.isSafeInteger(amount)||amount<=0){alert("Veuillez saisir un montant entier valide en FCFA.");return;}
+    if(product==="Compte Mobikisi"&&amount<300){alert("La contribution quotidienne Mobikisi doit être d'au moins 300 FCFA.");return;}
+    const confirmedAt=new Date();
+    const operation={amount,product,note:note||"Dépôt simulé",date:confirmedAt.toLocaleString("fr-FR"),timestamp:confirmedAt.toISOString(),reference:makeReference(),status:"confirmed",balanceAfter:state.balance+amount};
+    state.balance+=amount;state.operations.unshift(operation);saveState();
+    depositAmount.value="";noteInput.value="";
+    const result=document.getElementById("deposit-result");result.style.display="block";result.replaceChildren();
+    const message=document.createElement("p");message.textContent="Dépôt fictif confirmé : "+money(amount)+" — "+operation.reference;
+    const receiptButton=document.createElement("button");receiptButton.className="btn btn-light";receiptButton.style.marginTop="12px";
+    receiptButton.textContent="Consulter / enregistrer le reçu PDF";receiptButton.addEventListener("click",()=>openReceipt(operation));
+    result.append(message,receiptButton);updateInterface();
   });
 
-  // SIMULATION DE CREDIT
-  document.getElementById("credit-button").addEventListener("click", () => {
-    const amount = Number(document.getElementById("credit-amount").value);
-    const duration = Number(document.getElementById("credit-duration").value);
-
-    if (!Number.isFinite(amount) || amount <= 0 ||
-        !Number.isInteger(duration) || duration < 1 || duration > 60) {
-      alert("Veuillez vérifier le montant et la durée.");
-      return;
-    }
-
-    const monthly = amount / duration;
-    const result = document.getElementById("credit-result");
-
-    result.style.display = "block";
-    result.innerHTML =
-      "<strong>Résultat indicatif</strong><br>" +
-      "Montant demandé : " + money(amount) + "<br>" +
-      "Durée : " + duration + " mois<br>" +
-      "Mensualité estimée hors intérêts et frais : <strong>" +
-      money(monthly) + "</strong><br><small>Ce calcul ne représente pas une offre de financement.</small>";
+  // SIMULATION DE CRÉDIT EXISTANTE
+  document.getElementById("credit-button").addEventListener("click",()=>{
+    const amount=Number(document.getElementById("credit-amount").value),duration=Number(document.getElementById("credit-duration").value);
+    if(!Number.isFinite(amount)||amount<=0||!Number.isInteger(duration)||duration<1||duration>60){alert("Veuillez vérifier le montant et la durée.");return;}
+    const monthly=amount/duration,result=document.getElementById("credit-result");result.style.display="block";
+    result.innerHTML="<strong>Résultat indicatif</strong><br>Montant demandé : "+money(amount)+"<br>Durée : "+duration+" mois<br>Mensualité estimée hors intérêts et frais : <strong>"+money(monthly)+"</strong><br><small>Ce calcul ne représente pas une offre de financement.</small>";
   });
 
-  // AFFICHAGE DES OPERATIONS
-  function renderOperations(containerId, limit) {
-    const container = document.getElementById(containerId);
-    const operations = limit
-      ? state.operations.slice(0, limit)
-      : state.operations;
-
-    if (operations.length === 0) {
-      container.className = "empty";
-      container.textContent = "Aucune opération enregistrée.";
-      return;
-    }
-
-    container.className = "table-wrap";
-    const table = document.createElement("table");
-    const head = document.createElement("tr");
-
-    ["Date", "Description", "Montant"].forEach(label => {
-      const th = document.createElement("th");
-      th.textContent = label;
-      head.appendChild(th);
-    });
-
+  function renderOperations(containerId,limit,productFilter) {
+    const container=document.getElementById(containerId);
+    const filtered=productFilter?state.operations.filter(op=>op.product===productFilter):state.operations;
+    const operations=limit?filtered.slice(0,limit):filtered;
+    if(!operations.length){container.className="empty";container.textContent="Aucune opération enregistrée.";return;}
+    container.className="table-wrap";
+    const table=document.createElement("table"),head=document.createElement("tr");
+    ["Date et heure","Formule","Description","Montant","Reçu"].forEach(label=>{const th=document.createElement("th");th.textContent=label;head.appendChild(th);});
     table.appendChild(head);
-
-    operations.forEach(operation => {
-      const row = document.createElement("tr");
-
-      
-[operation.date, operation.note, "+" + money(operation.amount)].forEach(value => {
-  const td = document.createElement("td");
-  td.textContent = value;
-  row.appendChild(td);
-});
-
-table.appendChild(row);
-});
-container.replaceChildren(table);
-}
-
-// Mise à jour de toutes les rubriques
-function updateInterface() {
-  const count = state.operations.length;
-  const balanceText = money(state.balance);
-
-  document.getElementById("dashboard-balance").textContent = balanceText;
-  document.getElementById("dashboard-count").textContent = count;
-  document.getElementById("savings-balance").textContent = balanceText;
-  document.getElementById("mobikisi-total").textContent = balanceText;
-  document.getElementById("mobikisi-count").textContent = count;
-
-  renderOperations("recent-activity", 5);
-  renderOperations("mobikisi-history", 5);
-  renderOperations("history-table");
-}
-
-// Sauvegarde locale des données de démonstration
-const STORAGE_KEY = "matapay-demo-v1";
-
-function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.warn("Sauvegarde locale indisponible :", error);
+    operations.forEach(operation=>{
+      const row=document.createElement("tr");
+      [operation.date,operation.product||"Épargne Simple",operation.note,"+"+money(operation.amount)].forEach(value=>{const td=document.createElement("td");td.textContent=value;row.appendChild(td);});
+      const cell=document.createElement("td"),button=document.createElement("button");button.className="btn btn-light";button.textContent="Voir le reçu";
+      button.addEventListener("click",()=>openReceipt(operation));cell.appendChild(button);row.appendChild(cell);table.appendChild(row);
+    });
+    container.replaceChildren(table);
   }
-}
 
-function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-
-    if (!saved || !Array.isArray(saved.operations)) return;
-
-    state.operations = saved.operations.filter(operation =>
-      operation &&
-      Number.isSafeInteger(operation.amount) &&
-      operation.amount > 0 &&
-      typeof operation.note === "string" &&
-      typeof operation.date === "string"
-    );
-
-    state.balance = state.operations.reduce(
-      (total, operation) => total + operation.amount,
-      0
-    );
-  } catch (error) {
-    console.warn("Données locales non récupérables :", error);
+  function updateInterface() {
+    const count=state.operations.length,balanceText=money(state.balance);
+    document.getElementById("dashboard-balance").textContent=balanceText;
+    document.getElementById("dashboard-count").textContent=count;
+    document.getElementById("savings-balance").textContent=balanceText;
+    document.getElementById("savings-count").textContent=count;
+    document.getElementById("mobikisi-total").textContent=money(productBalance("Compte Mobikisi"));
+    document.getElementById("mobikisi-count").textContent=state.operations.filter(op=>op.product==="Compte Mobikisi").length;
+    document.getElementById("simple-balance").textContent=money(productBalance("Épargne Simple"));
+    document.getElementById("blocked-balance").textContent=money(productBalance("Épargne Bloquée"));
+    document.getElementById("mobikisi-savings-balance").textContent=money(productBalance("Compte Mobikisi"));
+    renderOperations("recent-activity",5);
+    renderOperations("mobikisi-history",5,"Compte Mobikisi");
+    renderOperations("savings-history",5);
+    renderOperations("history-table");
   }
-}
 
-// Démarrage
-loadState();
-updateInterface();
+  const STORAGE_KEY="matapay-demo-v1";
+  function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(error){console.warn("Sauvegarde locale indisponible :",error);alert("La sauvegarde locale n'est pas disponible sur cet appareil.");}}
+  function loadState(){
+    try{
+      const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!saved||!Array.isArray(saved.operations))return;
+      state.operations=saved.operations.filter(op=>op&&Number.isSafeInteger(op.amount)&&op.amount>0&&typeof op.note==="string"&&typeof op.date==="string")
+        .map(op=>({...op,product:op.product||"Épargne Simple",reference:op.reference||"MP-ANCIEN-"+Math.random().toString(36).slice(2,8).toUpperCase(),status:"confirmed"}));
+      state.balance=state.operations.reduce((total,op)=>total+op.amount,0);saveState();
+    }catch(error){console.warn("Données locales non récupérables :",error);}
+  }
+  loadState();updateDepositRule();updateInterface();
 </script>
 </body>
 </html>

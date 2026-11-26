@@ -2103,3 +2103,47 @@ body {
     flex-basis: 30px;
   }
 }
+
+
+/* MATA PAY — CALENDRIERS MENSUELS DE POINTAGE ET VALIDATION ADMINISTRATIVE SIMULÉE */
+.pointage-calendar { width:100%; }
+.calendar-toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:14px 0; }
+.calendar-toolbar strong { color:var(--green-dark); text-transform:capitalize; font-size:15px; text-align:center; }
+.calendar-nav { border:1px solid #DCE5DD; border-radius:9px; padding:9px 11px; background:#fff; color:#174B36; font-size:11px; font-weight:700; }
+.calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; }
+.calendar-weekday { padding:8px 2px; text-align:center; color:#758178; font-size:10px; font-weight:800; }
+.calendar-day { min-height:72px; padding:7px 4px; display:flex; flex-direction:column; align-items:center; gap:4px; border:1px solid #E6EBE6; border-radius:9px; background:#FBFCFA; }
+.calendar-day-empty { border-color:transparent; background:transparent; }
+.calendar-day-number { color:#354A3D; font-size:12px; font-weight:800; }
+.calendar-day-mark { display:grid; place-items:center; width:23px; height:23px; border-radius:50%; color:#8B968E; background:#EEF1ED; font-size:14px; font-weight:900; }
+.calendar-day.has-validated { border-color:#BBD9C4; background:#F2FAF4; }
+.calendar-day.has-validated .calendar-day-mark, .legend-mark.validated { color:#fff; background:#25834A; }
+.calendar-day.has-pending { border-color:#E9D8A9; background:#FFFCF3; }
+.calendar-day.has-pending .calendar-day-mark, .legend-mark.pending { color:#73571A; background:#F6E8BD; }
+.calendar-day small { color:#718077; font-size:8px; text-align:center; line-height:1.2; }
+.calendar-operations { display:grid; gap:9px; margin-top:16px; }
+.calendar-operations > strong { color:var(--green-dark); font-size:13px; }
+.calendar-operation { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid #E6EBE6; border-radius:10px; background:#fff; }
+.calendar-operation > div { display:grid; gap:4px; min-width:0; }
+.calendar-operation strong { color:#354A3D; font-size:12px; }
+.calendar-operation span { color:#68766D; font-size:11px; overflow-wrap:anywhere; }
+.calendar-operation small { font-size:10px; }
+.admin-status-validated { color:#25834A; font-weight:800; }
+.admin-status-pending { color:#946D1D; font-weight:700; }
+.calendar-validate-button { flex:0 0 auto; border:1px solid #D7B45E; border-radius:8px; padding:8px 10px; background:#FFF8E8; color:#6F5318; font-size:10px; font-weight:800; }
+.pointage-legend { display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:18px; color:#69776E; font-size:10px; }
+.legend-mark { display:inline-grid; place-items:center; width:19px; height:19px; margin-right:5px; border-radius:50%; font-style:normal; font-weight:900; }
+.legend-mark.empty { color:#7C8980; background:#EEF1ED; }
+.pointage-admin-notice { margin:14px 0 18px; }
+@media(max-width:520px) {
+  .calendar-grid { gap:3px; }
+  .calendar-day { min-height:60px; padding:6px 1px; border-radius:7px; }
+  .calendar-weekday { font-size:9px; }
+  .calendar-day-number { font-size:11px; }
+  .calendar-day-mark { width:20px; height:20px; }
+  .calendar-day small { font-size:7px; }
+  .calendar-toolbar { gap:5px; }
+  .calendar-nav { padding:8px 6px; font-size:9px; }
+  .calendar-operation { align-items:flex-start; flex-direction:column; }
+  .calendar-validate-button { width:100%; }
+}

@@ -129,17 +129,6 @@
           <label for="demo-first-name">Prénom(s)</label>
           <input id="demo-first-name" name="firstName" type="text" maxlength="50" autocomplete="off" placeholder="Ex. Presley Dielphy De Pathéo" required>
 
-          <label for="demo-profile-photo">Photo de profil (facultative)</label>
-          <div class="profile-photo-picker">
-            <img id="profile-photo-preview" src="assets/images/profile-placeholder.svg" alt="Aperçu de la photo de profil">
-            <div>
-              <input id="demo-profile-photo" name="profilePhoto" type="file" accept="image/jpeg,image/png,image/webp">
-              <small>Choisissez une photo depuis votre téléphone. Image JPEG, PNG ou WebP, 5 Mo maximum. Elle sera réduite et conservée uniquement sur cet appareil dans ce prototype. N’utilisez pas la photo d’une autre personne sans son accord.</small>
-              <button type="button" id="remove-profile-photo" class="secondary-button">Retirer la photo</button>
-            </div>
-          </div>
-          <div id="profile-photo-result" class="result-message" aria-live="polite"></div>
-
           <label for="demo-birth-date">Date de naissance</label>
           <input id="demo-birth-date" name="birthDate" type="date" required>
           <small>Utilisez une date fictive. Le prototype n'a pas besoin de votre véritable date de naissance.</small>
@@ -170,6 +159,17 @@
 
           <label for="demo-neighborhood">Quartier</label>
           <input id="demo-neighborhood" name="neighborhood" type="text" maxlength="100" autocomplete="off" placeholder="Ex. Poto-Poto" required>
+
+          <label for="demo-profile-photo">Photo de profil (obligatoire)</label>
+          <div class="profile-photo-picker">
+            <img id="profile-photo-preview" src="assets/images/profile-placeholder.svg" alt="Aperçu de la photo de profil">
+            <div>
+              <input id="demo-profile-photo" name="profilePhoto" type="file" accept="image/jpeg,image/png,image/webp" required>
+              <small>Choisissez une photo depuis votre téléphone. Image JPEG, PNG ou WebP, 5 Mo maximum. Elle sera réduite et conservée uniquement sur cet appareil dans ce prototype. Utilisez une photo de vous-même. Elle est obligatoire pour créer votre espace de démonstration.</small>
+              <button type="button" id="remove-profile-photo" class="secondary-button">Retirer la photo</button>
+            </div>
+          </div>
+          <div id="profile-photo-result" class="result-message" aria-live="polite"></div>
 
           <section id="demo-document-card" class="document-section">
             <h3>Pièces jointes — vérification simulée</h3>

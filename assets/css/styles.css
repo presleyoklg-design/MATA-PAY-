@@ -1825,3 +1825,48 @@ body {
     margin-right: auto;
   }
 }
+
+
+/* MATA PAY — EN-TÊTE RÉTABLI : LOGO À GAUCHE, TITRE AU CENTRE, COMPTE À DROITE */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.topbar .topbar-brand {
+  order: 0;
+  margin-left: 0;
+  margin-right: 0;
+  flex: 0 0 auto;
+}
+.topbar .topbar-page {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+}
+.topbar .profile-area {
+  order: 2;
+  margin-left: 0;
+  margin-right: 0;
+  flex: 0 0 auto;
+}
+@media (max-width: 700px) {
+  .topbar {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .topbar .topbar-brand {
+    order: 0;
+  }
+  .topbar .profile-area {
+    order: 1;
+    margin-left: auto;
+  }
+  .topbar .topbar-page {
+    order: 2;
+    flex: 0 0 100%;
+    text-align: left;
+  }
+}

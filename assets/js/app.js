@@ -273,6 +273,44 @@ function updateInterface() {
 const STORAGE_KEY = "matapay-demo-v1";
 const PROFILE_KEY = "matapay-demo-profile-v1";
 let demoProfile = "";
+let demoProfileData = null;
+
+function createMemberNumber() {
+  const bytes = new Uint8Array(8);
+  if (window.crypto && typeof window.crypto.getRandomValues === "function") {
+    window.crypto.getRandomValues(bytes);
+  } else {
+    for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  }
+  return "MP-DEMO-" + Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+function saveDemoProfile() {
+  if (!demoProfileData) return;
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(demoProfileData));
+}
+function renderMobikisiCard() {
+  const nameNode = document.getElementById("mobikisi-member-name");
+  const numberNode = document.getElementById("mobikisi-member-number");
+  const statusNode = document.getElementById("mobikisi-card-status");
+  const requestButton = document.getElementById("physical-card-request");
+  const requestResult = document.getElementById("physical-card-result");
+  if (!nameNode || !numberNode || !statusNode || !requestButton) return;
+  if (!demoProfileData || !demoProfileData.memberNumber) {
+    nameNode.textContent = "MEMBRE MATA PAY";
+    numberNode.textContent = "MP-DEMO-••••••••••••";
+    statusNode.textContent = "Créez votre espace de démonstration pour obtenir votre carte numérique.";
+    requestButton.disabled = true;
+    return;
+  }
+  nameNode.textContent = ((demoProfileData.firstName || "") + " " + (demoProfileData.name || "")).trim().toUpperCase();
+  numberNode.textContent = demoProfileData.memberNumber;
+  statusNode.textContent = "Carte numérique activée immédiatement dans cette démonstration.";
+  requestButton.disabled = Boolean(demoProfileData.physicalCardRequested);
+  requestButton.textContent = demoProfileData.physicalCardRequested ? "Demande physique enregistrée" : "Demander une carte physique";
+  if (requestResult) requestResult.textContent = demoProfileData.physicalCardRequested
+    ? "Votre demande de carte physique est enregistrée localement à titre de démonstration. Aucune fabrication ni livraison réelle n'est déclenchée."
+    : "";
+}
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -306,9 +344,16 @@ try {
   if (savedProfile) {
     try {
       const parsedProfile = JSON.parse(savedProfile);
-      demoProfile = parsedProfile && typeof parsedProfile === "object"
-        ? (parsedProfile.name || "")
-        : savedProfile;
+      if (parsedProfile && typeof parsedProfile === "object") {
+        demoProfileData = parsedProfile;
+        demoProfile = parsedProfile.name || "";
+        if (!demoProfileData.memberNumber) {
+          demoProfileData.memberNumber = createMemberNumber();
+          saveDemoProfile();
+        }
+      } else {
+        demoProfile = savedProfile;
+      }
     } catch {
       demoProfile = savedProfile;
     }
@@ -415,15 +460,23 @@ if (registerForm) {
       showResult("register-result", "Pièce refusée : la carte scolaire ou étudiante doit expirer au plus tard à la fin de l'année scolaire en cours (" + currentAcademicYearEnd() + ")."); return;
     }
 
-    const demoDetails = { name, firstName, birthDate, birthPlace, gender: genderField.value, email, phone, country, city, neighborhood };
+    const demoDetails = {
+      name, firstName, birthDate, birthPlace, gender: genderField.value,
+      email, phone, country, city, neighborhood,
+      memberNumber: (demoProfileData && demoProfileData.memberNumber) || createMemberNumber(),
+      physicalCardRequested: false,
+      cardIssueMode: "digital-immediate-physical-on-request"
+    };
     const documentInfo = { type: documentType, expiryDate, status: "date valide — simulation" };
     try {
+      demoProfileData = demoDetails;
       localStorage.setItem(PROFILE_KEY, JSON.stringify(demoDetails));
       localStorage.setItem(DOCUMENT_KEY, JSON.stringify(documentInfo));
       demoProfile = name;
       document.getElementById("profile-label").textContent = demoProfile + " — démonstration";
       renderDemoDocument(documentInfo);
-      showResult("register-result", "Votre espace de démonstration est créé sur cet appareil. Informations et justificatif fictifs enregistrés ; aucune pièce officielle n'a été téléversée et aucune opération réelle n'est possible.");
+      renderMobikisiCard();
+      showResult("register-result", "Votre espace de démonstration est créé. Votre carte MOBIKISI numérique et son numéro de membre ont été générés immédiatement. Une carte physique pourra être demandée depuis l'espace MOBIKISI. Toutes les données restent fictives et locales ; aucune carte réelle n'est fabriquée.");
       registerForm.reset();
       updateDocumentDateRule();
     } catch (error) {
@@ -433,7 +486,25 @@ if (registerForm) {
 }
 if (documentTypeField && documentExpiryField) updateDocumentDateRule();
 
+const physicalCardButton = document.getElementById("physical-card-request");
+if (physicalCardButton) {
+  physicalCardButton.addEventListener("click", () => {
+    if (!demoProfileData || !demoProfileData.memberNumber) {
+      showResult("physical-card-result", "Créez d'abord votre espace de démonstration.");
+      return;
+    }
+    demoProfileData.physicalCardRequested = true;
+    try {
+      saveDemoProfile();
+      renderMobikisiCard();
+    } catch (error) {
+      showResult("physical-card-result", "La demande n'a pas pu être enregistrée sur cet appareil.");
+    }
+  });
+}
+
 loadState();
 updateDepositRule();
 updateInterface();
+renderMobikisiCard();
 refreshSavingsTracking();

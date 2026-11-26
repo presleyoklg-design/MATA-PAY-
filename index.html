@@ -120,17 +120,36 @@
           <p>Cette inscription est locale et fictive. N'indiquez ni mot de passe réel, ni numéro de téléphone, ni donnée bancaire. Aucun compte financier réel n'est créé.</p>
         </div>
         <form id="register-form" class="form-card">
-          <h3>Vos informations de démonstration</h3>
-          <label for="display-name">Nom d'affichage</label>
-          <input id="display-name" name="displayName" type="text" maxlength="40" autocomplete="off" placeholder="Ex. Marie" required>
-          <small>Utilisez un prénom fictif ou un pseudonyme.</small>
+          <h3>Vos informations personnelles — démonstration</h3>
+          <p>Complétez les champs dans l'ordre. Pour les essais, utilisez exclusivement des données fictives.</p>
+
+          <label for="display-name">Nom</label>
+          <input id="display-name" name="name" type="text" maxlength="40" autocomplete="off" placeholder="Ex. KIMBA" required>
 
           <label for="demo-first-name">Prénom</label>
-          <input id="demo-first-name" name="firstName" type="text" maxlength="50" autocomplete="off" placeholder="Ex. Jean" required>
+          <input id="demo-first-name" name="firstName" type="text" maxlength="50" autocomplete="off" placeholder="Ex. Marie" required>
 
-          <label for="demo-email">Adresse e-mail de démonstration</label>
+          <label for="demo-birth-date">Date de naissance</label>
+          <input id="demo-birth-date" name="birthDate" type="date" required>
+          <small>Utilisez une date fictive. Le prototype n'a pas besoin de votre véritable date de naissance.</small>
+
+          <label for="demo-birth-place">Lieu de naissance</label>
+          <input id="demo-birth-place" name="birthPlace" type="text" maxlength="100" autocomplete="off" placeholder="Ex. Brazzaville" required>
+
+          <label for="demo-gender">Genre</label>
+          <select id="demo-gender" name="gender" required>
+            <option value="" selected disabled>Choisissez une option</option>
+            <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+          </select>
+
+          <label for="demo-email">Adresse e-mail</label>
           <input id="demo-email" name="email" type="email" maxlength="120" autocomplete="off" placeholder="exemple@domaine.com" required>
-          <small>Aucun e-mail ne sera envoyé ni vérifié. Pour tester, utilisez une adresse fictive.</small>
+          <small>Aucun e-mail ne sera envoyé ni vérifié. Utilisez une adresse fictive.</small>
+
+          <label for="demo-phone">Numéro de téléphone</label>
+          <input id="demo-phone" name="phone" type="tel" maxlength="20" inputmode="tel" autocomplete="off" pattern="[0-9+() .-]{7,20}" placeholder="Ex. +242 06 000 00 00" required>
+          <small>Aucun appel ni SMS ne sera envoyé. Utilisez un numéro fictif.</small>
 
           <label for="demo-country">Pays</label>
           <input id="demo-country" name="country" type="text" maxlength="80" autocomplete="off" placeholder="Ex. Congo" required>
@@ -139,34 +158,15 @@
           <input id="demo-city" name="city" type="text" maxlength="80" autocomplete="off" placeholder="Ex. Brazzaville" required>
 
           <label for="demo-neighborhood">Quartier</label>
-          <input id="demo-neighborhood" name="neighborhood" type="text" maxlength="100" autocomplete="off" placeholder="Votre quartier fictif" required>
+          <input id="demo-neighborhood" name="neighborhood" type="text" maxlength="100" autocomplete="off" placeholder="Ex. Poto-Poto" required>
 
-          <label for="demo-phone">Numéro de téléphone de démonstration</label>
-          <input id="demo-phone" name="phone" type="tel" maxlength="20" inputmode="tel" autocomplete="off" pattern="[0-9+() .-]{7,20}" placeholder="Ex. +242 06 000 00 00" required>
-          <small>Aucun appel ni SMS ne sera envoyé. Utilisez un numéro fictif pour les essais.</small>
-
-          <label for="demo-age">Âge (18 ans minimum)</label>
-          <input id="demo-age" name="age" type="number" min="18" max="120" step="1" inputmode="numeric" placeholder="Ex. 25" required>
-          <small>Les profils de démonstration sont réservés aux personnes âgées de 18 ans ou plus. N'indiquez pas votre date de naissance.</small>
-
-          <label for="demo-gender">Type de profil</label>
-          <select id="demo-gender" name="gender" required>
-            <option value="" selected disabled>Choisissez une option</option>
-            <option value="Homme">Homme</option>
-            <option value="Femme">Femme</option>
-            <option value="Entreprise">Entreprise</option>
-          </select>
-          <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
-          <div id="register-result" class="result-message" aria-live="polite"></div>
-        </form>
-        <div class="form-card" id="demo-document-card">
-          <h3>Vérification du profil — pièce justificative (simulation)</h3>
-          <p>Choisissez un type de pièce et indiquez sa date d'expiration. Le prototype vérifie uniquement les dates saisies : il ne reçoit, ne photographie et ne conserve aucun document officiel.</p>
-          <div class="notice">
-            <strong>Protection de vos données</strong>
-            <p>N'ajoutez pas de photo, de numéro ou de copie de votre véritable pièce d'identité. Utilisez uniquement des informations fictives pour tester cette démonstration.</p>
-          </div>
-          <form id="demo-document-form">
+          <section id="demo-document-card" class="document-section">
+            <h3>Pièces jointes — vérification simulée</h3>
+            <p>Dernière étape : sélectionnez le type de justificatif et sa date de validité. Aucun fichier, aucune photo et aucun numéro de document officiel ne sont collectés.</p>
+            <div class="notice">
+              <strong>Protection de vos données</strong>
+              <p>N'utilisez pas votre véritable pièce d'identité. Cette démonstration enregistre uniquement le type de pièce et une date fictive ; elle ne vérifie pas l'authenticité du document.</p>
+            </div>
             <label for="demo-document-type">Type de pièce</label>
             <select id="demo-document-type" name="documentType" required>
               <option value="" selected disabled>Choisissez une pièce</option>
@@ -178,11 +178,12 @@
             <label for="demo-document-expiry">Date d'expiration / fin de validité</label>
             <input id="demo-document-expiry" name="expiryDate" type="date" required>
             <small id="demo-document-date-help">La date doit être aujourd'hui ou une date future.</small>
-            <button class="primary-button" type="submit">Ajouter la pièce (simulation)</button>
-            <div id="demo-document-result" class="result-message" aria-live="polite"></div>
-          </form>
-          <div id="demo-document-summary" aria-live="polite"></div>
-        </div>
+            <div id="demo-document-summary" aria-live="polite"></div>
+          </section>
+
+          <button class="primary-button" type="submit">Créer mon espace de démonstration</button>
+          <div id="register-result" class="result-message" aria-live="polite"></div>
+        </form>
         <div class="form-card">
           <h3>Vous avez déjà créé un espace sur cet appareil ?</h3>
           <p>Votre profil de démonstration est conservé localement dans ce navigateur.</p>

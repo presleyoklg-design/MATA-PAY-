@@ -1634,3 +1634,24 @@ body {
   .welcome-actions { align-items:stretch; flex-direction:column; }
   .welcome-actions button { width:100%; }
 }
+
+
+/* Placement des actions du tableau de bord */
+.services-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.services-action {
+  flex: 0 0 auto;
+}
+@media (max-width: 520px) {
+  .services-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .services-action {
+    width: 100%;
+  }
+}

@@ -56,7 +56,7 @@
 
   <div class="profile-area">
     <span class="status-dot"></span>
-    <span id="profile-label">Visiteur — démonstration</span>
+    <img id="profile-avatar" class="profile-avatar" src="assets/images/profile-placeholder.svg" alt="Photo de profil par défaut"><span id="profile-label">Visiteur — démonstration</span>
     <button type="button" class="account-entry" data-go="register">Mon compte</button>
   </div>
     </header>
@@ -128,6 +128,17 @@
 
           <label for="demo-first-name">Prénom(s)</label>
           <input id="demo-first-name" name="firstName" type="text" maxlength="50" autocomplete="off" placeholder="Ex. Presley Dielphy De Pathéo" required>
+
+          <label for="demo-profile-photo">Photo de profil (facultative)</label>
+          <div class="profile-photo-picker">
+            <img id="profile-photo-preview" src="assets/images/profile-placeholder.svg" alt="Aperçu de la photo de profil">
+            <div>
+              <input id="demo-profile-photo" name="profilePhoto" type="file" accept="image/jpeg,image/png,image/webp">
+              <small>Choisissez une photo depuis votre téléphone. Image JPEG, PNG ou WebP, 5 Mo maximum. Elle sera réduite et conservée uniquement sur cet appareil dans ce prototype. N’utilisez pas la photo d’une autre personne sans son accord.</small>
+              <button type="button" id="remove-profile-photo" class="secondary-button">Retirer la photo</button>
+            </div>
+          </div>
+          <div id="profile-photo-result" class="result-message" aria-live="polite"></div>
 
           <label for="demo-birth-date">Date de naissance</label>
           <input id="demo-birth-date" name="birthDate" type="date" required>

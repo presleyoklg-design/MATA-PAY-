@@ -1870,3 +1870,139 @@ body {
     text-align: left;
   }
 }
+
+
+/* MATA PAY — FORMULAIRE D'INSCRIPTION : PRESENTATION PLUS LISIBLE */
+#register .page-intro {
+  max-width: 760px;
+  margin: 0 auto 22px;
+}
+#register > .notice {
+  max-width: 760px;
+  margin: 0 auto 20px;
+}
+#register #register-form {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 22px;
+  padding: clamp(20px, 3.5vw, 34px);
+  border: 1px solid #E1E8E1;
+  border-radius: 20px;
+  background: #FFFFFF;
+  box-shadow: 0 12px 32px rgba(11,48,36,.065);
+}
+#register #register-form > h3 {
+  margin: 0 0 8px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid #EDF0EC;
+  font-size: 19px;
+}
+#register #register-form > p {
+  margin: 0 0 20px;
+  color: #748078;
+  font-size: 13px;
+  line-height: 1.65;
+}
+#register #register-form > label {
+  margin: 17px 0 7px;
+  color: #354A3D;
+  font-size: 12px;
+  font-weight: 700;
+}
+#register #register-form > input,
+#register #register-form > select {
+  min-height: 50px;
+  border: 1px solid #D9E2DA;
+  border-radius: 11px;
+  background: #FBFCFA;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+#register #register-form > input:hover,
+#register #register-form > select:hover {
+  border-color: #B8C9BB;
+  background: #FFFFFF;
+}
+#register #register-form > input:focus,
+#register #register-form > select:focus {
+  border-color: #B99543;
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(217,173,69,.14);
+  background: #FFFFFF;
+}
+#register #register-form > small {
+  margin-top: 6px;
+  color: #849087;
+  font-size: 11px;
+}
+#register #demo-document-card {
+  margin-top: 30px;
+  padding: clamp(17px, 3vw, 25px);
+  border: 1px solid #E8DDBF;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #FFFCF5 0%, #FFFFFF 100%);
+}
+#register #demo-document-card h3 {
+  margin-bottom: 8px;
+  color: #5F4B20;
+  font-size: 16px;
+}
+#register #demo-document-card > p {
+  margin: 0 0 13px;
+  color: #756C59;
+  font-size: 12px;
+  line-height: 1.65;
+}
+#register #demo-document-card .notice {
+  margin: 13px 0 18px;
+  padding: 13px 15px;
+  box-shadow: none;
+}
+#register #demo-document-card label {
+  margin-top: 15px;
+}
+#register #demo-document-summary:not(:empty) {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid #DDE9DF;
+  border-radius: 10px;
+  background: #F4F9F4;
+  color: #28583D;
+  font-size: 12px;
+  line-height: 1.6;
+}
+#register #register-form > .primary-button {
+  width: 100%;
+  min-height: 51px;
+  margin-top: 23px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+#register #register-result:not(:empty) {
+  margin-top: 14px;
+}
+#register > .form-card:last-child {
+  max-width: 760px;
+  margin: 0 auto;
+  border-radius: 16px;
+}
+#register > .form-card:last-child h3 {
+  margin-bottom: 8px;
+}
+@media (max-width: 700px) {
+  #register #register-form {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  #register #register-form > h3 {
+    font-size: 17px;
+  }
+  #register #register-form > input,
+  #register #register-form > select {
+    min-height: 49px;
+    font-size: 14px;
+  }
+  #register #demo-document-card {
+    margin-top: 25px;
+    padding: 16px 13px;
+  }
+}

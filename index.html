@@ -182,30 +182,68 @@
         <div class="page-intro">
           <span class="eyebrow">GESTION DE VOTRE ÉPARGNE</span>
           <h2>Votre espace épargne</h2>
-          <p>Découvrez le fonctionnement de l'épargne à travers cette simulation.</p>
+          <p>Découvrez les trois formules MATA PAY selon les modalités des affiches de référence.</p>
         </div>
-
         <div class="notice">
           <strong>Mode démonstration</strong>
-          <p>Les montants saisis ici sont fictifs. Aucun argent réel n'est collecté.</p>
+          <p>Toutes les opérations sont fictives. Aucun argent réel n'est collecté, conservé ou transféré. Le taux de 10 % indiqué sur l'affiche est présenté sans calcul automatique de rendement.</p>
         </div>
-
-        <article class="balance-card">
-          <span>Solde d'épargne simulé</span>
-          <strong id="savings-balance">0 FCFA</strong>
-          <small>Votre progression dans le prototype</small>
-        </article>
-
+        <div class="stats-grid">
+          <article class="stat-card"><span>Épargne Simple</span><strong>10 %</strong><small>Compte ouvert · Retrait mensuel</small></article>
+          <article class="stat-card"><span>Épargne Bloquée</span><strong>1 an</strong><small>Durée de référence · Pointage journalier</small></article>
+          <article class="stat-card"><span>Compte Mobikisi</span><strong>Dès 300 FCFA</strong><small>Contributions quotidiennes : 300, 500 ou 1 000 FCFA</small></article>
+        </div>
         <div class="form-card">
-          <h3>Simuler un versement</h3>
-          <label for="deposit-amount">Montant (FCFA)</label>
-          <input id="deposit-amount" type="number" min="1" placeholder="Ex. 5000">
-
-          <label for="deposit-note">Description</label>
-          <input id="deposit-note" type="text" placeholder="Ex. Épargne personnelle">
-
-          <button id="deposit-button" class="primary-button">Simuler le versement</button>
-          <div id="deposit-result" class="result-message"></div>
+          <h3>Modalités des formules</h3>
+          <p><strong>Épargne Simple :</strong> compte ouvert, retrait mensuel et taux de 10 % indiqué sur l'affiche.</p>
+          <p><strong>Épargne Bloquée :</strong> durée de référence d'un an avec pointage journalier.</p>
+          <p><strong>Compte Mobikisi :</strong> contributions quotidiennes à partir de 300 FCFA, selon les montants de référence de 300, 500 et 1 000 FCFA.</p>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>Solde total simulé</span><strong id="savings-balance">0 FCFA</strong><small><span id="savings-count">0</span> opération(s) fictive(s)</small></article>
+          <article class="stat-card"><span>Épargne Simple</span><strong id="simple-balance">0 FCFA</strong></article>
+          <article class="stat-card"><span>Épargne Bloquée</span><strong id="blocked-balance">0 FCFA</strong></article>
+          <article class="stat-card"><span>Compte Mobikisi</span><strong id="mobikisi-savings-balance">0 FCFA</strong></article>
+        </div>
+        <div class="form-card">
+          <h3>Enregistrer une opération fictive</h3>
+          <label for="deposit-product">Formule d'épargne</label>
+          <select id="deposit-product">
+            <option value="Épargne Simple">Épargne Simple — retrait mensuel</option>
+            <option value="Épargne Bloquée">Épargne Bloquée — 1 an</option>
+            <option value="Compte Mobikisi">Compte Mobikisi — contribution quotidienne</option>
+          </select>
+          <div id="mobikisi-choice-field" hidden>
+            <label for="mobikisi-choice">Contribution quotidienne Mobikisi</label>
+            <select id="mobikisi-choice">
+              <option value="300">300 FCFA / jour</option>
+              <option value="500">500 FCFA / jour</option>
+              <option value="1000">1 000 FCFA / jour</option>
+            </select>
+            <small>Montants de référence repris des affiches.</small>
+          </div>
+          <label for="deposit-amount">Montant du dépôt (FCFA)</label>
+          <input type="number" id="deposit-amount" min="1" step="1" placeholder="Exemple : 1000">
+          <small id="deposit-minimum">Saisissez un montant entier en FCFA.</small>
+          <label for="deposit-note">Description (facultatif)</label>
+          <input type="text" id="deposit-note" maxlength="120" placeholder="Exemple : Contribution du jour">
+          <button id="deposit-button" class="primary-button">Enregistrer l'opération fictive</button>
+          <div id="deposit-result" class="result-message" aria-live="polite"></div>
+        </div>
+        <div class="form-card">
+          <h3>Suivi des modalités</h3>
+          <p><strong>Épargne Simple :</strong> simulez une demande de retrait mensuel. Aucun argent n'est versé.</p>
+          <button id="simple-withdrawal-button" class="primary-button">Simuler une demande de retrait mensuel</button>
+          <div id="simple-withdrawal-result" class="result-message" aria-live="polite"></div>
+          <hr>
+          <p><strong>Épargne Bloquée :</strong> durée de référence d'un an et pointage journalier.</p>
+          <button id="blocked-checkin-button" class="primary-button">Effectuer le pointage du jour (simulation)</button>
+          <small id="blocked-checkin-status">Aucun pointage enregistré aujourd'hui.</small>
+          <div id="blocked-checkin-result" class="result-message" aria-live="polite"></div>
+        </div>
+        <div class="form-card">
+          <h3>Historique et reçus</h3>
+          <div id="savings-history" class="activity-list">Aucun dépôt enregistré.</div>
         </div>
       </section>
 

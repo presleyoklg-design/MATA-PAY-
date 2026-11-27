@@ -136,21 +136,9 @@
       details.appendChild(item);
     });
 
-    const timeline = element("ol", "credit-member-timeline");
-    file.events.forEach(event => {
-      const item = element("li", "credit-timeline-event");
-      const copy = element("div", "credit-timeline-copy");
-      copy.append(
-        element("strong", "credit-timeline-action", event.action),
-        element("small", "credit-timeline-date", dateTime(event.at))
-      );
-      item.append(element("span", "credit-timeline-dot"), copy);
-      timeline.appendChild(item);
-    });
-
     const disclaimer = element("p", "credit-member-disclaimer",
-      "Suivi fictif enregistré uniquement dans le stockage local de ce navigateur. Ce statut ne représente aucune décision de financement réelle.");
-    container.append(head, details, timeline, disclaimer);
+      "Suivi fictif enregistré uniquement dans ce navigateur. Retrouvez toutes les étapes et décisions simulées dans la rubrique Historique.");
+    container.append(head, details, disclaimer);
   }
 
   function renderAdmin() {
@@ -160,7 +148,6 @@
     const total = document.getElementById("credit-admin-total");
     const pending = document.getElementById("credit-admin-pending");
     const decided = document.getElementById("credit-admin-decided");
-    const audit = document.getElementById("credit-admin-audit");
 
     total.textContent = String(files.length);
     pending.textContent = String(files.filter(file => file.status === "submitted" || file.status === "reviewing").length);
@@ -214,26 +201,102 @@
       });
     }
 
-    if (audit) {
-      audit.replaceChildren();
-      const events = files.flatMap(file => file.events.map(event => ({ ...event, fileId: file.id })))
-        .sort((a, b) => b.at.localeCompare(a.at)).slice(0, 30);
-      if (!events.length) {
-        audit.appendChild(element("p", "credit-admin-empty-note", "Aucun événement pour le moment."));
-      } else {
-        events.forEach(event => {
-          const card = element("article", "credit-audit-card");
-          const top = element("div", "credit-audit-card-top");
-          top.append(
-            element("strong", "", event.action),
-            element("span", "", event.fileId)
-          );
-          card.append(top, element("small", "credit-audit-date", dateTime(event.at)));
-          audit.appendChild(card);
-        });
-      }
-    }
+
   }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const amount = Number(amountInput.value);
+    const duration = Number(durationInput.value);
+    const allowedDurations = [3, 6, 12, 18, 24];
+
+    if (!Number.isSafeInteger(amount) || amount <= 0) {
+      showError("Saisissez un montant fictif valide, exprimé en nombre entier de FCFA.");
+      amountInput.focus();
+      return;
+    }
+    if (!allowedDurations.includes(duration)) {
+      showError("Choisissez une durée proposée dans cette maquette.");
+      durationInput.focus();
+      return;
+    }
+
+    latestSimulation = { amount, duration, monthlyAverage: amount / duration };
+    simulationCount += 1;
+    countLabel.textContent = String(simulationCount);
+
+    result.classList.add("is-visible");
+    const title = element("div", "credit-result-title", "Estimation pédagogique — hors frais et intérêts");
+    const total = element("strong", "credit-result-total", money(latestSimulation.monthlyAverage) + " / mois");
+    const breakdown = element("div", "credit-result-breakdown");
+    [["Montant fictif", money(amount)], ["Durée illustrative", duration + " mois"], ["Taux appliqué", "Aucun"], ["Frais appliqués", "Aucun"]]
+      .forEach(([label, value]) => {
+        const item = element("div");
+        item.append(element("small", "", label), element("strong", "", value));
+        breakdown.appendChild(item);
+      });
+    const note = element("p", "credit-result-note",
+      "Calcul simplifié : montant divisé par durée. Ce résultat n'est pas un échéancier contractuel, ne vérifie aucune éligibilité et ne constitue pas une offre ou une approbation de prêt.");
+    result.replaceChildren(title, total, breakdown, note);
+    createWrap.hidden = false;
+    createMessage.textContent = "";
+  });
+
+  createButton.addEventListener("click", () => {
+    if (!latestSimulation) {
+      createMessage.textContent = "Effectuez d'abord une simulation fictive.";
+      return;
+    }
+    const now = new Date().toISOString();
+    const file = {
+      id: makeId(),
+      purpose: purposeInput.value,
+      amount: latestSimulation.amount,
+      duration: latestSimulation.duration,
+      status: "submitted",
+      createdAt: now,
+      updatedAt: now,
+      events: []
+    };
+    addAudit(file, "Dossier fictif créé et transmis à la file de démonstration", file.status);
+    files.push(file);
+    if (!saveFiles()) {
+      files = files.filter(item => item.id !== file.id);
+      createMessage.textContent = "Le navigateur n'a pas permis l'enregistrement local. Vérifiez son espace de stockage.";
+      return;
+    }
+    createMessage.textContent = "Dossier de démonstration créé : " + file.id;
+    renderMemberFile();
+    renderAdmin();
+  });
+
+  document.addEventListener("click", event => {
+    const button = event.target.closest("[data-credit-action]");
+    if (!button) return;
+    const file = files.find(item => item.id === button.dataset.fileId);
+    if (!file) return;
+
+    const action = button.dataset.creditAction;
+    const messages = {
+      review: ["Dossier placé en cours d'étude — simulation", "reviewing"],
+      favorable: ["Avis favorable simulé — sans valeur contractuelle", "favorable"],
+      unfavorable: ["Avis défavorable simulé — sans effet réel", "unfavorable"]
+    };
+    if (!messages[action]) return;
+
+    file.status = messages[action][1];
+    addAudit(file, messages[action][0], file.status);
+    if (!saveFiles()) {
+      file.status = "submitted";
+      return;
+    }
+    renderAdmin();
+    renderMemberFile();
+  });
+
+  renderMemberFile();
+  renderAdmin();
+})();
 
   form.addEventListener("submit", event => {
     event.preventDefault();

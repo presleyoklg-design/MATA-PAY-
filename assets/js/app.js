@@ -670,18 +670,17 @@ renderMobikisiCard();
 refreshSavingsTracking();
 
 
-// Diaporama des affiches de référence MATA-PAY
+// Diaporama tactile et automatique des affiches MATA-PAY
 (() => {
   const slideshow = document.getElementById("matapay-reference-slideshow");
   if (!slideshow) return;
   const slides = Array.from(slideshow.querySelectorAll(".reference-slide"));
-  const dots = Array.from(slideshow.querySelectorAll(".reference-dot"));
-  const previous = slideshow.querySelector(".reference-prev");
-  const next = slideshow.querySelector(".reference-next");
-  const status = slideshow.querySelector(".reference-slide-status");
   if (!slides.length) return;
   let current = 0;
   let timer = null;
+  let startX = 0;
+  let startY = 0;
+  let pointerActive = false;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function showSlide(index) {
@@ -693,15 +692,7 @@ refreshSavingsTracking();
       if (active) slide.removeAttribute("inert");
       else slide.setAttribute("inert", "");
     });
-    dots.forEach((dot, i) => {
-      const active = i === current;
-      dot.classList.toggle("is-active", active);
-      if (active) dot.setAttribute("aria-current", "true");
-      else dot.removeAttribute("aria-current");
-    });
-    if (status) status.textContent = "Photo " + (current + 1) + " sur " + slides.length;
   }
-
   function stopAuto() {
     if (timer) window.clearInterval(timer);
     timer = null;
@@ -709,13 +700,34 @@ refreshSavingsTracking();
   function startAuto() {
     stopAuto();
     if (!reducedMotion && !document.hidden) {
-      timer = window.setInterval(() => showSlide(current + 1), 5000);
+      timer = window.setInterval(() => showSlide(current + 1), 30000);
     }
   }
+  function changeByGesture(direction) {
+    showSlide(current + direction);
+    startAuto();
+  }
 
-  previous?.addEventListener("click", () => { showSlide(current - 1); startAuto(); });
-  next?.addEventListener("click", () => { showSlide(current + 1); startAuto(); });
-  dots.forEach((dot, i) => dot.addEventListener("click", () => { showSlide(i); startAuto(); }));
+  slideshow.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    pointerActive = true;
+    startX = event.clientX;
+    startY = event.clientY;
+  }, { passive: true });
+  slideshow.addEventListener("pointerup", (event) => {
+    if (!pointerActive) return;
+    pointerActive = false;
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      changeByGesture(deltaX < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+  slideshow.addEventListener("pointercancel", () => { pointerActive = false; });
+  slideshow.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") { event.preventDefault(); changeByGesture(1); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); changeByGesture(-1); }
+  });
   slideshow.addEventListener("mouseenter", stopAuto);
   slideshow.addEventListener("mouseleave", startAuto);
   slideshow.addEventListener("focusin", stopAuto);

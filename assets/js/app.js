@@ -336,13 +336,8 @@ function updateInterface() {
   const balanceText = money(state.balance);
   document.getElementById("dashboard-balance").textContent = balanceText;
   document.getElementById("dashboard-count").textContent = count;
-  document.getElementById("savings-balance").textContent = balanceText;
-  document.getElementById("savings-count").textContent = count;
   document.getElementById("mobikisi-total").textContent = money(productBalance("Compte Mobikisi"));
   document.getElementById("mobikisi-count").textContent = state.operations.filter(op => op.product === "Compte Mobikisi").length;
-  document.getElementById("simple-balance").textContent = money(productBalance("Épargne Simple"));
-  document.getElementById("blocked-balance").textContent = money(productBalance("Épargne Bloquée"));
-  document.getElementById("mobikisi-savings-balance").textContent = money(productBalance("Compte Mobikisi"));
   renderOperations("recent-activity", 5);
   renderOperations("mobikisi-history", 5, "Compte Mobikisi");
   renderOperations("savings-history", 10);

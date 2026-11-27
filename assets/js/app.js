@@ -233,7 +233,7 @@ document.getElementById("simple-withdrawal-button").addEventListener("click", ()
   if (state.withdrawalRequests.some(item => item.monthKey === monthKey)) {
     showResult("simple-withdrawal-result", "Une demande de retrait mensuel a déjà été enregistrée pour ce mois dans la démonstration.");
   } else {
-    const request = { monthKey, date: now.toLocaleString("fr-FR"), reference: makeReference(), status: "demande fictive" };
+    const request = { monthKey, date: now.toLocaleString("fr-FR"), timestamp: now.toISOString(), reference: makeReference(), status: "demande fictive" };
     state.withdrawalRequests.push(request);
     saveState();
     showResult("simple-withdrawal-result", "Demande de retrait mensuel fictive enregistrée : " + request.reference + ". Aucun fonds n'est versé.");
@@ -404,7 +404,7 @@ function renderCentralHistory() {
     add(simple, {
       title: "Demande de retrait mensuel — Épargne Simple",
       date: request.date || request.monthKey || "Date non disponible",
-      sortDate: request.timestamp || request.date || request.monthKey || "",
+      sortDate: request.timestamp || (request.monthKey ? request.monthKey + "-01" : request.date || ""),
       amountLabel: "Demande",
       description: "Demande de retrait fictive — aucun versement effectué.",
       reference: request.reference

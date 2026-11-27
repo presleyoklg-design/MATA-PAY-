@@ -2181,3 +2181,17 @@ body {
 @keyframes referenceFade{from{opacity:.65}to{opacity:1}}
 @media(max-width:420px){.reference-slideshow{width:100%}.reference-slide img{max-height:560px}}
 @media(prefers-reduced-motion:reduce){.reference-slide.is-active{animation:none}}
+
+
+/* Choix guidé des formules d'épargne */
+.savings-formula-buttons,.mobikisi-choice-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 20px}
+.savings-formula-button,.mobikisi-choice-button{min-height:48px;padding:12px 14px;border:1px solid #d8e2dc;border-radius:12px;background:#fff;color:#174b3a;font:inherit;font-weight:700;cursor:pointer}
+.savings-formula-button.is-selected,.mobikisi-choice-button.is-selected{background:#123f30;color:#fff;border-color:#123f30}
+.deposit-options-panel{margin-top:18px;padding-top:18px;border-top:1px solid #e5ebe7}
+.deposit-options-panel[hidden]{display:none}
+.deposit-options-panel h4{margin:0 0 8px;color:#123f30}
+.deposit-options-panel p{margin:0 0 16px}
+.mobikisi-amount-choices{margin:16px 0}
+.mobikisi-amount-choices[hidden]{display:none}
+.field-label{display:block;font-weight:600;margin-bottom:8px}
+@media(max-width:600px){.savings-formula-buttons,.mobikisi-choice-buttons{grid-template-columns:1fr}.savings-formula-button,.mobikisi-choice-button{width:100%}}

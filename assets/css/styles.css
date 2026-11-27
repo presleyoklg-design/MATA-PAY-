@@ -2195,3 +2195,20 @@ body {
 .mobikisi-amount-choices[hidden]{display:none}
 .field-label{display:block;font-weight:600;margin-bottom:8px}
 @media(max-width:600px){.savings-formula-buttons,.mobikisi-choice-buttons{grid-template-columns:1fr}.savings-formula-button,.mobikisi-choice-button{width:100%}}
+
+
+/* Présentation professionnelle des contributions Mobikisi */
+.mobikisi-choice-intro{margin:0 0 12px;color:#64756d;font-size:.92rem;line-height:1.5}
+.mobikisi-choice-buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.mobikisi-choice-button{position:relative;display:flex;min-width:0;min-height:88px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:16px 14px;border:1px solid #dce6e0;border-radius:14px;background:#fff;color:#174b3a;text-align:left;transition:border-color .18s ease,background-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.mobikisi-choice-button strong{font-size:1.08rem;line-height:1.2;font-weight:750;letter-spacing:-.02em}
+.mobikisi-choice-button span{color:#738179;font-size:.82rem;font-weight:500}
+.mobikisi-choice-button:hover{border-color:#8ca99a;background:#f7faf8;transform:translateY(-1px)}
+.mobikisi-choice-button.is-selected{border:2px solid #176044;background:#edf5f0;padding:15px 13px;box-shadow:0 0 0 3px rgba(23,96,68,.08)}
+.mobikisi-choice-button.is-selected strong{color:#123f30}
+.mobikisi-choice-button.is-selected span{color:#426b58}
+.mobikisi-choice-button.is-selected:after{content:"✓";position:absolute;top:9px;right:10px;display:grid;width:21px;height:21px;place-items:center;border-radius:50%;background:#176044;color:#fff;font-size:.75rem;font-weight:800}
+.mobikisi-choice-button:focus-visible{outline:3px solid rgba(23,96,68,.28);outline-offset:3px}
+@media(max-width:900px){.mobikisi-choice-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.mobikisi-choice-buttons{gap:9px}.mobikisi-choice-button{min-height:78px;padding:13px 11px}.mobikisi-choice-button.is-selected{padding:12px 10px}.mobikisi-choice-button strong{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){.mobikisi-choice-button{transition:none}.mobikisi-choice-button:hover{transform:none}}

@@ -556,7 +556,6 @@ function updateInterface() {
   document.getElementById("dashboard-count").textContent = count;
   document.getElementById("mobikisi-total").textContent = money(productBalance("Compte Mobikisi"));
   document.getElementById("mobikisi-count").textContent = state.operations.filter(op => op.product === "Compte Mobikisi").length;
-  renderOperations("recent-activity", 5);
   renderCentralHistory();
   renderPointageSheets();
 }

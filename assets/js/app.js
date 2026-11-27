@@ -61,27 +61,38 @@ function openReceipt(operation) {
   receiptWindow.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1"><title>Reçu MATA PAY - ${safe(operation.reference)}</title>
   <style>
-  body{font-family:Arial,sans-serif;background:#f5f7f4;color:#25352c;padding:20px}
-  .receipt{max-width:580px;margin:20px auto;background:#fff;border:1px solid #e7ece7;border-radius:16px;padding:28px}
-  h1{color:#124b35;margin:0 0 6px}.subtitle{color:#7c8980;font-size:13px}
-  .amount{font-size:30px;color:#124b35;font-weight:bold;margin:25px 0}
-  .row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid #e7ece7}
-  .row span{color:#7c8980}.status{color:#124b35;font-weight:bold}
-  .note{color:#7c8980;font-size:12px;line-height:1.6;margin-top:24px}
-  button{background:#124b35;color:white;border:0;border-radius:8px;padding:13px 18px;margin-top:20px;font-weight:bold}
-  @media print{body{background:#fff;padding:0}.receipt{border:0;margin:0 auto}button{display:none}}
+  *{box-sizing:border-box}
+  body{font-family:Arial,sans-serif;background:#f2f5f2;color:#26382e;margin:0;padding:clamp(12px,4vw,28px)}
+  .receipt{width:100%;max-width:620px;margin:clamp(4px,3vh,24px) auto;background:#fff;border:1px solid #e2e9e3;border-radius:20px;padding:clamp(20px,5vw,36px);box-shadow:0 12px 36px rgba(18,63,48,.08)}
+  .receipt-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:20px;border-bottom:1px solid #e8eee9}
+  .brand{color:#124b35;font-size:25px;font-weight:900;letter-spacing:.06em}.brand-caption{display:block;margin-top:4px;color:#7c8980;font-size:11px}
+  .demo-tag{flex:0 0 auto;padding:7px 10px;border-radius:30px;background:#fff6df;color:#765a19;font-size:10px;font-weight:800}
+  .receipt-title{margin:24px 0 5px;color:#26382e;font-size:18px}.subtitle{margin:0;color:#7c8980;font-size:12px;line-height:1.5}
+  .amount-panel{margin:22px 0;padding:20px;border:1px solid #dce9df;border-radius:14px;background:#f5faf6}
+  .amount-label{display:block;color:#6e7e73;font-size:12px;font-weight:600}.amount{display:block;margin-top:8px;color:#124b35;font-size:clamp(26px,7vw,34px);font-weight:850;overflow-wrap:anywhere}
+  .receipt-details{display:grid}.row{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start;gap:12px;padding:14px 0;border-bottom:1px solid #edf1ed;font-size:13px}
+  .row span{color:#7c8980;line-height:1.45}.row strong{text-align:right;color:#2e4035;line-height:1.45;overflow-wrap:anywhere}.status{color:#176044!important}
+  .note{margin:22px 0 0;padding:13px 14px;border-left:3px solid #c49a3d;border-radius:7px;background:#fbf8ef;color:#71643f;font-size:11px;line-height:1.65}
+  .receipt-actions{display:flex;gap:10px;margin-top:22px}.receipt-actions button{flex:1;min-width:0;min-height:48px;border:0;border-radius:10px;padding:12px 14px;background:#124b35;color:#fff;font-size:13px;font-weight:750;cursor:pointer}
+  .receipt-actions .secondary{border:1px solid #dce5de;background:#fff;color:#315541}
+  @media(max-width:420px){.receipt-head{align-items:flex-start}.demo-tag{font-size:9px;padding:6px 8px}.row{grid-template-columns:1fr;gap:5px}.row strong{text-align:left}.receipt-actions{flex-direction:column}}
+  @media print{body{background:#fff;padding:0}.receipt{max-width:none;margin:0;border:0;border-radius:0;box-shadow:none;padding:18px}.receipt-actions{display:none}.note{break-inside:avoid}}
   </style></head><body><main class="receipt">
-  <h1>MATA PAY</h1><div class="subtitle">Reçu de dépôt — Prototype de démonstration</div>
-  <div class="amount">+${safe(money(operation.amount))}</div>
+  <header class="receipt-head"><div><div class="brand">MATA PAY</div><span class="brand-caption">Épargne • Simplicité • Confiance</span></div><span class="demo-tag">DÉMONSTRATION</span></header>
+  <h1 class="receipt-title">Reçu d'opération</h1><p class="subtitle">Confirmation d'une opération enregistrée dans le prototype.</p>
+  <section class="amount-panel"><span class="amount-label">Montant de l'opération</span><strong class="amount">+${safe(money(operation.amount))}</strong></section>
+  <section class="receipt-details">
   <div class="row"><span>Formule</span><strong>${safe(operation.product)}</strong></div>
   <div class="row"><span>Date et heure</span><strong>${safe(operation.date)}</strong></div>
-  ${operation.maturityDate ? `<div class="row"><span>Échéance indicative (un an)</span><strong>${safe(operation.maturityDate)}</strong></div>` : ""}
+  ${operation.maturityDate ? `<div class="row"><span>Échéance indicative</span><strong>${safe(operation.maturityDate)}</strong></div>` : ""}
   <div class="row"><span>Référence unique</span><strong>${safe(operation.reference)}</strong></div>
   <div class="row"><span>Statut</span><strong class="status">Confirmé — simulation</strong></div>
   <div class="row"><span>Solde total simulé après dépôt</span><strong>${safe(money(operation.balanceAfter))}</strong></div>
-  <div class="row"><span>Description</span><strong>${safe(operation.note)}</strong></div>
-  <p class="note">Ce document atteste uniquement d'une opération fictive dans le prototype. Il ne constitue pas une preuve de dépôt de fonds réels. Pour obtenir un PDF, choisissez « Enregistrer au format PDF » dans les options d'impression du navigateur.</p>
-  <button onclick="window.print()">Imprimer / Enregistrer en PDF</button></main></body></html>`);
+  ${operation.note ? `<div class="row"><span>Description</span><strong>${safe(operation.note)}</strong></div>` : ""}
+  </section>
+  <p class="note">Ce reçu concerne uniquement une opération fictive réalisée dans le prototype MATA PAY. Il ne constitue pas une preuve de dépôt de fonds réels ni un document financier officiel.</p>
+  <div class="receipt-actions"><button onclick="window.print()">Imprimer / Enregistrer en PDF</button><button class="secondary" onclick="window.close()">Fermer</button></div>
+  </main></body></html>`);
   receiptWindow.document.close();
 }
 
@@ -263,6 +274,56 @@ function renderOperations(containerId, limit, productFilter) {
       });
       body.appendChild(row);
     });
+    return;
+  }
+  if (containerId === "savings-history") {
+    if (!operations.length) {
+      container.className = "empty";
+      container.textContent = "Aucune opération enregistrée.";
+      return;
+    }
+    container.className = "savings-receipt-list";
+    const fragment = document.createDocumentFragment();
+    operations.forEach(operation => {
+      const card = document.createElement("article");
+      card.className = "savings-receipt-card";
+      const top = document.createElement("div");
+      top.className = "savings-receipt-card-top";
+      const info = document.createElement("div");
+      info.className = "savings-receipt-info";
+      const product = document.createElement("strong");
+      product.className = "savings-receipt-product";
+      product.textContent = operation.product || "Épargne Simple";
+      const date = document.createElement("span");
+      date.className = "savings-receipt-date";
+      date.textContent = operation.date || "Date non disponible";
+      info.append(product, date);
+      const amount = document.createElement("strong");
+      amount.className = "savings-receipt-amount";
+      amount.textContent = "+" + money(operation.amount);
+      top.append(info, amount);
+      card.appendChild(top);
+      if (operation.note) {
+        const description = document.createElement("p");
+        description.className = "savings-receipt-description";
+        description.textContent = operation.note;
+        card.appendChild(description);
+      }
+      const footer = document.createElement("div");
+      footer.className = "savings-receipt-footer";
+      const reference = document.createElement("small");
+      reference.textContent = "Réf. " + operation.reference;
+      const button = document.createElement("button");
+      button.className = "primary-button savings-view-receipt";
+      button.type = "button";
+      button.textContent = "Voir le reçu";
+      button.setAttribute("aria-label", "Voir le reçu de " + money(operation.amount));
+      button.addEventListener("click", () => openReceipt(operation));
+      footer.append(reference, button);
+      card.appendChild(footer);
+      fragment.appendChild(card);
+    });
+    container.replaceChildren(fragment);
     return;
   }
   if (!operations.length) {

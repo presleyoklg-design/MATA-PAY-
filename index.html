@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261127-05">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261127-06">
   <link rel="stylesheet" href="assets/css/credit.css?v=20261126-02">
 </head>
 
@@ -247,11 +247,12 @@
             <small id="deposit-minimum">Saisissez un montant entier en FCFA.</small>
             <div id="mobikisi-choice-field" class="mobikisi-amount-choices" hidden>
               <span class="field-label">Choisissez votre contribution quotidienne</span>
-              <div class="mobikisi-choice-buttons" role="group" aria-label="Montant quotidien Mobikisi">
-                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="300">300 FCFA / jour</button>
-                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="500">500 FCFA / jour</button>
-                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="1000">1 000 FCFA / jour</button>
-                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="2000">2 000 FCFA / jour</button>
+              <p class="mobikisi-choice-intro">Sélectionnez le montant de votre contribution quotidienne dans cette démonstration.</p>
+              <div class="mobikisi-choice-buttons" role="group" aria-label="Choisir une contribution quotidienne Mobikisi">
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="300" aria-pressed="false"><strong>300 FCFA</strong><span>par jour</span></button>
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="500" aria-pressed="false"><strong>500 FCFA</strong><span>par jour</span></button>
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="1000" aria-pressed="false"><strong>1 000 FCFA</strong><span>par jour</span></button>
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="2000" aria-pressed="false"><strong>2 000 FCFA</strong><span>par jour</span></button>
               </div>
               <select id="mobikisi-choice" hidden aria-hidden="true" tabindex="-1">
                 <option value="300">300</option><option value="500">500</option><option value="1000">1000</option><option value="2000">2000</option>
@@ -612,7 +613,7 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261127-06"></script>
+<script src="assets/js/app.js?v=20261127-07"></script>
 <script src="assets/js/credit.js?v=20261126-02"></script>
 </body>
   </html>

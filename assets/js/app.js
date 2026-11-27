@@ -700,7 +700,7 @@ refreshSavingsTracking();
   function startAuto() {
     stopAuto();
     if (!reducedMotion && !document.hidden) {
-      timer = window.setInterval(() => showSlide(current + 1), 30000);
+      timer = window.setInterval(() => showSlide(current + 1), 15000);
     }
   }
   function changeByGesture(direction) {

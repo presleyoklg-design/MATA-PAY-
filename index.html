@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#123F30">
   <meta name="description" content="MATA PAY - Prototype de démonstration">
   <title>MATA PAY | Espace financier</title>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261126-13">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261127-01">
   <link rel="stylesheet" href="assets/css/credit.css?v=20261126-02">
 </head>
 
@@ -218,16 +218,28 @@
           <strong>Mode démonstration</strong>
           <p>Toutes les opérations sont fictives. Aucun argent réel n'est collecté, conservé ou transféré. Le taux de 10 % indiqué sur l'affiche est présenté sans calcul automatique de rendement.</p>
         </div>
+        <section class="matapay-reference-gallery" aria-labelledby="matapay-reference-title">
+          <div class="reference-gallery-heading">
+            <span class="eyebrow">SUPPORTS DE RÉFÉRENCE</span><h3 id="matapay-reference-title">Découvrez MATA-PAY</h3>
+            <p>Retrouvez les trois affiches de présentation transmises pour ce prototype.</p>
+          </div>
+          <div class="reference-gallery-grid">
+            <figure class="reference-poster"><img src="assets/images/matapay-reference-epargne.jpg" alt="Affiche MATA-PAY présentant les formules d'épargne avec un bocal rempli de billets" loading="lazy"><figcaption>Les formules d'épargne</figcaption></figure>
+            <figure class="reference-poster"><img src="assets/images/matapay-reference-representante.jpg" alt="Affiche MATA-PAY présentant les services avec une représentante" loading="lazy"><figcaption>Présentation des services</figcaption></figure>
+            <figure class="reference-poster"><img src="assets/images/matapay-reference-representant.jpg" alt="Affiche MATA-PAY présentant les services avec un représentant" loading="lazy"><figcaption>Présentation institutionnelle</figcaption></figure>
+          </div>
+          <p class="reference-gallery-note">Les chiffres et mentions des affiches sont reproduits comme références visuelles. Certaines commissions diffèrent d'une affiche à l'autre ; elles ne sont pas considérées comme des conditions contractuelles validées.</p>
+        </section>
         <div class="stats-grid">
           <article class="stat-card"><span>Épargne Simple</span><strong>10 %</strong><small>Compte ouvert · Retrait mensuel</small></article>
           <article class="stat-card"><span>Épargne Bloquée</span><strong>1 an</strong><small>Durée de référence · Pointage journalier</small></article>
-          <article class="stat-card"><span>Compte Mobikisi</span><strong>Dès 300 FCFA</strong><small>Contributions quotidiennes : 300, 500 ou 1 000 FCFA</small></article>
+          <article class="stat-card"><span>Compte Mobikisi</span><strong>Dès 300 FCFA</strong><small>Contributions quotidiennes : 300, 500, 1 000 ou 2 000 FCFA</small></article>
         </div>
         <div class="form-card">
           <h3>Modalités des formules</h3>
           <p><strong>Épargne Simple :</strong> compte ouvert, retrait mensuel et taux de 10 % indiqué sur l'affiche.</p>
           <p><strong>Épargne Bloquée :</strong> durée de référence d'un an avec pointage journalier.</p>
-          <p><strong>Compte Mobikisi :</strong> contributions quotidiennes à partir de 300 FCFA, selon les montants de référence de 300, 500 et 1 000 FCFA.</p>
+          <p><strong>Compte Mobikisi :</strong> contributions quotidiennes à partir de 300 FCFA, selon les montants de référence de 300, 500, 1 000 et 2 000 FCFA.</p>
         </div>
         <div class="stats-grid">
           <article class="stat-card"><span>Solde total simulé</span><strong id="savings-balance">0 FCFA</strong><small><span id="savings-count">0</span> opération(s) fictive(s)</small></article>
@@ -249,6 +261,7 @@
               <option value="300">300 FCFA / jour</option>
               <option value="500">500 FCFA / jour</option>
               <option value="1000">1 000 FCFA / jour</option>
+              <option value="2000">2 000 FCFA / jour</option>
             </select>
             <small>Montants de référence repris des affiches.</small>
           </div>
@@ -609,7 +622,7 @@
 
 </div>
 
-<script src="assets/js/app.js?v=20261126-13"></script>
+<script src="assets/js/app.js?v=20261127-01"></script>
 <script src="assets/js/credit.js?v=20261126-02"></script>
 </body>
   </html>

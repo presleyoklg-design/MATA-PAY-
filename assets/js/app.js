@@ -262,95 +262,56 @@ document.getElementById("blocked-checkin-button").addEventListener("click", () =
 
 function renderOperations(containerId, limit, productFilter) {
   const container = document.getElementById(containerId);
+  if (!container) return;
   const filtered = productFilter ? state.operations.filter(op => op.product === productFilter) : state.operations;
   const operations = limit ? filtered.slice(0, limit) : filtered;
-  if (containerId === "history-table") {
-    const body = container.querySelector("tbody");
-    body.replaceChildren();
-    operations.forEach(operation => {
-      const row = document.createElement("tr");
-      [operation.product || "Épargne Simple", operation.note, money(operation.amount), operation.date].forEach(value => {
-        const cell = document.createElement("td"); cell.textContent = value; row.appendChild(cell);
-      });
-      body.appendChild(row);
-    });
-    return;
-  }
-  if (containerId === "savings-history") {
-    if (!operations.length) {
-      container.className = "empty";
-      container.textContent = "Aucune opération enregistrée.";
-      return;
-    }
-    container.className = "savings-receipt-list";
-    const fragment = document.createDocumentFragment();
-    operations.forEach(operation => {
-      const card = document.createElement("article");
-      card.className = "savings-receipt-card";
-      const top = document.createElement("div");
-      top.className = "savings-receipt-card-top";
-      const info = document.createElement("div");
-      info.className = "savings-receipt-info";
-      const product = document.createElement("strong");
-      product.className = "savings-receipt-product";
-      product.textContent = operation.product || "Épargne Simple";
-      const date = document.createElement("span");
-      date.className = "savings-receipt-date";
-      date.textContent = operation.date || "Date non disponible";
-      info.append(product, date);
-      const amount = document.createElement("strong");
-      amount.className = "savings-receipt-amount";
-      amount.textContent = "+" + money(operation.amount);
-      top.append(info, amount);
-      card.appendChild(top);
-      if (operation.note) {
-        const description = document.createElement("p");
-        description.className = "savings-receipt-description";
-        description.textContent = operation.note;
-        card.appendChild(description);
-      }
-      const footer = document.createElement("div");
-      footer.className = "savings-receipt-footer";
-      const reference = document.createElement("small");
-      reference.textContent = "Réf. " + operation.reference;
-      const button = document.createElement("button");
-      button.className = "primary-button savings-view-receipt";
-      button.type = "button";
-      button.textContent = "Voir le reçu";
-      button.setAttribute("aria-label", "Voir le reçu de " + money(operation.amount));
-      button.addEventListener("click", () => openReceipt(operation));
-      footer.append(reference, button);
-      card.appendChild(footer);
-      fragment.appendChild(card);
-    });
-    container.replaceChildren(fragment);
-    return;
-  }
   if (!operations.length) {
-    container.className = "empty";
-    container.textContent = "Aucune opération enregistrée.";
+    container.className = "activity-history-empty";
+    container.textContent = "Aucune opération enregistrée pour le moment.";
     return;
   }
-  container.className = "table-wrap";
-  const table = document.createElement("table");
-  const head = document.createElement("tr");
-  ["Date", "Formule", "Description", "Montant", "Reçu"].forEach(label => {
-    const th = document.createElement("th"); th.textContent = label; head.appendChild(th);
-  });
-  table.appendChild(head);
+  container.className = "activity-history-list activity-history-list-" + containerId;
+  const fragment = document.createDocumentFragment();
   operations.forEach(operation => {
-    const row = document.createElement("tr");
-    [operation.date, operation.product || "Épargne Simple", operation.note, "+" + money(operation.amount)].forEach(value => {
-      const cell = document.createElement("td"); cell.textContent = value; row.appendChild(cell);
-    });
-    const cell = document.createElement("td");
+    const card = document.createElement("article");
+    card.className = "activity-history-card";
+    const top = document.createElement("div");
+    top.className = "activity-history-card-top";
+    const info = document.createElement("div");
+    info.className = "activity-history-info";
+    const title = document.createElement("strong");
+    title.className = "activity-history-title";
+    title.textContent = operation.product || "Opération d'épargne";
+    const date = document.createElement("span");
+    date.className = "activity-history-date";
+    date.textContent = operation.date || "Date non disponible";
+    info.append(title, date);
+    const amount = document.createElement("strong");
+    amount.className = "activity-history-amount";
+    amount.textContent = "+" + money(operation.amount);
+    top.append(info, amount);
+    card.appendChild(top);
+    if (operation.note) {
+      const description = document.createElement("p");
+      description.className = "activity-history-description";
+      description.textContent = operation.note;
+      card.appendChild(description);
+    }
+    const footer = document.createElement("div");
+    footer.className = "activity-history-footer";
+    const reference = document.createElement("small");
+    reference.textContent = "Réf. " + (operation.reference || "non disponible");
     const button = document.createElement("button");
-    button.className = "primary-button";
+    button.className = "primary-button activity-history-receipt";
+    button.type = "button";
     button.textContent = "Voir le reçu";
+    button.setAttribute("aria-label", "Voir le reçu de " + money(operation.amount));
     button.addEventListener("click", () => openReceipt(operation));
-    cell.appendChild(button); row.appendChild(cell); table.appendChild(row);
+    footer.append(reference, button);
+    card.appendChild(footer);
+    fragment.appendChild(card);
   });
-  container.replaceChildren(table);
+  container.replaceChildren(fragment);
 }
 
 function formatOperationDateTime(value) {

@@ -131,7 +131,11 @@ document.querySelectorAll("[data-deposit-product]").forEach(button => {
         : "Choisissez l'une des contributions quotidiennes prévues pour Mobikisi.";
     depositAmount.value = "";
     mobikisiChoice.value = "300";
-    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => item.classList.toggle("is-selected", item.dataset.mobikisiAmount === "300"));
+    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => {
+      const selected = item.dataset.mobikisiAmount === "300";
+      item.classList.toggle("is-selected", selected);
+      item.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
     depositOptionsPanel.hidden = false;
     updateDepositRule();
     if (product === "Compte Mobikisi") {
@@ -142,6 +146,8 @@ document.querySelectorAll("[data-deposit-product]").forEach(button => {
       depositAmount.placeholder = "Saisir un montant";
     }
     document.getElementById("deposit-result").style.display = "none";
+    renderPointageSheets();
+    document.getElementById("pointage-day-details").textContent = "Sélectionnez une journée marquée pour consulter les détails.";
   });
 });
 document.querySelectorAll("[data-mobikisi-amount]").forEach(button => {
@@ -149,7 +155,11 @@ document.querySelectorAll("[data-mobikisi-amount]").forEach(button => {
     mobikisiChoice.value = button.dataset.mobikisiAmount;
     depositAmount.value = mobikisiChoice.value;
     depositAmount.min = mobikisiChoice.value;
-    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => item.classList.toggle("is-selected", item === button));
+    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => {
+      const selected = item === button;
+      item.classList.toggle("is-selected", selected);
+      item.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
   });
 });
 

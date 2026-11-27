@@ -231,31 +231,36 @@
             </div>
           </div>
         </section>
-        <div class="form-card">
-          <h3>Enregistrer une opération fictive</h3>
-          <label for="deposit-product">Formule d'épargne</label>
-          <select id="deposit-product">
-            <option value="Épargne Simple">Épargne Simple — retrait mensuel</option>
-            <option value="Épargne Bloquée">Épargne Bloquée — 1 an</option>
-            <option value="Compte Mobikisi">Compte Mobikisi — contribution quotidienne</option>
-          </select>
-          <div id="mobikisi-choice-field" hidden>
-            <label for="mobikisi-choice">Contribution quotidienne Mobikisi</label>
-            <select id="mobikisi-choice">
-              <option value="300">300 FCFA / jour</option>
-              <option value="500">500 FCFA / jour</option>
-              <option value="1000">1 000 FCFA / jour</option>
-              <option value="2000">2 000 FCFA / jour</option>
-            </select>
-            <small>Montants de référence repris des affiches.</small>
+        <div class="form-card savings-action-card">
+          <h3>Que souhaitez-vous faire ?</h3>
+          <p>Choisissez une formule pour afficher uniquement les options qui lui correspondent.</p>
+          <div class="savings-formula-buttons" role="group" aria-label="Choisir une formule d'épargne">
+            <button type="button" class="savings-formula-button" data-deposit-product="Épargne Simple">Épargne Simple</button>
+            <button type="button" class="savings-formula-button" data-deposit-product="Épargne Bloquée">Épargne Bloquée</button>
+            <button type="button" class="savings-formula-button" data-deposit-product="Compte Mobikisi">Compte Mobikisi</button>
           </div>
-          <label for="deposit-amount">Montant du dépôt (FCFA)</label>
-          <input type="number" id="deposit-amount" min="1" step="1" placeholder="Exemple : 1000">
-          <small id="deposit-minimum">Saisissez un montant entier en FCFA.</small>
-          <label for="deposit-note">Description (facultatif)</label>
-          <input type="text" id="deposit-note" maxlength="120" placeholder="Exemple : Contribution du jour">
-          <button id="deposit-button" class="primary-button">Enregistrer l'opération fictive</button>
-          <div id="deposit-result" class="result-message" aria-live="polite"></div>
+          <div id="deposit-options-panel" class="deposit-options-panel" hidden>
+            <h4 id="deposit-options-title">Épargne Simple</h4>
+            <p id="deposit-options-description">Retrait mensuel selon les modalités de la formule.</p>
+            <label for="deposit-amount">Montant de l'opération fictive (FCFA)</label>
+            <input type="number" id="deposit-amount" min="1" step="1" placeholder="Saisir un montant">
+            <small id="deposit-minimum">Saisissez un montant entier en FCFA.</small>
+            <div id="mobikisi-choice-field" class="mobikisi-amount-choices" hidden>
+              <span class="field-label">Choisissez votre contribution quotidienne</span>
+              <div class="mobikisi-choice-buttons" role="group" aria-label="Montant quotidien Mobikisi">
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="300">300 FCFA / jour</button>
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="500">500 FCFA / jour</button>
+                <button type="button" class="mobikisi-choice-button" data-mobikisi-amount="1000">1 000 FCFA / jour</button>
+              </div>
+              <select id="mobikisi-choice" hidden aria-hidden="true" tabindex="-1">
+                <option value="300">300</option><option value="500">500</option><option value="1000">1000</option>
+              </select>
+            </div>
+            <input type="hidden" id="deposit-product" value="Épargne Simple">
+            <input type="hidden" id="deposit-note" value="">
+            <button id="deposit-button" class="primary-button">Enregistrer l'opération fictive</button>
+            <div id="deposit-result" class="result-message" aria-live="polite"></div>
+          </div>
         </div>
         <div class="form-card">
           <h3>Suivi des modalités</h3>

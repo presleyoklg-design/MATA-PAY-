@@ -142,7 +142,8 @@
       item.append(
         element("span", "credit-timeline-dot"),
         element("div", "credit-timeline-copy",
-          event.action + " • " + dateTime(event.at))
+          element("strong", "credit-timeline-action", event.action),
+          element("small", "credit-timeline-date", dateTime(event.at)))
       );
       timeline.appendChild(item);
     });
@@ -221,13 +222,14 @@
         audit.appendChild(element("p", "credit-admin-empty-note", "Aucun événement pour le moment."));
       } else {
         events.forEach(event => {
-          const row = element("div", "credit-audit-row");
-          row.append(
+          const card = element("article", "credit-audit-card");
+          const top = element("div", "credit-audit-card-top");
+          top.append(
             element("strong", "", event.action),
-            element("span", "", event.fileId),
-            element("small", "", dateTime(event.at))
+            element("span", "", event.fileId)
           );
-          audit.appendChild(row);
+          card.append(top, element("small", "credit-audit-date", dateTime(event.at)));
+          audit.appendChild(card);
         });
       }
     }

@@ -188,3 +188,17 @@
 @media(max-width:700px) {
  .credit-heading-actions { justify-content:flex-start; }
 }
+
+
+/* MATA PAY — Historique des événements de dossiers */
+.credit-admin-audit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.credit-audit-card{display:grid;gap:8px;min-width:0;padding:13px;border:1px solid var(--border);border-radius:11px;background:#fff}
+.credit-audit-card-top{display:grid;gap:5px;min-width:0}
+.credit-audit-card-top strong{color:#405348;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.credit-audit-card-top span{color:#78867d;font-size:10px;overflow-wrap:anywhere}
+.credit-audit-date{color:#929d95;font-size:10px}
+.credit-timeline-event{padding:9px 0}
+.credit-timeline-copy{display:grid;gap:4px}
+.credit-timeline-action{color:#43564a;font-size:11px;line-height:1.45}
+.credit-timeline-date{color:#87938a;font-size:10px}
+@media(max-width:700px){.credit-admin-audit{grid-template-columns:1fr}.credit-audit-card{padding:12px}}

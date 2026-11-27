@@ -112,6 +112,46 @@ mobikisiChoice.addEventListener("change", () => {
   depositAmount.value = mobikisiChoice.value;
   depositAmount.min = mobikisiChoice.value;
 });
+const depositOptionsPanel = document.getElementById("deposit-options-panel");
+const depositOptionsTitle = document.getElementById("deposit-options-title");
+const depositOptionsDescription = document.getElementById("deposit-options-description");
+document.querySelectorAll("[data-deposit-product]").forEach(button => {
+  button.addEventListener("click", () => {
+    const product = button.dataset.depositProduct;
+    depositProduct.value = product;
+    document.querySelectorAll("[data-deposit-product]").forEach(item => {
+      item.classList.toggle("is-selected", item === button);
+      item.setAttribute("aria-pressed", item === button ? "true" : "false");
+    });
+    depositOptionsTitle.textContent = product;
+    depositOptionsDescription.textContent = product === "Épargne Simple"
+      ? "Saisissez le montant que vous souhaitez simuler. La formule prévoit un retrait mensuel."
+      : product === "Épargne Bloquée"
+        ? "Saisissez le montant à simuler. La durée de référence de cette formule est d'un an."
+        : "Choisissez l'une des contributions quotidiennes prévues pour Mobikisi.";
+    depositAmount.value = "";
+    mobikisiChoice.value = "300";
+    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => item.classList.toggle("is-selected", item.dataset.mobikisiAmount === "300"));
+    depositOptionsPanel.hidden = false;
+    updateDepositRule();
+    if (product === "Compte Mobikisi") {
+      depositAmount.value = "";
+      depositAmount.readOnly = true;
+      depositAmount.placeholder = "Choisissez une contribution ci-dessous";
+    } else {
+      depositAmount.placeholder = "Saisir un montant";
+    }
+    document.getElementById("deposit-result").style.display = "none";
+  });
+});
+document.querySelectorAll("[data-mobikisi-amount]").forEach(button => {
+  button.addEventListener("click", () => {
+    mobikisiChoice.value = button.dataset.mobikisiAmount;
+    depositAmount.value = mobikisiChoice.value;
+    depositAmount.min = mobikisiChoice.value;
+    document.querySelectorAll("[data-mobikisi-amount]").forEach(item => item.classList.toggle("is-selected", item === button));
+  });
+});
 
 document.getElementById("deposit-button").addEventListener("click", () => {
   const amount = Number(depositAmount.value);

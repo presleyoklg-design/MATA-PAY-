@@ -314,6 +314,152 @@ function renderOperations(containerId, limit, productFilter) {
   container.replaceChildren(fragment);
 }
 
+function createHistoryEntry(item) {
+  const card = document.createElement("article");
+  card.className = "history-entry-card";
+  const top = document.createElement("div");
+  top.className = "history-entry-top";
+  const info = document.createElement("div");
+  info.className = "history-entry-info";
+  const title = document.createElement("strong");
+  title.className = "history-entry-title";
+  title.textContent = item.title || "Activité";
+  const date = document.createElement("span");
+  date.className = "history-entry-date";
+  date.textContent = item.date || "Date non disponible";
+  info.append(title, date);
+  const amount = document.createElement("strong");
+  amount.className = "history-entry-amount";
+  amount.textContent = item.amountLabel || "—";
+  top.append(info, amount);
+  card.appendChild(top);
+  if (item.description) {
+    const description = document.createElement("p");
+    description.className = "history-entry-description";
+    description.textContent = item.description;
+    card.appendChild(description);
+  }
+  const footer = document.createElement("div");
+  footer.className = "history-entry-footer";
+  const reference = document.createElement("small");
+  reference.textContent = item.reference ? "Réf. " + item.reference : "Activité de démonstration";
+  footer.appendChild(reference);
+  if (item.operation) {
+    const button = document.createElement("button");
+    button.className = "primary-button activity-history-receipt";
+    button.type = "button";
+    button.textContent = "Voir le reçu";
+    button.addEventListener("click", () => openReceipt(item.operation));
+    footer.appendChild(button);
+  }
+  card.appendChild(footer);
+  return card;
+}
+
+function renderHistoryGroup(containerId, items, countId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const count = document.getElementById(countId);
+  if (count) count.textContent = String(items.length);
+  container.replaceChildren();
+  container.className = "history-entry-list";
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "activity-history-empty";
+    empty.textContent = "Aucune activité enregistrée dans cette catégorie.";
+    container.appendChild(empty);
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  items.forEach(item => fragment.appendChild(createHistoryEntry(item)));
+  container.appendChild(fragment);
+}
+
+function renderCentralHistory() {
+  const simple = [];
+  const blocked = [];
+  const mobikisi = [];
+  const credit = [];
+  const all = [];
+  const add = (category, item) => {
+    category.push(item);
+    all.push(item);
+  };
+  state.operations.forEach(operation => {
+    const item = {
+      title: operation.product || "Opération d'épargne",
+      date: operation.date || "Date non disponible",
+      sortDate: operation.timestamp || operation.date || "",
+      amountLabel: "+" + money(operation.amount),
+      description: operation.note || "Opération fictive enregistrée",
+      reference: operation.reference,
+      operation
+    };
+    if (operation.product === "Compte Mobikisi") add(mobikisi, item);
+    else if (operation.product === "Épargne Bloquée") add(blocked, item);
+    else add(simple, item);
+  });
+
+  state.withdrawalRequests.forEach(request => {
+    add(simple, {
+      title: "Demande de retrait mensuel — Épargne Simple",
+      date: request.date || request.monthKey || "Date non disponible",
+      sortDate: request.timestamp || request.date || request.monthKey || "",
+      amountLabel: "Demande",
+      description: "Demande de retrait fictive — aucun versement effectué.",
+      reference: request.reference
+    });
+  });
+
+  state.dailyChecks.forEach(day => {
+    const parts = String(day).split("-").map(Number);
+    const parsed = parts.length === 3 ? new Date(parts[0], parts[1]-1, parts[2]) : null;
+    const dateLabel = parsed && !Number.isNaN(parsed.getTime())
+      ? parsed.toLocaleDateString("fr-FR", {day:"2-digit",month:"long",year:"numeric"})
+      : String(day);
+    add(blocked, {
+      title: "Pointage journalier — Épargne Bloquée",
+      date: dateLabel,
+      sortDate: String(day),
+      amountLabel: "Pointage",
+      description: "Pointage fictif enregistré."
+    });
+  });
+
+  try {
+    const files = JSON.parse(localStorage.getItem("matapay-demo-credit-files-v1") || "[]");
+    if (Array.isArray(files)) {
+      files.forEach(file => {
+        (Array.isArray(file.events) ? file.events : []).forEach(event => {
+          const item = {
+            title: event.action || "Événement du dossier",
+            date: event.at ? new Date(event.at).toLocaleString("fr-FR") : "Date non disponible",
+            sortDate: event.at || file.createdAt || "",
+            amountLabel: money(file.amount || 0),
+            description: "Dossier " + (file.id || "de démonstration") + " • " + (file.purpose || "Objet non précisé") + " • " + (file.duration || "—") + " mois",
+            reference: file.id
+          };
+          add(credit, item);
+        });
+      });
+    }
+  } catch (error) {
+    console.warn("Historique des dossiers de démonstration indisponible :", error);
+  }
+
+  const newestFirst = items => items.sort((a,b) => {
+    const ta = Date.parse(a.sortDate) || 0;
+    const tb = Date.parse(b.sortDate) || 0;
+    return tb - ta;
+  });
+  newestFirst(simple); newestFirst(blocked); newestFirst(mobikisi); newestFirst(credit); newestFirst(all);
+  renderHistoryGroup("history-general", all, "history-general-count");
+  renderHistoryGroup("history-simple", simple, "history-simple-count");
+  renderHistoryGroup("history-blocked", blocked, "history-blocked-count");
+  renderHistoryGroup("history-mobikisi", mobikisi, "history-mobikisi-count");
+  renderHistoryGroup("history-credit", credit, "history-credit-count");
+}
+
 function formatOperationDateTime(value) {
   if (!value) return "Heure non disponible";
   const date = new Date(value);
@@ -411,9 +557,7 @@ function updateInterface() {
   document.getElementById("mobikisi-total").textContent = money(productBalance("Compte Mobikisi"));
   document.getElementById("mobikisi-count").textContent = state.operations.filter(op => op.product === "Compte Mobikisi").length;
   renderOperations("recent-activity", 5);
-  renderOperations("mobikisi-history", 5, "Compte Mobikisi");
-  renderOperations("savings-history", 10);
-  renderOperations("history-table");
+  renderCentralHistory();
   renderPointageSheets();
 }
 

@@ -139,12 +139,12 @@
     const timeline = element("ol", "credit-member-timeline");
     file.events.forEach(event => {
       const item = element("li", "credit-timeline-event");
-      item.append(
-        element("span", "credit-timeline-dot"),
-        element("div", "credit-timeline-copy",
-          element("strong", "credit-timeline-action", event.action),
-          element("small", "credit-timeline-date", dateTime(event.at)))
+      const copy = element("div", "credit-timeline-copy");
+      copy.append(
+        element("strong", "credit-timeline-action", event.action),
+        element("small", "credit-timeline-date", dateTime(event.at))
       );
+      item.append(element("span", "credit-timeline-dot"), copy);
       timeline.appendChild(item);
     });
 

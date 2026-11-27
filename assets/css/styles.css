@@ -2249,3 +2249,19 @@ body {
   .mobikisi-choice-button strong{font-size:.96rem}
   #deposit-button{font-size:.92rem}
 }
+
+
+/* MATA PAY — Historique des reçus : cartes adaptatives */
+.savings-receipt-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;width:100%}
+.savings-receipt-card{display:grid;gap:13px;min-width:0;padding:16px;border:1px solid #e1e9e3;border-radius:14px;background:#fff;box-shadow:0 4px 14px rgba(18,63,48,.045)}
+.savings-receipt-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
+.savings-receipt-info{display:grid;gap:6px;min-width:0}
+.savings-receipt-product{color:#174b36;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.savings-receipt-date{color:#77847b;font-size:11px;line-height:1.45}
+.savings-receipt-amount{flex:0 0 auto;color:#176044;font-size:16px;line-height:1.3;text-align:right;overflow-wrap:anywhere}
+.savings-receipt-description{margin:0;color:#66746b;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.savings-receipt-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:11px;border-top:1px solid #edf1ed}
+.savings-receipt-footer small{min-width:0;color:#879188;font-size:10px;overflow-wrap:anywhere}
+.savings-view-receipt{flex:0 0 auto;min-height:42px;padding:10px 14px;font-size:12px;white-space:normal}
+@media(max-width:760px){.savings-receipt-list{grid-template-columns:1fr;gap:10px}.savings-receipt-card{padding:14px}}
+@media(max-width:380px){.savings-receipt-card-top{flex-direction:column;gap:7px}.savings-receipt-amount{text-align:left}.savings-receipt-footer{align-items:stretch;flex-direction:column}.savings-view-receipt{width:100%;min-height:46px}}

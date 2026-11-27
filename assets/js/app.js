@@ -668,3 +668,64 @@ updateDepositRule();
 updateInterface();
 renderMobikisiCard();
 refreshSavingsTracking();
+
+
+// Diaporama des affiches de référence MATA-PAY
+(() => {
+  const slideshow = document.getElementById("matapay-reference-slideshow");
+  if (!slideshow) return;
+  const slides = Array.from(slideshow.querySelectorAll(".reference-slide"));
+  const dots = Array.from(slideshow.querySelectorAll(".reference-dot"));
+  const previous = slideshow.querySelector(".reference-prev");
+  const next = slideshow.querySelector(".reference-next");
+  const status = slideshow.querySelector(".reference-slide-status");
+  if (!slides.length) return;
+  let current = 0;
+  let timer = null;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function showSlide(index) {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      const active = i === current;
+      slide.classList.toggle("is-active", active);
+      slide.setAttribute("aria-hidden", String(!active));
+      if (active) slide.removeAttribute("inert");
+      else slide.setAttribute("inert", "");
+    });
+    dots.forEach((dot, i) => {
+      const active = i === current;
+      dot.classList.toggle("is-active", active);
+      if (active) dot.setAttribute("aria-current", "true");
+      else dot.removeAttribute("aria-current");
+    });
+    if (status) status.textContent = "Photo " + (current + 1) + " sur " + slides.length;
+  }
+
+  function stopAuto() {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+  }
+  function startAuto() {
+    stopAuto();
+    if (!reducedMotion && !document.hidden) {
+      timer = window.setInterval(() => showSlide(current + 1), 5000);
+    }
+  }
+
+  previous?.addEventListener("click", () => { showSlide(current - 1); startAuto(); });
+  next?.addEventListener("click", () => { showSlide(current + 1); startAuto(); });
+  dots.forEach((dot, i) => dot.addEventListener("click", () => { showSlide(i); startAuto(); }));
+  slideshow.addEventListener("mouseenter", stopAuto);
+  slideshow.addEventListener("mouseleave", startAuto);
+  slideshow.addEventListener("focusin", stopAuto);
+  slideshow.addEventListener("focusout", (event) => {
+    if (!slideshow.contains(event.relatedTarget)) startAuto();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAuto();
+    else startAuto();
+  });
+  showSlide(0);
+  startAuto();
+})();
